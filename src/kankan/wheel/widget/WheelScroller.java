@@ -36,7 +36,7 @@ import android.widget.Scroller;
 /**
  * Scroller class handles scrolling events and updates the 
  */
-public class WheelScroller {
+public abstract class WheelScroller {
     /**
      * Scrolling listener interface
      */
@@ -248,26 +248,13 @@ public class WheelScroller {
         }
     }
 
-    protected int getCurrentScrollerPosition() {
-        // should be overriden
-        return 0;
-    }
+    protected abstract int getCurrentScrollerPosition();
 
-    protected int getFinalScrollerPosition() {
-        // should be overriden
-        return 0;
-    }
+    protected abstract int getFinalScrollerPosition();
 
-    protected float getMotionEventPosition(MotionEvent event) {
-        // should be overriden
-        return 0;
-    }
+    protected abstract float getMotionEventPosition(MotionEvent event);
 
-    protected void scrollerStartScroll(int distance, int time) {
-        // should be overriden
-    }
+    protected abstract void scrollerStartScroll(int distance, int time);
 
-    protected void scrollerFling(int position, int velocityX, int velocityY) {
-        // should be overriden
-    }
+    protected abstract void scrollerFling(int position, int velocityX, int velocityY);
 }

@@ -41,7 +41,7 @@ import android.widget.LinearLayout;
  *
  * @author Yuri Kanivets
  */
-public class WheelView extends View {
+public abstract class WheelView extends View {
 
     /** Left and right padding value */
     private static final int PADDING = 10;
@@ -147,10 +147,7 @@ public class WheelView extends View {
         });
     }
     
-    protected WheelScroller createScroller(WheelScroller.ScrollingListener scrollingListener) {
-        // should be overriden
-        return null;
-    }
+    abstract protected WheelScroller createScroller(WheelScroller.ScrollingListener scrollingListener);
 
     /**
      * Set the the specified scrolling interpolator
@@ -599,30 +596,18 @@ public class WheelView extends View {
     /**
      * Updates view. Rebuilds items and label if necessary, recalculate items sizes.
      */
-    protected void updateView() {
-        // should be overriden
-    }
+    abstract protected void updateView();
 
-    protected int getBaseDimension() {
-        // should be overriden
-        return -1;
-    }
+    abstract protected int getBaseDimension();
 
-    protected int getItemDimension() {
-        // should be overriden
-        return -1;
-    }
+    abstract protected int getItemDimension();
 
-    protected float getMotionEventPosition(MotionEvent event) {
-        return 0;
-    }
+    abstract protected float getMotionEventPosition(MotionEvent event);
 
     /**
      * Creates item layouts if necessary
      */
-    protected void createItemsLayout() {
-        // should be overriden
-    }
+    abstract protected void createItemsLayout();
 
     /**
      * Builds view for measuring
