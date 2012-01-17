@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_height="fill_parent"
+	android:orientation="vertical"
+	android:background="@drawable/layout_bg"
+	android:layout_width="fill_parent">
+	
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="24dp"
+		android:layout_gravity="center_horizontal"
+		android:textSize="20sp"
+		android:text="Please select the city"/>
+	
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center_horizontal"
+		android:layout_width="fill_parent"
+		android:paddingLeft="12dp"
+		android:paddingRight="12dp"
+		android:paddingTop="4dp"
+		android:layout_marginTop="8dp"
+		android:orientation="horizontal">
+	
+   <kankan.wheel.widget.WheelVerticalView android:id="@+id/country"
+        android:layout_height="110dp"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"/>
+	
+	<kankan.wheel.widget.WheelVerticalView android:id="@+id/city"
+		android:layout_height="110dp"
+		android:layout_width="wrap_content"
+        android:layout_gravity="center_vertical"
+		android:layout_marginLeft="10dp"
+		android:layout_weight="1.5"/>
+		
+	</LinearLayout>
+	
+	<!-- Button
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center_horizontal"
+		android:layout_marginTop="18dp"
+		android:textSize="18sp"
+		android:text="    Next >   "/-->
+
+</LinearLayout>

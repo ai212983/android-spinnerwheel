@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="@drawable/layout_bg"
+    android:layout_width="fill_parent">
+    
+    <LinearLayout
+        android:layout_marginTop="44dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        
+        <kankan.wheel.widget.WheelVerticalView android:id="@+id/slot_1"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"/>
+        <kankan.wheel.widget.WheelVerticalView android:id="@+id/slot_2"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"/>
+        <kankan.wheel.widget.WheelVerticalView android:id="@+id/slot_3"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"/>
+    </LinearLayout>
+    
+   <TextView android:id="@+id/pwd_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_gravity="center_horizontal"
+        android:textSize="18sp"
+        android:textColor="#F00"
+        android:text=""/>
+    
+    <Button android:id="@+id/btn_mix"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="12dp"
+        android:textSize="18sp"
+        android:text="   Try!  "/>
+
+</LinearLayout>
