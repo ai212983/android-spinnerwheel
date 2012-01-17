@@ -96,6 +96,8 @@ public class WheelHorizontalView extends WheelView {
     private void initializeResources(AttributeSet attrs) {
         int backgroundResourceID = -1;
         if (attrs != null) {
+
+            // TODO: Move styling to WheelView class
             TypedArray attr = getContext().obtainStyledAttributes(attrs, R.styleable.WheelHorizontalView);
             centerDrawable = attr.getDrawable(R.styleable.WheelHorizontalView_valueSelector);
             backgroundResourceID = attr.getResourceId(R.styleable.WheelHorizontalView_background, -1);
