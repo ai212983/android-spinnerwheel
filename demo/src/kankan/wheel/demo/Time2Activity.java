@@ -44,7 +44,7 @@ public class Time2Activity extends Activity {
         ampmAdapter.setItemResource(R.layout.wheel_text_item);
         ampmAdapter.setItemTextResource(R.id.text);
         ampm.setViewAdapter(ampmAdapter);
-    
+
         // set current time
         Calendar calendar = Calendar.getInstance(Locale.US);
         hours.setCurrentItem(calendar.get(Calendar.HOUR));
@@ -52,7 +52,15 @@ public class Time2Activity extends Activity {
         ampm.setCurrentItem(calendar.get(Calendar.AM_PM));
         
         final WheelView day = (WheelView) findViewById(R.id.day);
-        day.setViewAdapter(new DayArrayAdapter(this, calendar));        
+        day.setViewAdapter(new DayArrayAdapter(this, calendar));
+
+        final WheelView hor = (WheelView) findViewById(R.id.horizontal);
+        ArrayWheelAdapter<String> horAdapter =
+                new ArrayWheelAdapter<String>(this, new String[] {"H01", "H02", "H03", "H04", "H05", "H06", "H07"});
+        horAdapter.setItemResource(R.layout.wheel_text_horizontal_item);
+        horAdapter.setItemTextResource(R.id.text);
+        hor.setViewAdapter(horAdapter);
+
     }
     
     /**

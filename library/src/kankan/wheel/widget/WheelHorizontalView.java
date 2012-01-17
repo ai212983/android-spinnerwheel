@@ -26,11 +26,12 @@ package kankan.wheel.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Canvas;
+import android.graphics.*;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.GradientDrawable.Orientation;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
@@ -43,9 +44,6 @@ import kankan.wheel.R;
  */
 public class WheelHorizontalView extends WheelView {
 
-    /** Top and bottom shadows colors */
-    private static final int[] SHADOWS_COLORS = new int[] { 0xFFffffff, 0x00ffffff, 0x00ffffff };
-
     /** Top and bottom items offset (to hide that) */
     private static final int ITEM_OFFSET_PERCENT = 10;
 
@@ -57,10 +55,6 @@ public class WheelHorizontalView extends WheelView {
 
     // Center Line
     private Drawable centerDrawable;
-
-    // Shadows drawables
-    private GradientDrawable leftShadow;
-    private GradientDrawable rightShadow;
 
     /**
      * Constructor
@@ -112,9 +106,6 @@ public class WheelHorizontalView extends WheelView {
         if (backgroundResourceID == -1) {
             backgroundResourceID = R.drawable.wheel_bg_hor;
         }
-
-        leftShadow = new GradientDrawable(Orientation.LEFT_RIGHT, SHADOWS_COLORS);
-        rightShadow = new GradientDrawable(Orientation.RIGHT_LEFT, SHADOWS_COLORS);
 
         // setBackgroundResource(backgroundResourceID); // there's no background in ICS spinner
     }
@@ -232,24 +223,11 @@ public class WheelHorizontalView extends WheelView {
             updateView();
 
             drawItems(canvas);
-            drawCenterRect(canvas);
+//            drawCenterRect(canvas);
         }
 
-        drawShadows(canvas);
     }
 
-    /**
-     * Draws shadows on top and bottom of control
-     * @param canvas the canvas for drawing
-     */
-    private void drawShadows(Canvas canvas) {
-        int width = (int)(1.5 * getItemDimension());
-        leftShadow.setBounds(0, 0, width, getHeight());
-        leftShadow.draw(canvas);
-
-        rightShadow.setBounds(getWidth() - width, 0, getWidth(), getHeight());
-        rightShadow.draw(canvas);
-    }
 
     /**
      * Draws items
@@ -257,12 +235,27 @@ public class WheelHorizontalView extends WheelView {
      */
     private void drawItems(Canvas canvas) {
         canvas.save();
+        int w = getMeasuredWidth();
+        int h = getMeasuredHeight();
 
+        // creating intermediate bitmap and canvas
+        Bitmap b = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        Canvas c = new Canvas(b);
         int position = (currentItem - firstItem) * getItemDimension() + (getItemDimension() - getBaseDimension()) / 2;
-        canvas.translate(- position + scrollingOffset, PADDING);
+        c.translate(- position + scrollingOffset, PADDING);
+        itemsLayout.draw(c);
 
-        itemsLayout.draw(canvas);
+        //Create a shader that is a linear gradient that covers the reflection
+        Paint paint = new Paint();
+        LinearGradient shader = new LinearGradient(0, 0, w, 0, 0x70ff0000, 0x000000ff, Shader.TileMode.CLAMP);
+        //Set the paint to use this shader (linear gradient)
+        paint.setShader(shader);
+        //Set the Transfer mode to be porter duff and destination in
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
+        //Draw a rectangle using the paint with our linear gradient
+        c.drawRect(0, 0, w, h, paint);
 
+        canvas.drawBitmap(b, 0, 0, null);
         canvas.restore();
     }
 

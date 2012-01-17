@@ -213,9 +213,9 @@ public abstract class AbstractWheelTextAdapter extends AbstractWheelAdapter {
                 }
                 textView.setText(text);
     
-                //if (itemResourceId == TEXT_VIEW_ITEM_RESOURCE) {
+                if (itemResourceId == TEXT_VIEW_ITEM_RESOURCE) {
                     configureTextView(textView);
-                //}
+                }
             }
             return convertView;
         }

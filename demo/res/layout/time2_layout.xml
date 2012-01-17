@@ -27,5 +27,9 @@
         <kankan.wheel.widget.WheelVerticalView android:id="@+id/ampm"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"/>
-    </LinearLayout>        
+    </LinearLayout>
+
+    <kankan.wheel.widget.WheelHorizontalView android:id="@+id/horizontal"
+                                           android:layout_height="wrap_content"
+                                           android:layout_width="wrap_content"/>
 </LinearLayout>
