@@ -116,7 +116,7 @@ public class WheelHorizontalView extends WheelView {
         leftShadow = new GradientDrawable(Orientation.LEFT_RIGHT, SHADOWS_COLORS);
         rightShadow = new GradientDrawable(Orientation.RIGHT_LEFT, SHADOWS_COLORS);
 
-        setBackgroundResource(backgroundResourceID);
+        // setBackgroundResource(backgroundResourceID); // there's no background in ICS spinner
     }
 
     /**
