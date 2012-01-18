@@ -108,12 +108,13 @@ public abstract class WheelView extends View {
      * Initializes class data
      * @param context the context
      */
-    private void initData(Context context) {
+    protected void initData(Context context) {
         scroller = createScroller(new WheelScroller.ScrollingListener() {
 
             public void onStarted() {
                 isScrollingPerformed = true;
                 notifyScrollingListenersAboutStart();
+                onScrollStarted();
             }
 
             public void onScroll(int distance) {
@@ -133,6 +134,7 @@ public abstract class WheelView extends View {
                 if (isScrollingPerformed) {
                     notifyScrollingListenersAboutEnd();
                     isScrollingPerformed = false;
+                    onScrollFinished();
                 }
 
                 scrollingOffset = 0;
@@ -146,6 +148,9 @@ public abstract class WheelView extends View {
             }
         });
     }
+
+    protected void onScrollFinished() {}
+    protected void onScrollStarted() {}
     
     abstract protected WheelScroller createScroller(WheelScroller.ScrollingListener scrollingListener);
 
@@ -401,7 +406,9 @@ public abstract class WheelView extends View {
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        layout(r - l, b - t);
+        if (changed) {
+            layout(r - l, b - t);
+        }
     }
 
     /**

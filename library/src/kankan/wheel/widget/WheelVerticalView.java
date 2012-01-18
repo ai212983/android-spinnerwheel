@@ -34,6 +34,9 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
+import com.jakewharton.nineoldandroids.Animator;
+import com.jakewharton.nineoldandroids.AnimatorSet;
+import com.jakewharton.nineoldandroids.ObjectAnimator;
 import kankan.wheel.R;
 
 /**
@@ -42,6 +45,44 @@ import kankan.wheel.R;
  * @author Yuri Kanivets
  */
 public class WheelVerticalView extends WheelView {
+
+    /**
+     * The {@link Paint} for drawing active value.
+     */
+    private Paint mActiveValuePaint;
+    
+    /**
+     * The {@link Paint} for drawing the selector.
+     */
+    private Paint mSelectorWheelPaint;
+
+    /**
+     * {@link com.jakewharton.nineoldandroids.Animator} for showing the up/down arrows.
+     */
+    private AnimatorSet mShowInputControlsAnimator;
+
+    /**
+     * {@link com.jakewharton.nineoldandroids.Animator} for dimming the selector wheel.
+     */
+    private Animator mDimSelectorWheelAnimator;
+
+    /**
+     * The property for setting the selector paint.
+     */
+    private static final String PROPERTY_SELECTOR_PAINT_ALPHA = "selectorPaintAlpha";
+
+    /**
+     * The alpha of the selector wheel when it is bright.
+     */
+    private static final int SELECTOR_WHEEL_BRIGHT_ALPHA = 255;
+
+    /**
+     * The alpha of the selector wheel when it is dimmed.
+     */
+    private static final int SELECTOR_WHEEL_DIM_ALPHA = 60;
+
+
+    // -------------- items above should be moved to WheelView
 
     /** Top and bottom shadows colors */
     private static final int[] SHADOWS_COLORS = new int[] { 0xFFffffff, 0x00ffffff, 0x00ffffff };
@@ -87,6 +128,48 @@ public class WheelVerticalView extends WheelView {
         return new WheelVerticalScroller(getContext(), scrollingListener);
     }
 
+    protected void initData(Context context) {
+        super.initData(context);
+        // create the animator for showing the input controls
+        mDimSelectorWheelAnimator = ObjectAnimator.ofInt(this, PROPERTY_SELECTOR_PAINT_ALPHA,
+                SELECTOR_WHEEL_BRIGHT_ALPHA, SELECTOR_WHEEL_DIM_ALPHA);
+
+        mShowInputControlsAnimator = new AnimatorSet();
+        mShowInputControlsAnimator.playTogether(mDimSelectorWheelAnimator);
+    }
+
+    @Override
+    protected void onScrollStarted() {
+        mDimSelectorWheelAnimator.cancel();
+    }
+
+    @Override
+    protected void onScrollFinished() {
+        fadeSelectorWheel(500);
+        Log.e("WheelVerticalView", "Dimming selector wheel");
+    }
+
+    /**
+     * Sets the <code>alpha</code> of the {@link Paint} for drawing the selector
+     * wheel.
+     */
+    @SuppressWarnings("unused")
+    // Called via reflection
+    public void setSelectorPaintAlpha(int alpha) {
+        mSelectorWheelPaint.setAlpha(alpha);
+        invalidate();
+    }
+
+    /**
+     * Fade the selector wheel via an animation.
+     *
+     * @param animationDuration The duration of the animation.
+     */
+    private void fadeSelectorWheel(long animationDuration) {
+        mDimSelectorWheelAnimator.setDuration(animationDuration);
+        mDimSelectorWheelAnimator.start();
+    }
+    
     /**
      * Initializes resources
      */
@@ -205,8 +288,34 @@ public class WheelVerticalView extends WheelView {
      * @param height the layout height
      */
     @Override
-    protected void layout(int width, int height) {
+    protected void layout(int width, int height) { //TODO: Something wrong with layout, its called too often. Unoptimized parent?
         itemsLayout.layout(0, 0, width - 2 * PADDING, height);
+        int w = getMeasuredWidth();
+        int h = getMeasuredHeight();
+        int ih = getItemDimension();
+        Log.e("WheelVerticalView", "Layout invoked for " + this  + ": " + w + "x" + h + ",  " + ih);
+
+        if (mSelectorWheelPaint == null) { // ugly hack to check stuff. remove it, see TO DO item for this method
+        mSelectorWheelPaint = new Paint();
+        float p1 = (1 - ih/(float) h)/2;
+        float p2 = (1 + ih/(float) h)/2;
+        int[] colors = {0x00000000, 0xff000000, 0x00000000, 0x00000000, 0xff000000, 0x00000000};
+        float[] positions = {0, p1, p1, p2, p2, 1};
+
+        LinearGradient shader = new LinearGradient(0, 0, 0, h, colors, positions, Shader.TileMode.CLAMP);
+        //Set the paint to use this shader (linear gradient)
+        mSelectorWheelPaint.setShader(shader);
+        //Set the Transfer mode to be porter duff and destination in
+        mSelectorWheelPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
+
+        mActiveValuePaint= new Paint();
+        int[] colorsV = {0x00000000, 0x00000000, 0xff00ff00, 0xff0000ff, 0x00000000, 0x00000000};
+        float[] positionsV = {0, p1, p1, p2, p2, 1};
+
+        LinearGradient shaderV = new LinearGradient(0, 0, 0, h, colorsV, positionsV, Shader.TileMode.CLAMP);
+        mActiveValuePaint.setShader(shaderV);
+        mActiveValuePaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
+        }
     }
 
     @Override
@@ -247,7 +356,7 @@ public class WheelVerticalView extends WheelView {
     private void drawNew(Canvas canvas) {
         canvas.save();
         int w = getMeasuredWidth();
-        int h = getMeasuredHeight(); // getDesiredHeight(itemsLayout) + getItemDimension();
+        int h = getMeasuredHeight();
         int ih = getItemDimension();
 
         // creating intermediate bitmap and canvas
@@ -260,33 +369,10 @@ public class WheelVerticalView extends WheelView {
         itemsLayout.draw(c);
 
         Bitmap bValue = bSpin.copy(Bitmap.Config.ARGB_8888, true);
-        Canvas cValue = new Canvas(bValue);
+        Canvas cValue = new Canvas(bValue); //TODO: We have to create canvas and bitmaps only once, do we?
 
-        Paint paint = new Paint();
-        float p1 = (1 - ih/(float) h)/2;
-        float p2 = (1 + ih/(float) h)/2;
-        int[] colors = {0x00000000, 0xff000000, 0x00000000, 0x00000000, 0xff000000, 0x00000000};
-        float[] positions = {0, p1, p1, p2, p2, 1};
-
-        LinearGradient shader = new LinearGradient(0, 0, 0, h, colors, positions, Shader.TileMode.CLAMP);
-        //Set the paint to use this shader (linear gradient)
-        paint.setShader(shader);
-        //Set the Transfer mode to be porter duff and destination in
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
-        //Draw a rectangle using the paint with our linear gradient
-        cSpin.drawRect(0, 0, w, h, paint);
-
-
-        Paint paintV = new Paint();
-        int[] colorsV = {0x00000000, 0x00000000, 0xff00ff00, 0xff0000ff, 0x00000000, 0x00000000};
-        float[] positionsV = {0, p1, p1, p2, p2, 1};
-
-        LinearGradient shaderV = new LinearGradient(0, 0, 0, h, colorsV, positionsV, Shader.TileMode.CLAMP);
-        paintV.setShader(shaderV);
-        paintV.setAlpha(50);
-        paintV.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
-        cValue.drawRect(0, 0, w, h, paintV);
-
+        cSpin.drawRect(0, 0, w, h, mSelectorWheelPaint);
+        cValue.drawRect(0, 0, w, h, mActiveValuePaint);
 
         canvas.drawBitmap(bValue, 0, 0, null);
         canvas.drawBitmap(bSpin, 0, 0, null);

@@ -649,12 +649,8 @@ public class NumberPicker extends LinearLayout {
                 PROPERTY_BUTTON_ALPHA, BUTTON_ALPHA_TRANSPARENT, BUTTON_ALPHA_OPAQUE);
         mShowInputControlsAnimator = new AnimatorSet();
         mShowInputControlsAnimator.playTogether(mDimSelectorWheelAnimator);
-
-        mIncrementButton.setVisibility(INVISIBLE);
-        mDecrementButton.setVisibility(INVISIBLE);
-
-        //mShowInputControlsAnimator.playTogether(mDimSelectorWheelAnimator, showIncrementButton,
-         //       showDecrementButton);
+        mShowInputControlsAnimator.playTogether(mDimSelectorWheelAnimator, showIncrementButton,
+               showDecrementButton);
         mShowInputControlsAnimator.addListener(new AnimatorListenerAdapter() {
             private boolean mCanceled = false;
 
@@ -1604,8 +1600,8 @@ public class NumberPicker extends LinearLayout {
      */
     private void hideInputControls() {
         mShowInputControlsAnimator.cancel();
-        //mIncrementButton.setVisibility(INVISIBLE);
-        //mDecrementButton.setVisibility(INVISIBLE);
+        mIncrementButton.setVisibility(INVISIBLE);
+        mDecrementButton.setVisibility(INVISIBLE);
         mInputText.setVisibility(INVISIBLE);
     }
 
