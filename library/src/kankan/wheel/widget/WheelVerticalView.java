@@ -25,11 +25,12 @@
 package kankan.wheel.widget;
 
 import android.content.Context;
-import android.graphics.Canvas;
+import android.graphics.*;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.GradientDrawable.Orientation;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
@@ -101,8 +102,9 @@ public class WheelVerticalView extends WheelView {
         if (bottomShadow == null) {
             bottomShadow = new GradientDrawable(Orientation.BOTTOM_TOP, SHADOWS_COLORS);
         }
-
-        setBackgroundResource(R.drawable.wheel_bg_ver);
+        setVerticalFadingEdgeEnabled(true);
+        setFadingEdgeLength(100);
+        //setBackgroundResource(R.drawable.wheel_bg_ver);
     }
 
     /**
@@ -218,7 +220,7 @@ public class WheelVerticalView extends WheelView {
             drawCenterRect(canvas);
         }
 
-        drawShadows(canvas);
+        // drawShadows(canvas);
     }
 
     /**
@@ -239,16 +241,67 @@ public class WheelVerticalView extends WheelView {
      * @param canvas the canvas for drawing
      */
     private void drawItems(Canvas canvas) {
+        drawNew(canvas);
+    }
+
+    private void drawNew(Canvas canvas) {
+        canvas.save();
+        int w = getMeasuredWidth();
+        int h = getMeasuredHeight(); // getDesiredHeight(itemsLayout) + getItemDimension();
+        int ih = getItemDimension();
+
+        // creating intermediate bitmap and canvas
+        Bitmap b = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        Canvas c = new Canvas(b);
+        Canvas cvr = new Canvas(b);
+
+
+        int top = (currentItem - firstItem) * getItemDimension() + (getItemDimension() - getHeight()) / 2;
+        c.translate(PADDING, - top + scrollingOffset);
+        itemsLayout.draw(c);
+
+
+        Paint paint = new Paint();
+        int[] colors = {0x00000000, 0xff000000, 0xff000000, 0x00000000};
+        float[] positions = {0, (1 - ih/(float) h)/2, (1 + ih/(float) h)/2, 1};
+
+        LinearGradient shader = new LinearGradient(0, 0, 0, h, colors, positions, Shader.TileMode.CLAMP);
+        //Set the paint to use this shader (linear gradient)
+        paint.setShader(shader);
+        //Set the Transfer mode to be porter duff and destination in
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
+        //Draw a rectangle using the paint with our linear gradient
+        cvr.drawRect(0, 0, w, h, paint);
+
+
+        canvas.drawBitmap(b, 0, 0, null);
+        canvas.restore();
+    }
+
+    private void drawLegacy(Canvas canvas) {
         canvas.save();
 
         int top = (currentItem - firstItem) * getItemDimension() + (getItemDimension() - getHeight()) / 2;
         canvas.translate(PADDING, - top + scrollingOffset);
 
+        int h = getDesiredHeight(itemsLayout);
+        Paint paint = new Paint();
+        int[] colors = {0x70ff0000, 0x600000ff};
+        float[] positions = {0, 1};
+        LinearGradient shader = new LinearGradient(0, 0, 0, h, colors, positions, Shader.TileMode.CLAMP);
+        //Set the paint to use this shader (linear gradient)
+        paint.setShader(shader);
+        //Set the Transfer mode to be porter duff and destination in
+        // paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
+        //Draw a rectangle using the paint with our linear gradient
+        canvas.drawRect(0, 0, getMeasuredWidth(), h, paint);
+
         itemsLayout.draw(canvas);
 
         canvas.restore();
     }
-
+    
+    
     /**
      * Draws rect for current value
      * @param canvas the canvas for drawing

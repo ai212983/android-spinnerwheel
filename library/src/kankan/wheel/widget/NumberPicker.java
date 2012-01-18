@@ -132,7 +132,7 @@ public class NumberPicker extends LinearLayout {
     /**
      * The alpha for the increment/decrement button when it is opaque.
      */
-    private static final float BUTTON_ALPHA_OPAQUE = .5f;
+    private static final int BUTTON_ALPHA_OPAQUE = 150;
 
     /**
      * The property for setting the selector paint.
@@ -142,7 +142,7 @@ public class NumberPicker extends LinearLayout {
     /**
      * The property for setting the increment/decrement button alpha.
      */
-    private static final String PROPERTY_BUTTON_ALPHA = "alpha";
+    private static final String PROPERTY_BUTTON_ALPHA = "x";
 
     /**
      * The numbers accepted by the input text's {@link Filter}
@@ -545,7 +545,7 @@ public class NumberPicker extends LinearLayout {
                 && mMinHeight > mMaxHeight) {
             throw new IllegalArgumentException("minHeight > maxHeight");
         }
-        //XXX: hardwiring
+        //XXX: hardwiring, too bad
         mMinHeight = 150;
         mMinWidth = attributesArray.getDimensionPixelSize(R.styleable.NumberPicker_minWidth,
                 SIZE_UNSPECIFIED);
@@ -643,13 +643,18 @@ public class NumberPicker extends LinearLayout {
         // create the animator for showing the input controls
         mDimSelectorWheelAnimator = ObjectAnimator.ofInt(this, PROPERTY_SELECTOR_PAINT_ALPHA,
                 SELECTOR_WHEEL_BRIGHT_ALPHA, SELECTOR_WHEEL_DIM_ALPHA);
-        final ObjectAnimator showIncrementButton = ObjectAnimator.ofFloat(mIncrementButton,
+        final ObjectAnimator showIncrementButton = ObjectAnimator.ofInt(mIncrementButton,
                 PROPERTY_BUTTON_ALPHA, BUTTON_ALPHA_TRANSPARENT, BUTTON_ALPHA_OPAQUE);
-        final ObjectAnimator showDecrementButton = ObjectAnimator.ofFloat(mDecrementButton,
+        final ObjectAnimator showDecrementButton = ObjectAnimator.ofInt(mDecrementButton,
                 PROPERTY_BUTTON_ALPHA, BUTTON_ALPHA_TRANSPARENT, BUTTON_ALPHA_OPAQUE);
         mShowInputControlsAnimator = new AnimatorSet();
-        mShowInputControlsAnimator.playTogether(mDimSelectorWheelAnimator, showIncrementButton,
-                showDecrementButton);
+        mShowInputControlsAnimator.playTogether(mDimSelectorWheelAnimator);
+
+        mIncrementButton.setVisibility(INVISIBLE);
+        mDecrementButton.setVisibility(INVISIBLE);
+
+        //mShowInputControlsAnimator.playTogether(mDimSelectorWheelAnimator, showIncrementButton,
+         //       showDecrementButton);
         mShowInputControlsAnimator.addListener(new AnimatorListenerAdapter() {
             private boolean mCanceled = false;
 
@@ -1297,6 +1302,7 @@ public class NumberPicker extends LinearLayout {
 
     @Override
     protected void onDraw(Canvas canvas) {
+
         if (mSelectorWheelState == SELECTOR_WHEEL_STATE_NONE) {
             return;
         }
@@ -1508,6 +1514,7 @@ public class NumberPicker extends LinearLayout {
      * Sets the <code>selectorWheelState</code>.
      */
     private void setSelectorWheelState(int selectorWheelState) {
+        Log.e("NumberPicker", " >>> " + selectorWheelState);
         mSelectorWheelState = selectorWheelState;
         if (selectorWheelState == SELECTOR_WHEEL_STATE_LARGE) {
             mSelectorWheelPaint.setAlpha(SELECTOR_WHEEL_BRIGHT_ALPHA);
@@ -1597,8 +1604,8 @@ public class NumberPicker extends LinearLayout {
      */
     private void hideInputControls() {
         mShowInputControlsAnimator.cancel();
-        mIncrementButton.setVisibility(INVISIBLE);
-        mDecrementButton.setVisibility(INVISIBLE);
+        //mIncrementButton.setVisibility(INVISIBLE);
+        //mDecrementButton.setVisibility(INVISIBLE);
         mInputText.setVisibility(INVISIBLE);
     }
 
@@ -1631,14 +1638,14 @@ public class NumberPicker extends LinearLayout {
      */
     private void updateIncrementAndDecrementButtonsVisibilityState() {
         if (mWrapSelectorWheel || mValue < mMaxValue) {
-            mIncrementButton.setVisibility(VISIBLE);
+            //mIncrementButton.setVisibility(VISIBLE);
         } else {
-            mIncrementButton.setVisibility(INVISIBLE);
+            //mIncrementButton.setVisibility(INVISIBLE);
         }
         if (mWrapSelectorWheel || mValue > mMinValue) {
-            mDecrementButton.setVisibility(VISIBLE);
+            //mDecrementButton.setVisibility(VISIBLE);
         } else {
-            mDecrementButton.setVisibility(INVISIBLE);
+           // mDecrementButton.setVisibility(INVISIBLE);
         }
     }
 
@@ -1740,13 +1747,11 @@ public class NumberPicker extends LinearLayout {
          */
 
         if (mDisplayedValues == null) {
-            Log.e("NumberPicker", " > " + formatNumber(mValue));
             mInputText.setText(formatNumber(mValue));
         } else {
-            Log.e("NumberPicker", " >>> " + mDisplayedValues[mValue - mMinValue]);
             mInputText.setText(mDisplayedValues[mValue - mMinValue]);
         }
-        mInputText.setTextColor(0xffff0000);
+
         // mInputText.setSelection(mInputText.getText().length());
 
         /*
@@ -1861,6 +1866,7 @@ public class NumberPicker extends LinearLayout {
         postDelayed(mAdjustScrollerCommand, delayMillis);
     }
 
+    
     /**
      * Filter for accepting only valid indices or prefixes of the string
      * representation of valid indices.
