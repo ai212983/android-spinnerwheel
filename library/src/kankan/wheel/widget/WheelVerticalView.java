@@ -217,7 +217,7 @@ public class WheelVerticalView extends WheelView {
             updateView();
 
             drawItems(canvas);
-            drawCenterRect(canvas);
+            // drawCenterRect(canvas);
         }
 
         // drawShadows(canvas);
@@ -251,19 +251,22 @@ public class WheelVerticalView extends WheelView {
         int ih = getItemDimension();
 
         // creating intermediate bitmap and canvas
-        Bitmap b = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-        Canvas c = new Canvas(b);
-        Canvas cvr = new Canvas(b);
-
+        Bitmap bSpin = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        Canvas c = new Canvas(bSpin);
+        Canvas cSpin = new Canvas(bSpin);
 
         int top = (currentItem - firstItem) * getItemDimension() + (getItemDimension() - getHeight()) / 2;
         c.translate(PADDING, - top + scrollingOffset);
         itemsLayout.draw(c);
 
+        Bitmap bValue = bSpin.copy(Bitmap.Config.ARGB_8888, true);
+        Canvas cValue = new Canvas(bValue);
 
         Paint paint = new Paint();
-        int[] colors = {0x00000000, 0xff000000, 0xff000000, 0x00000000};
-        float[] positions = {0, (1 - ih/(float) h)/2, (1 + ih/(float) h)/2, 1};
+        float p1 = (1 - ih/(float) h)/2;
+        float p2 = (1 + ih/(float) h)/2;
+        int[] colors = {0x00000000, 0xff000000, 0x00000000, 0x00000000, 0xff000000, 0x00000000};
+        float[] positions = {0, p1, p1, p2, p2, 1};
 
         LinearGradient shader = new LinearGradient(0, 0, 0, h, colors, positions, Shader.TileMode.CLAMP);
         //Set the paint to use this shader (linear gradient)
@@ -271,10 +274,22 @@ public class WheelVerticalView extends WheelView {
         //Set the Transfer mode to be porter duff and destination in
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
         //Draw a rectangle using the paint with our linear gradient
-        cvr.drawRect(0, 0, w, h, paint);
+        cSpin.drawRect(0, 0, w, h, paint);
 
 
-        canvas.drawBitmap(b, 0, 0, null);
+        Paint paintV = new Paint();
+        int[] colorsV = {0x00000000, 0x00000000, 0xff00ff00, 0xff0000ff, 0x00000000, 0x00000000};
+        float[] positionsV = {0, p1, p1, p2, p2, 1};
+
+        LinearGradient shaderV = new LinearGradient(0, 0, 0, h, colorsV, positionsV, Shader.TileMode.CLAMP);
+        paintV.setShader(shaderV);
+        paintV.setAlpha(50);
+        paintV.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
+        cValue.drawRect(0, 0, w, h, paintV);
+
+
+        canvas.drawBitmap(bValue, 0, 0, null);
+        canvas.drawBitmap(bSpin, 0, 0, null);
         canvas.restore();
     }
 
