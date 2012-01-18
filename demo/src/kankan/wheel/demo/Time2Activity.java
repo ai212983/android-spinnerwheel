@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Locale;
 
 import kankan.wheel.R;
+import kankan.wheel.widget.NumberPicker;
 import kankan.wheel.widget.WheelView;
 import kankan.wheel.widget.adapters.AbstractWheelTextAdapter;
 import kankan.wheel.widget.adapters.ArrayWheelAdapter;
@@ -60,6 +61,10 @@ public class Time2Activity extends Activity {
         horAdapter.setItemResource(R.layout.wheel_text_horizontal_item);
         horAdapter.setItemTextResource(R.id.text);
         hor.setViewAdapter(horAdapter);
+
+        NumberPicker numberPicker = (NumberPicker) findViewById(R.id.number_picker);
+        numberPicker.setMinValue(1);
+        numberPicker.setMaxValue(12);
 
     }
     

@@ -4,4 +4,30 @@
         <attr name="valueSelector" format="integer"/>
         <attr name="background" format="reference"/>
     </declare-styleable>
+    <!-- NumberPicker style. -->
+    <attr name="numberPickerStyle" format="reference" />
+    <!-- NumberPicker up button style. -->
+    <attr name="numberPickerUpButtonStyle" format="reference" />
+    <!-- NumberPicker down button style. -->
+    <attr name="numberPickerDownButtonStyle" format="reference" />
+    <!-- NumberPicker input text style. -->
+    <attr name="numberPickerInputTextStyle" format="reference" />
+    <declare-styleable name="NumberPicker">
+        <!-- @hide Color for the solid color background if such for optimized rendering. -->
+        <attr name="solidColor" format="color|reference" />
+        <!-- @hide Whether the number picker supports flinging. -->
+        <attr name="flingable" format="boolean" />
+        <!-- @hide The divider for making the selection area. -->
+        <attr name="selectionDivider" format="reference" />
+        <!-- @hide The height of the selection divider. -->
+        <attr name="selectionDividerHeight" format="dimension" />
+        <!-- @hide The min height of the NumberPicker. -->
+        <attr name="minHeight" format="integer" />
+        <!-- @hide The max height of the NumberPicker. -->
+        <attr name="maxHeight" format="integer" />
+        <!-- @hide The min width of the NumberPicker. -->
+        <attr name="minWidth" format="integer" />
+        <!-- @hide The max width of the NumberPicker. -->
+        <attr name="maxWidth" format="integer" />
+    </declare-styleable>
 </resources>

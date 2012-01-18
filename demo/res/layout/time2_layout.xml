@@ -1,35 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="fill_parent"
-    android:layout_width="fill_parent"
-    android:layout_marginTop="12dp"
-    android:orientation="vertical"
-    android:background="@drawable/layout_bg">
+        android:layout_height="fill_parent"
+        android:layout_width="fill_parent"
+        android:layout_marginTop="12dp"
+        android:orientation="vertical"
+        android:background="#ffffff">
     
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp"
-        android:paddingTop="20dp">
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:paddingTop="20dp">
       
         <kankan.wheel.widget.WheelVerticalView android:id="@+id/day"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"/>
         <kankan.wheel.widget.WheelVerticalView android:id="@+id/hour"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"/>
         <kankan.wheel.widget.WheelVerticalView android:id="@+id/mins"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"/>
         <kankan.wheel.widget.WheelVerticalView android:id="@+id/ampm"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"/>
     </LinearLayout>
 
     <kankan.wheel.widget.WheelHorizontalView android:id="@+id/horizontal"
-                                           android:layout_height="wrap_content"
-                                           android:layout_width="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"/>
+
+    <kankan.wheel.widget.NumberPicker android:id="@+id/number_picker"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"/>
 </LinearLayout>
