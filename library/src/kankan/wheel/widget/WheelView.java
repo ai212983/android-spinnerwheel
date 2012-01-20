@@ -117,6 +117,10 @@ public abstract class WheelView extends View {
                 onScrollStarted();
             }
 
+            public void onTouch() {
+                onScrollTouched();
+            }
+
             public void onScroll(int distance) {
                 doScroll(distance);
 
@@ -149,6 +153,7 @@ public abstract class WheelView extends View {
         });
     }
 
+    protected void onScrollTouched() {}
     protected void onScrollFinished() {}
     protected void onScrollStarted() {}
     

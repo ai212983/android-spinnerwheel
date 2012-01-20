@@ -48,6 +48,11 @@ public abstract class WheelScroller {
         void onScroll(int distance);
 
         /**
+         * This callback is invoked when scroller has been touched
+         */
+        void onTouch();
+
+        /**
          * Starting callback called when scrolling is started
          */
         void onStarted();
@@ -101,6 +106,9 @@ public abstract class WheelScroller {
                 setNextMessage(MESSAGE_SCROLL);
                 return true;
             }
+
+            // public boolean onDown(MotionEvent motionEvent);
+
         });
         gestureDetector.setIsLongpressEnabled(false);
         
@@ -146,10 +154,12 @@ public abstract class WheelScroller {
      */
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
+
             case MotionEvent.ACTION_DOWN:
                 lastTouchedPosition = getMotionEventPosition(event);
                 scroller.forceFinished(true);
                 clearMessages();
+                listener.onTouch();
                 break;
     
             case MotionEvent.ACTION_MOVE:
