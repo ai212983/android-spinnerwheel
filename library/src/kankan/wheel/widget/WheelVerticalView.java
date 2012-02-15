@@ -34,9 +34,9 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
-import com.jakewharton.nineoldandroids.Animator;
-import com.jakewharton.nineoldandroids.AnimatorSet;
-import com.jakewharton.nineoldandroids.ObjectAnimator;
+import com.nineoldandroids.animation.Animator;
+import com.nineoldandroids.animation.AnimatorSet;
+import com.nineoldandroids.animation.ObjectAnimator;
 
 /**
  * Numeric wheel view.
@@ -76,17 +76,17 @@ public class WheelVerticalView extends WheelView {
     private Paint mSeparatorsPaint;
 
     /**
-     * {@link com.jakewharton.nineoldandroids.Animator} for showing the up/down arrows.
+     * {@link com.nineoldandroids.animation.Animator} for showing the up/down arrows.
      */
     private AnimatorSet mShowInputControlsAnimator;
 
     /**
-     * {@link com.jakewharton.nineoldandroids.Animator} for dimming the selector wheel.
+     * {@link com.nineoldandroids.animation.Animator} for dimming the selector wheel.
      */
     private Animator mDimSelectorWheelAnimator;
 
     /**
-     * {@link com.jakewharton.nineoldandroids.Animator} for dimming the selector wheel.
+     * {@link com.nineoldandroids.animation.Animator} for dimming the selector wheel.
      */
     private Animator mDimSeparatorsAnimator;
 

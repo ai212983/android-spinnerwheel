@@ -1,6 +1,5 @@
 package kankan.wheel.demo;
 
-import kankan.wheel.R;
 import kankan.wheel.widget.OnWheelChangedListener;
 import kankan.wheel.widget.OnWheelScrollListener;
 import kankan.wheel.widget.WheelView;

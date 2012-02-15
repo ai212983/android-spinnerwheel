@@ -2,7 +2,6 @@ package kankan.wheel.demo;
 
 import java.util.Calendar;
 
-import kankan.wheel.R;
 import kankan.wheel.widget.OnWheelChangedListener;
 import kankan.wheel.widget.OnWheelClickedListener;
 import kankan.wheel.widget.OnWheelScrollListener;

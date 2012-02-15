@@ -528,6 +528,7 @@ public abstract class WheelView extends View {
      */
     public void scroll(int itemsToScroll, int time) {
         int distance = itemsToScroll * getItemDimension() - scrollingOffset;
+        onScrollTouched(); // we have to emulate touch when scrolling wheel programmatically
         scroller.scroll(distance, time);
     }
 
