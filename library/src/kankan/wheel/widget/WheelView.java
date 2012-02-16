@@ -51,7 +51,7 @@ public abstract class WheelView extends View {
     private static final int PADDING = 10;
 
     /** Default count of visible items */
-    private static final int DEF_VISIBLE_ITEMS = 5;
+    private static final int DEF_VISIBLE_ITEMS = 4;
 
     // Wheel Values
     protected int currentItem = 0;
@@ -125,6 +125,10 @@ public abstract class WheelView extends View {
                 onScrollTouched();
             }
 
+            public void onTouchUp() {
+                onScrollTouchedUp();
+            }
+
             public void onScroll(int distance) {
                 doScroll(distance);
 
@@ -158,6 +162,7 @@ public abstract class WheelView extends View {
     }
 
     protected void onScrollTouched() {}
+    protected void onScrollTouchedUp() {}
     protected void onScrollFinished() {}
     protected void onScrollStarted() {}
 

@@ -53,6 +53,11 @@ public abstract class WheelScroller {
         void onTouch();
 
         /**
+         * This callback is invoked when touch is up
+         */
+        void onTouchUp();
+
+        /**
          * Starting callback called when scrolling is started
          */
         void onStarted();
@@ -161,7 +166,13 @@ public abstract class WheelScroller {
                 clearMessages();
                 listener.onTouch();
                 break;
-    
+
+            case MotionEvent.ACTION_UP:
+                if (scroller.isFinished())
+                    listener.onTouchUp();
+                break;
+
+
             case MotionEvent.ACTION_MOVE:
                 // perform scrolling
                 int distance = (int)(getMotionEventPosition(event) - lastTouchedPosition);

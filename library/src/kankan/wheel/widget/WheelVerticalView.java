@@ -46,11 +46,6 @@ import com.nineoldandroids.animation.ObjectAnimator;
 public class WheelVerticalView extends WheelView {
 
     /**
-     * The {@link Paint} for drawing active value.
-     */
-    private Paint mActiveValuePaint;
-    
-    /**
      * The {@link Paint} for drawing the selector.
      */
     private Paint mSelectorWheelPaint;
@@ -76,11 +71,6 @@ public class WheelVerticalView extends WheelView {
     private Paint mSeparatorsPaint;
 
     /**
-     * {@link com.nineoldandroids.animation.Animator} for showing the up/down arrows.
-     */
-    private AnimatorSet mShowInputControlsAnimator;
-
-    /**
      * {@link com.nineoldandroids.animation.Animator} for dimming the selector wheel.
      */
     private Animator mDimSelectorWheelAnimator;
@@ -93,7 +83,7 @@ public class WheelVerticalView extends WheelView {
     /**
      * The property for setting the selector paint.
      */
-    private static final String PROPERTY_SELECTOR_PAINT_ALPHA = "selectorPaintAlpha";
+    private static final String PROPERTY_SELECTOR_PAINT_COEFF = "selectorPaintCoeff";
 
     /**
      * The property for setting the separators paint.
@@ -101,14 +91,9 @@ public class WheelVerticalView extends WheelView {
     private static final String PROPERTY_SEPARATORS_PAINT_ALPHA = "separatorsPaintAlpha";
 
     /**
-     * The alpha of the selector wheel when it is bright.
-     */
-    private static final int SELECTOR_WHEEL_BRIGHT_ALPHA = 255;  // 255 in ICS
-
-    /**
      * The alpha of the selector wheel when it is dimmed.
      */
-    private static final int SELECTOR_WHEEL_DIM_ALPHA = 60; // 60 in ICS
+    private static final int SELECTOR_WHEEL_DIM_ALPHA = 30; // 60 in ICS
 
     /**
      * The alpha of separators wheel when they are shown.
@@ -121,7 +106,6 @@ public class WheelVerticalView extends WheelView {
     private static final int SEPARATORS_DIM_ALPHA = 70;
 
     // -------------- items above should be moved to WheelView
-
 
     /** Top and bottom items offset (to hide that) */
     private static final int ITEM_OFFSET_PERCENT = 10;
@@ -160,14 +144,11 @@ public class WheelVerticalView extends WheelView {
     protected void initData(Context context) {
         super.initData(context);
         // create the animator for showing the input controls
-        mDimSelectorWheelAnimator = ObjectAnimator.ofInt(this, PROPERTY_SELECTOR_PAINT_ALPHA,
-                SELECTOR_WHEEL_BRIGHT_ALPHA, SELECTOR_WHEEL_DIM_ALPHA);
+        mDimSelectorWheelAnimator = ObjectAnimator.ofFloat(this, PROPERTY_SELECTOR_PAINT_COEFF, 1, 0);
 
         mDimSeparatorsAnimator = ObjectAnimator.ofInt(this, PROPERTY_SEPARATORS_PAINT_ALPHA,
-                SEPARATORS_BRIGHT_ALPHA, SEPARATORS_DIM_ALPHA);
-
-        //mShowInputControlsAnimator = new AnimatorSet();
-        // mShowInputControlsAnimator.playTogether(mDimSelectorWheelAnimator, mDimSeparatorsAnimator);
+                SEPARATORS_BRIGHT_ALPHA, SEPARATORS_DIM_ALPHA
+        );
 
         int[] dividerColors = new int[] { 0xFF111111, 0xFF222222, 0xFF111111 };
         mSelectionDivider = new  GradientDrawable(Orientation.LEFT_RIGHT, dividerColors);
@@ -186,8 +167,14 @@ public class WheelVerticalView extends WheelView {
     protected void onScrollTouched() {
         mDimSelectorWheelAnimator.cancel();
         mDimSeparatorsAnimator.cancel();
-        setSelectorPaintAlpha(SELECTOR_WHEEL_BRIGHT_ALPHA);
+        setSelectorPaintCoeff(1);
         setSeparatorsPaintAlpha(SEPARATORS_BRIGHT_ALPHA);
+    }
+
+    @Override
+    protected void onScrollTouchedUp() {
+        fadeSelectorWheel(500);
+        lightSeparators(500);
     }
 
     @Override
@@ -197,13 +184,38 @@ public class WheelVerticalView extends WheelView {
     }
 
     /**
-     * Sets the <code>alpha</code> of the {@link Paint} for drawing the selector
+     * Sets the <code>coeff</code> of the {@link Paint} for drawing the selector
      * wheel.
      */
     @SuppressWarnings("unused")
     // Called via reflection
-    public void setSelectorPaintAlpha(int alpha) {
-        mSelectorWheelPaint.setAlpha(alpha);
+    public void setSelectorPaintCoeff(float coeff) {
+
+        int h = getMeasuredHeight();
+        int ih = getItemDimension();
+
+        float p1 = (1 - ih/(float) h)/2;
+        float p2 = (1 + ih/(float) h)/2;
+        float p3 = (1 - ih*3/(float) h)/2;
+        float p4 = (1 + ih*3/(float) h)/2;
+
+        float s = 255 * p3/p1;
+        float z = SELECTOR_WHEEL_DIM_ALPHA * (1 - coeff);
+
+        float c3f = s * coeff ;
+        float c2f = z + c3f;
+        float c1f = z + 255 * coeff;
+
+        int c1 = Math.round( c1f ) << 24;
+        int c2 = Math.round( c2f ) << 24;
+        int c3 = Math.round( c3f ) << 24;
+
+        int[] colors =      {0, c3, c2, c1, 0xff000000, 0xff000000, c1, c2, c3, 0};
+        float[] positions = {0, p3, p3, p1,     p1,         p2,     p2, p4, p4, 1};
+
+        LinearGradient shader = new LinearGradient(0, 0, 0, h, colors, positions, Shader.TileMode.CLAMP);
+        mSelectorWheelPaint.setShader(shader);
+
         invalidate();
     }
 
@@ -236,13 +248,6 @@ public class WheelVerticalView extends WheelView {
     private void lightSeparators(long animationDuration) {
         mDimSeparatorsAnimator.setDuration(animationDuration);
         mDimSeparatorsAnimator.start();
-    }
-    /**
-     * Initializes resources
-     */
-    private void initResourcesIfNecessary() {
-
-        //setBackgroundResource(R.drawable.wheel_bg_ver);
     }
 
     /**
@@ -285,7 +290,8 @@ public class WheelVerticalView extends WheelView {
      * @return the calculated control width
      */
     private int calculateLayoutWidth(int widthSize, int mode) {
-        initResourcesIfNecessary();
+
+        // initResourcesIfNecessary();
 
         // TODO: make it static
         itemsLayout.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
@@ -306,14 +312,17 @@ public class WheelVerticalView extends WheelView {
             }
         }
 
-        itemsLayout.measure(MeasureSpec.makeMeasureSpec(width - 2 * PADDING, MeasureSpec.EXACTLY),
-                MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
+        itemsLayout.measure(
+                MeasureSpec.makeMeasureSpec(width - 2 * PADDING, MeasureSpec.EXACTLY),
+                MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
+        );
 
         return width;
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);
         int widthSize = MeasureSpec.getSize(widthMeasureSpec);
@@ -343,45 +352,23 @@ public class WheelVerticalView extends WheelView {
      * @param height the layout height
      */
     @Override
-    protected void layout(int width, int height) { //TODO: This method is invoked too often
+    protected void layout(int width, int height) {
         itemsLayout.layout(0, 0, width - 2 * PADDING, height);
-        int w = getMeasuredWidth();
-        int h = getMeasuredHeight();
-        int ih = getItemDimension();
 
-        mSelectorElementHeight = ih;
+        mSelectorElementHeight = getItemDimension();
 
-        Log.d("WheelVerticalView", "Layout invoked for " + this  + ": " + w + "x" + h + ",  " + ih);
-
-        if (mSelectorWheelPaint == null) { // ugly hack to check stuff. remove it, see TO DO item for this method
+        if (mSelectorWheelPaint == null) { // ugly hack to check stuff. remove it
             mSelectorWheelPaint = new Paint();
-
-            float p1 = (1 - ih/(float) h)/2;
-            float p2 = (1 + ih/(float) h)/2;
-            float p3 = (1 - ih*3/(float) h)/2;
-            float p4 = (1 + ih*3/(float) h)/2;
-            int[] colors = {0x00000000, 0xff000000, 0x00000000, 0x00000000, 0xff000000, 0x00000000};
-            float[] positions = {0, p1, p1, p2, p2, 1};
-
-            LinearGradient shader = new LinearGradient(0, 0, 0, h, colors, positions, Shader.TileMode.CLAMP);
-            //Set the paint to use this shader (linear gradient)
-            mSelectorWheelPaint.setShader(shader);
-            //Set the Transfer mode to be porter duff and destination in
             mSelectorWheelPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
-            mSelectorWheelPaint.setAlpha(SELECTOR_WHEEL_DIM_ALPHA); // DIM initially
+            setSelectorPaintCoeff(0);
+        }
 
-            mActiveValuePaint= new Paint();
-            int[] colorsV = {0x00000000, 0x00000000, 0xff00ff00, 0xff0000ff, 0x00000000, 0x00000000};
-            float[] positionsV = {0, p1, p1, p2, p2, 1};
-
-            LinearGradient shaderV = new LinearGradient(0, 0, 0, h, colorsV, positionsV, Shader.TileMode.CLAMP);
-            mActiveValuePaint.setShader(shaderV);
-            mActiveValuePaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
-
+        if (mSeparatorsPaint == null) {
             mSeparatorsPaint = new Paint();
             mSeparatorsPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
-            mSeparatorsPaint.setAlpha(SEPARATORS_DIM_ALPHA); // Dim initially
+            mSeparatorsPaint.setAlpha(SEPARATORS_DIM_ALPHA);
         }
+
     }
 
     @Override
@@ -414,9 +401,6 @@ public class WheelVerticalView extends WheelView {
         c.translate(PADDING, - top + scrollingOffset);
         itemsLayout.draw(c);
 
-        Bitmap bValue = bSpin.copy(Bitmap.Config.ARGB_8888, true);
-        Canvas cValue = new Canvas(bValue); //TODO: We have to create canvas and bitmaps only once, do we? -df
-
         // ----------------------------
 
         Bitmap bSeparators = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
@@ -440,12 +424,10 @@ public class WheelVerticalView extends WheelView {
         // ----------------------------
 
         cSpin.drawRect(0, 0, w, h, mSelectorWheelPaint);
-        cValue.drawRect(0, 0, w, h, mActiveValuePaint);
         cSeparators.drawRect(0, 0, w, h, mSeparatorsPaint);
 
         canvas.drawBitmap(bSpin, 0, 0, null);
         canvas.drawBitmap(bSeparators, 0, 0, null);
-        canvas.drawBitmap(bValue, 0, 0, null);
 
         canvas.restore();
     }
