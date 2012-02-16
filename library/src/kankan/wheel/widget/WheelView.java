@@ -27,6 +27,7 @@ package kankan.wheel.widget;
 import java.util.LinkedList;
 import java.util.List;
 
+import android.util.Log;
 import kankan.wheel.widget.adapters.WheelViewAdapter;
 import android.content.Context;
 import android.database.DataSetObserver;
@@ -43,11 +44,14 @@ import android.widget.LinearLayout;
  */
 public abstract class WheelView extends View {
 
+    @SuppressWarnings("unused")
+    private static final String LOG_TAG = WheelView.class.getName();
+
     /** Left and right padding value */
     private static final int PADDING = 10;
 
     /** Default count of visible items */
-    private static final int DEF_VISIBLE_ITEMS = 4;
+    private static final int DEF_VISIBLE_ITEMS = 5;
 
     // Wheel Values
     protected int currentItem = 0;
@@ -156,7 +160,7 @@ public abstract class WheelView extends View {
     protected void onScrollTouched() {}
     protected void onScrollFinished() {}
     protected void onScrollStarted() {}
-    
+
     abstract protected WheelScroller createScroller(WheelScroller.ScrollingListener scrollingListener);
 
     /**

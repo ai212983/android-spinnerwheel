@@ -113,7 +113,7 @@ public class WheelVerticalView extends WheelView {
     /**
      * The alpha of separators wheel when they are shown.
      */
-    private static final int SEPARATORS_BRIGHT_ALPHA = 200;
+    private static final int SEPARATORS_BRIGHT_ALPHA = 70;
 
     /**
      * The alpha of separators when they are is dimmed.
@@ -194,7 +194,6 @@ public class WheelVerticalView extends WheelView {
     protected void onScrollFinished() {
         fadeSelectorWheel(500);
         lightSeparators(500);
-        Log.e("WheelVerticalView", "Dimming selector wheel");
     }
 
     /**
@@ -344,7 +343,7 @@ public class WheelVerticalView extends WheelView {
      * @param height the layout height
      */
     @Override
-    protected void layout(int width, int height) { //TODO: Something wrong with layout, its called too often. Unoptimized parent?
+    protected void layout(int width, int height) { //TODO: This method is invoked too often
         itemsLayout.layout(0, 0, width - 2 * PADDING, height);
         int w = getMeasuredWidth();
         int h = getMeasuredHeight();
@@ -352,12 +351,15 @@ public class WheelVerticalView extends WheelView {
 
         mSelectorElementHeight = ih;
 
-        Log.e("WheelVerticalView", "Layout invoked for " + this  + ": " + w + "x" + h + ",  " + ih);
+        Log.d("WheelVerticalView", "Layout invoked for " + this  + ": " + w + "x" + h + ",  " + ih);
 
         if (mSelectorWheelPaint == null) { // ugly hack to check stuff. remove it, see TO DO item for this method
             mSelectorWheelPaint = new Paint();
+
             float p1 = (1 - ih/(float) h)/2;
             float p2 = (1 + ih/(float) h)/2;
+            float p3 = (1 - ih*3/(float) h)/2;
+            float p4 = (1 + ih*3/(float) h)/2;
             int[] colors = {0x00000000, 0xff000000, 0x00000000, 0x00000000, 0xff000000, 0x00000000};
             float[] positions = {0, p1, p1, p2, p2, 1};
 
@@ -389,10 +391,7 @@ public class WheelVerticalView extends WheelView {
         if (viewAdapter != null && viewAdapter.getItemsCount() > 0) {
             updateView();
             drawItems(canvas);
-            // drawCenterRect(canvas);
         }
-
-        // drawShadows(canvas);
     }
 
 
@@ -401,10 +400,6 @@ public class WheelVerticalView extends WheelView {
      * @param canvas the canvas for drawing
      */
     private void drawItems(Canvas canvas) {
-        drawNew(canvas);
-    }
-
-    private void drawNew(Canvas canvas) {
         canvas.save();
         int w = getMeasuredWidth();
         int h = getMeasuredHeight();
@@ -415,12 +410,12 @@ public class WheelVerticalView extends WheelView {
         Canvas c = new Canvas(bSpin);
         Canvas cSpin = new Canvas(bSpin);
 
-        int top = (currentItem - firstItem) * getItemDimension() + (getItemDimension() - getHeight()) / 2;
+        int top = (currentItem - firstItem) * ih + (ih - getHeight()) / 2;
         c.translate(PADDING, - top + scrollingOffset);
         itemsLayout.draw(c);
 
         Bitmap bValue = bSpin.copy(Bitmap.Config.ARGB_8888, true);
-        Canvas cValue = new Canvas(bValue); //TODO: We have to create canvas and bitmaps only once, do we?
+        Canvas cValue = new Canvas(bValue); //TODO: We have to create canvas and bitmaps only once, do we? -df
 
         // ----------------------------
 
