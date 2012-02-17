@@ -35,7 +35,6 @@ import android.view.MotionEvent;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
 import com.nineoldandroids.animation.Animator;
-import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 
 /**
@@ -45,6 +44,11 @@ import com.nineoldandroids.animation.ObjectAnimator;
  */
 public class WheelVerticalView extends WheelView {
 
+    private static int itemID = -1;
+
+    @SuppressWarnings("unused")
+    private final String LOG_TAG = WheelVerticalView.class.getName() + " #" + (++itemID);
+    
     /**
      * The {@link Paint} for drawing the selector.
      */
@@ -93,21 +97,21 @@ public class WheelVerticalView extends WheelView {
     /**
      * The alpha of the selector wheel when it is dimmed.
      */
-    private static final int SELECTOR_WHEEL_DIM_ALPHA = 30; // 60 in ICS
+    private static final int SELECTOR_WHEEL_DIM_ALPHA = 30; // 60 in ICS //TODO: Make this parameter customizable
 
     /**
      * The alpha of separators wheel when they are shown.
      */
-    private static final int SEPARATORS_BRIGHT_ALPHA = 70;
+    private static final int SEPARATORS_BRIGHT_ALPHA = 70; //TODO: Make this parameter customizable
 
     /**
      * The alpha of separators when they are is dimmed.
      */
-    private static final int SEPARATORS_DIM_ALPHA = 70;
+    private static final int SEPARATORS_DIM_ALPHA = 70; //TODO: Make this parameter customizable
 
     // -------------- items above should be moved to WheelView
 
-    /** Top and bottom items offset (to hide that) */
+    /** Top and bottom items offset */
     private static final int ITEM_OFFSET_PERCENT = 10;
 
     /** Left and right padding value */
@@ -161,7 +165,19 @@ public class WheelVerticalView extends WheelView {
         mSelectionDividerHeight = 1;
         //mSelectionDividerHeight = attributesArray.getDimensionPixelSize(
         //        R.styleable.NumberPicker_selectionDividerHeight, defSelectionDividerHeight);
+        
+        mSeparatorsPaint = new Paint();
+        mSeparatorsPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
+        mSeparatorsPaint.setAlpha(SEPARATORS_DIM_ALPHA);
+
+        mSelectorWheelPaint = new Paint();
+        mSelectorWheelPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
+        Log.d(LOG_TAG, "Selector wheel paint has been created");
     }
+
+    //
+    // Methods related to scroll starting up/finishing
+    //
 
     @Override
     protected void onScrollTouched() {
@@ -173,8 +189,8 @@ public class WheelVerticalView extends WheelView {
 
     @Override
     protected void onScrollTouchedUp() {
-        fadeSelectorWheel(500);
-        lightSeparators(500);
+        fadeSelectorWheel(750);
+        lightSeparators(750);
     }
 
     @Override
@@ -183,16 +199,25 @@ public class WheelVerticalView extends WheelView {
         lightSeparators(500);
     }
 
+    @Override
+    protected void onFinishInflate() {
+        Log.d(LOG_TAG, "Inflate has been finished");
+        super.onFinishInflate();
+        Log.d(LOG_TAG, "------------- start");
+        setSelectorPaintCoeff(0);
+        Log.d(LOG_TAG, "------------- end");
+    }
+
     /**
-     * Sets the <code>coeff</code> of the {@link Paint} for drawing the selector
-     * wheel.
+     * Sets the <code>coeff</code> of the {@link Paint} for drawing
+     * the selector wheel.
      */
-    @SuppressWarnings("unused")
-    // Called via reflection
+    @SuppressWarnings("unused") // Called via reflection
     public void setSelectorPaintCoeff(float coeff) {
 
         int h = getMeasuredHeight();
         int ih = getItemDimension();
+        Log.d(LOG_TAG, "h is: " + h + ", ih: " + ih);
 
         float p1 = (1 - ih/(float) h)/2;
         float p2 = (1 + ih/(float) h)/2;
@@ -202,7 +227,7 @@ public class WheelVerticalView extends WheelView {
         float s = 255 * p3/p1;
         float z = SELECTOR_WHEEL_DIM_ALPHA * (1 - coeff);
 
-        float c3f = s * coeff ;
+        float c3f = s * coeff ; // here goes some optimized stuff
         float c2f = z + c3f;
         float c1f = z + 255 * coeff;
 
@@ -223,8 +248,7 @@ public class WheelVerticalView extends WheelView {
      * Sets the <code>alpha</code> of the {@link Paint} for drawing separators
      * wheel.
      */
-    @SuppressWarnings("unused")
-    // Called via reflection
+    @SuppressWarnings("unused")  // Called via reflection
     public void setSeparatorsPaintAlpha(int alpha) {
         mSeparatorsPaint.setAlpha(alpha);
         invalidate();
@@ -261,8 +285,8 @@ public class WheelVerticalView extends WheelView {
             itemHeight = layout.getChildAt(0).getMeasuredHeight();
         }
 
-        int desired = itemHeight * visibleItems - itemHeight * ITEM_OFFSET_PERCENT / 50;
-        return Math.max(desired, getSuggestedMinimumHeight());
+        int desired =  - itemHeight * ITEM_OFFSET_PERCENT / 100;
+        return Math.max(itemHeight * visibleItems, getSuggestedMinimumHeight());
     }
 
     /**
@@ -290,9 +314,6 @@ public class WheelVerticalView extends WheelView {
      * @return the calculated control width
      */
     private int calculateLayoutWidth(int widthSize, int mode) {
-
-        // initResourcesIfNecessary();
-
         // TODO: make it static
         itemsLayout.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
         itemsLayout.measure(MeasureSpec.makeMeasureSpec(widthSize, MeasureSpec.UNSPECIFIED),
@@ -320,6 +341,16 @@ public class WheelVerticalView extends WheelView {
         return width;
     }
 
+    private void measureLayout() {
+
+        itemsLayout.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+
+        itemsLayout.measure(
+                MeasureSpec.makeMeasureSpec(getWidth() - 2 * PADDING, MeasureSpec.EXACTLY),
+                MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
+        );
+    }
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 
@@ -342,33 +373,22 @@ public class WheelVerticalView extends WheelView {
                 height = Math.min(height, heightSize);
             }
         }
-
         setMeasuredDimension(width, height);
     }
 
     /**
-     * Sets layouts width and height
+     * Sets layouts width and height. This method should be invoked only if something has been changed.
      * @param width the layout width
      * @param height the layout height
      */
     @Override
-    protected void layout(int width, int height) {
+    protected void doLayout(int width, int height) {
+        Log.e(LOG_TAG, "Do Layout has been invoked");
         itemsLayout.layout(0, 0, width - 2 * PADDING, height);
 
         mSelectorElementHeight = getItemDimension();
 
-        if (mSelectorWheelPaint == null) { // ugly hack to check stuff. remove it
-            mSelectorWheelPaint = new Paint();
-            mSelectorWheelPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
-            setSelectorPaintCoeff(0);
-        }
-
-        if (mSeparatorsPaint == null) {
-            mSeparatorsPaint = new Paint();
-            mSeparatorsPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
-            mSeparatorsPaint.setAlpha(SEPARATORS_DIM_ALPHA);
-        }
-
+        setSelectorPaintCoeff(0);
     }
 
     @Override
@@ -443,8 +463,9 @@ public class WheelVerticalView extends WheelView {
     @Override
     protected void updateView() {
         if (rebuildItems()) {
-            calculateLayoutWidth(getWidth(), MeasureSpec.EXACTLY);
-            layout(getWidth(), getHeight());
+            Log.e(LOG_TAG, "Items are rebuilding, entering into Do Layout");
+            measureLayout();
+            doLayout(getWidth(), getHeight());
         }
     }
 

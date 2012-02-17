@@ -28,10 +28,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.*;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.GradientDrawable.Orientation;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
@@ -211,7 +208,7 @@ public class WheelHorizontalView extends WheelView {
      * @param height the layout height
      */
     @Override
-    protected void layout(int width, int height) {
+    protected void doLayout(int width, int height) {
         itemsLayout.layout(0, 0, width, height - 2 * PADDING);
     }
 
@@ -283,7 +280,7 @@ public class WheelHorizontalView extends WheelView {
     protected void updateView() {
         if (rebuildItems()) {
             calculateLayoutHeight(getHeight(), MeasureSpec.EXACTLY);
-            layout(getWidth(), getHeight());
+            doLayout(getWidth(), getHeight());
         }
     }
 
