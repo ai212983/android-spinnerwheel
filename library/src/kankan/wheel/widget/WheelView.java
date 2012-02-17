@@ -126,7 +126,8 @@ public abstract class WheelView extends View {
             }
 
             public void onTouchUp() {
-                onScrollTouchedUp();
+                if (!isScrollingPerformed)
+                    onScrollTouchedUp();
             }
 
             public void onScroll(int distance) {
