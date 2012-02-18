@@ -15,13 +15,13 @@
         android:paddingRight="12dp"
         android:paddingTop="30dp">
       
-        <kankan.wheel.widget.WheelVerticalView android:id="@+id/day"
+        <antistatic.widget.wheel.WheelVerticalView android:id="@+id/day"
             android:layout_height="wrap_content"
             android:layout_width="46dp"/>
-        <kankan.wheel.widget.WheelVerticalView android:id="@+id/month"
+        <antistatic.widget.wheel.WheelVerticalView android:id="@+id/month"
             android:layout_height="wrap_content"
             android:layout_width="100dp"/>
-        <kankan.wheel.widget.WheelVerticalView android:id="@+id/year"
+        <antistatic.widget.wheel.WheelVerticalView android:id="@+id/year"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"/>            
     </LinearLayout>

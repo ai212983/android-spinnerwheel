@@ -27,6 +27,7 @@ package antistatic.widget.wheel;
 import java.util.LinkedList;
 import java.util.List;
 
+import android.util.Log;
 import antistatic.widget.wheel.adapters.WheelViewAdapter;
 import android.content.Context;
 import android.database.DataSetObserver;
@@ -229,7 +230,6 @@ public abstract class AbstractWheelView extends View {
         if (this.viewAdapter != null) {
             this.viewAdapter.registerDataSetObserver(dataObserver);
         }
-
         invalidateWheel(true);
     }
 
@@ -339,7 +339,7 @@ public abstract class AbstractWheelView extends View {
         if (viewAdapter == null || viewAdapter.getItemsCount() == 0) {
             return; // throw?
         }
-
+        
         int itemCount = viewAdapter.getItemsCount();
         if (index < 0 || index >= itemCount) {
             if (isCyclic) {
@@ -399,7 +399,7 @@ public abstract class AbstractWheelView extends View {
 
     /**
      * Invalidates widget
-     * @param clearCaches if true then cached views will be clear
+     * @param clearCaches if true then cached views will be cleared
      */
     public void invalidateWheel(boolean clearCaches) {
         if (clearCaches) {
@@ -574,13 +574,17 @@ public abstract class AbstractWheelView extends View {
     protected boolean rebuildItems() {
         boolean updated;
         ItemsRange range = getItemsRange();
-        
+
         if (itemsLayout != null) {
             int first = recycle.recycleItems(itemsLayout, firstItem, range);
             updated = firstItem != first;
             firstItem = first;
         } else {
             createItemsLayout();
+            updated = true;
+        }
+        
+        if (itemsLayout.getChildCount() == 0) { // if itemsLayout was cleaned up, update it
             updated = true;
         }
 

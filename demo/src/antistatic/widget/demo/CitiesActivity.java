@@ -66,7 +66,7 @@ public class CitiesActivity extends Activity {
             new ArrayWheelAdapter<String>(this, cities[index]);
         adapter.setTextSize(18);
         city.setViewAdapter(adapter);
-        city.setCurrentItem(cities[index].length / 2);        
+        city.setCurrentItem(cities[index].length / 2);
     }
     
     /**

@@ -38,9 +38,11 @@ import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.ObjectAnimator;
 
 /**
- * Numeric widget view.
+ * Spinner wheel horizontal view.
  *
  * @author Yuri Kanivets
+ * @author Dimitri Fedorov
+ *
  */
 public class WheelVerticalView extends AbstractWheelView {
 
@@ -52,12 +54,12 @@ public class WheelVerticalView extends AbstractWheelView {
     /**
      * The {@link Paint} for drawing the selector.
      */
-    private Paint mSelectorWheelPaint;
+    protected Paint mSelectorWheelPaint;
 
     /**
      * Divider for showing item to be selected while scrolling
      */
-    private Drawable mSelectionDivider;
+    protected Drawable mSelectionDivider;
 
     /**
      * The height of the selection divider.
@@ -67,55 +69,59 @@ public class WheelVerticalView extends AbstractWheelView {
     /**
      * The height of a selector element (text + gap).
      */
-    private int mSelectorElementHeight;
+    protected int mSelectorElementHeight;
 
     /**
      * The {@link Paint} for drawing the separators.
      */
-    private Paint mSeparatorsPaint;
+    protected Paint mSeparatorsPaint;
 
     /**
      * {@link com.nineoldandroids.animation.Animator} for dimming the selector widget.
      */
-    private Animator mDimSelectorWheelAnimator;
+    protected Animator mDimSelectorWheelAnimator;
 
     /**
      * {@link com.nineoldandroids.animation.Animator} for dimming the selector widget.
      */
-    private Animator mDimSeparatorsAnimator;
+    protected Animator mDimSeparatorsAnimator;
 
     /**
      * The property for setting the selector paint.
      */
-    private static final String PROPERTY_SELECTOR_PAINT_COEFF = "selectorPaintCoeff";
+    protected static final String PROPERTY_SELECTOR_PAINT_COEFF = "selectorPaintCoeff";
 
     /**
      * The property for setting the separators paint.
      */
-    private static final String PROPERTY_SEPARATORS_PAINT_ALPHA = "separatorsPaintAlpha";
+    protected static final String PROPERTY_SEPARATORS_PAINT_ALPHA = "separatorsPaintAlpha";
 
     /**
      * The alpha of the selector widget when it is dimmed.
      */
-    private static final int SELECTOR_WHEEL_DIM_ALPHA = 30; // 60 in ICS //TODO: Make this parameter customizable
+    protected static final int SELECTOR_WHEEL_DIM_ALPHA = 30; // 60 in ICS //TODO: Make this parameter customizable
 
     /**
      * The alpha of separators widget when they are shown.
      */
-    private static final int SEPARATORS_BRIGHT_ALPHA = 70; //TODO: Make this parameter customizable
+    protected static final int SEPARATORS_BRIGHT_ALPHA = 70; //TODO: Make this parameter customizable
 
     /**
      * The alpha of separators when they are is dimmed.
      */
-    private static final int SEPARATORS_DIM_ALPHA = 70; //TODO: Make this parameter customizable
-
-    // -------------- items above should be moved to AbstractWheelView
+    protected static final int SEPARATORS_DIM_ALPHA = 70; //TODO: Make this parameter customizable
 
     /** Top and bottom items offset */
-    private static final int ITEM_OFFSET_PERCENT = 10;
+    protected static final int ITEM_OFFSET_PERCENT = 10;
 
     /** Left and right padding value */
-    private static final int PADDING = 10;
+    protected static final int PADDING = 10;
+
+    protected Bitmap mSpinBitmap;
+    protected Bitmap mSeparatorsBitmap;
+    
+    // -------------- items above should be moved to AbstractWheelView
+
 
     // Item height
     private int itemHeight = 0;
@@ -208,7 +214,6 @@ public class WheelVerticalView extends AbstractWheelView {
 
         int h = getMeasuredHeight();
         int ih = getItemDimension();
-        Log.d(LOG_TAG, "h is: " + h + ", ih: " + ih);
 
         float p1 = (1 - ih/(float) h)/2;
         float p2 = (1 + ih/(float) h)/2;
@@ -374,10 +379,13 @@ public class WheelVerticalView extends AbstractWheelView {
      */
     @Override
     protected void doLayout(int width, int height, boolean dimensionsChanged) {
-        Log.e(LOG_TAG, "Do Layout has been invoked");
         itemsLayout.layout(0, 0, width - 2 * PADDING, height);
         
         if (dimensionsChanged) {
+            int w = getMeasuredWidth();
+            int h = getMeasuredHeight();
+            mSpinBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+            mSeparatorsBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
             mSelectorElementHeight = getItemDimension();
             setSelectorPaintCoeff(0);
         }
@@ -404,10 +412,10 @@ public class WheelVerticalView extends AbstractWheelView {
         int h = getMeasuredHeight();
         int ih = getItemDimension();
 
-        // creating intermediate bitmap and canvas
-        Bitmap bSpin = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-        Canvas c = new Canvas(bSpin);
-        Canvas cSpin = new Canvas(bSpin);
+        // resetting intermediate bitmap and canvas
+        mSpinBitmap.eraseColor(0);
+        Canvas c = new Canvas(mSpinBitmap);
+        Canvas cSpin = new Canvas(mSpinBitmap);
 
         int top = (currentItem - firstItem) * ih + (ih - getHeight()) / 2;
         c.translate(PADDING, - top + scrollingOffset);
@@ -415,11 +423,10 @@ public class WheelVerticalView extends AbstractWheelView {
 
         // ----------------------------
 
-        Bitmap bSeparators = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-        Canvas cSeparators = new Canvas(bSeparators);
+        mSeparatorsBitmap.eraseColor(0);
+        Canvas cSeparators = new Canvas(mSeparatorsBitmap);
 
         if (mSelectionDivider != null) {
-            mSelectionDividerHeight = 2;
             // draw the top divider
             int topOfTopDivider =
                     (getHeight() - mSelectorElementHeight - mSelectionDividerHeight) / 2;
@@ -438,9 +445,8 @@ public class WheelVerticalView extends AbstractWheelView {
         cSpin.drawRect(0, 0, w, h, mSelectorWheelPaint);
         cSeparators.drawRect(0, 0, w, h, mSeparatorsPaint);
 
-        canvas.drawBitmap(bSpin, 0, 0, null);
-        canvas.drawBitmap(bSeparators, 0, 0, null);
-
+        canvas.drawBitmap(mSpinBitmap, 0, 0, null);
+        canvas.drawBitmap(mSeparatorsBitmap, 0, 0, null);
         canvas.restore();
     }
 
@@ -455,7 +461,6 @@ public class WheelVerticalView extends AbstractWheelView {
     @Override
     protected void updateView() {
         if (rebuildItems()) {
-            Log.e(LOG_TAG, "Items are rebuilding, entering into Do Layout");
             measureLayout();
             doLayout(getWidth(), getHeight(), false);
         }
