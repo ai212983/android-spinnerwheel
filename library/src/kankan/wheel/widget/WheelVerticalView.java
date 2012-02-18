@@ -199,15 +199,6 @@ public class WheelVerticalView extends WheelView {
         lightSeparators(500);
     }
 
-    @Override
-    protected void onFinishInflate() {
-        Log.d(LOG_TAG, "Inflate has been finished");
-        super.onFinishInflate();
-        Log.d(LOG_TAG, "------------- start");
-        setSelectorPaintCoeff(0);
-        Log.d(LOG_TAG, "------------- end");
-    }
-
     /**
      * Sets the <code>coeff</code> of the {@link Paint} for drawing
      * the selector wheel.
@@ -382,13 +373,14 @@ public class WheelVerticalView extends WheelView {
      * @param height the layout height
      */
     @Override
-    protected void doLayout(int width, int height) {
+    protected void doLayout(int width, int height, boolean dimensionsChanged) {
         Log.e(LOG_TAG, "Do Layout has been invoked");
         itemsLayout.layout(0, 0, width - 2 * PADDING, height);
-
-        mSelectorElementHeight = getItemDimension();
-
-        setSelectorPaintCoeff(0);
+        
+        if (dimensionsChanged) {
+            mSelectorElementHeight = getItemDimension();
+            setSelectorPaintCoeff(0);
+        }
     }
 
     @Override
@@ -465,7 +457,7 @@ public class WheelVerticalView extends WheelView {
         if (rebuildItems()) {
             Log.e(LOG_TAG, "Items are rebuilding, entering into Do Layout");
             measureLayout();
-            doLayout(getWidth(), getHeight());
+            doLayout(getWidth(), getHeight(), false);
         }
     }
 

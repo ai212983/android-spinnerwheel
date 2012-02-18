@@ -74,6 +74,10 @@ public abstract class WheelView extends View {
 
     // View adapter
     protected WheelViewAdapter viewAdapter;
+    
+    
+    protected int mLayoutHeight;
+    protected int mLayoutWidth;
 
     // Recycle
     private WheelRecycle recycle = new WheelRecycle(this);
@@ -420,8 +424,11 @@ public abstract class WheelView extends View {
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         if (changed) {
-            Log.e(LOG_TAG, "onLayout has been invoked: " + l + ", " + t + ", " + r + ", " + b);
-            doLayout(r - l, b - t);
+            int w = r - l;
+            int h = b - t;
+            doLayout(w, h, mLayoutWidth != w || mLayoutHeight != h );
+            mLayoutWidth = w;
+            mLayoutHeight = h;
         }
     }
 
@@ -430,7 +437,7 @@ public abstract class WheelView extends View {
      * @param width the layout width
      * @param height the layout height
      */
-    abstract protected void doLayout(int width, int height);
+    abstract protected void doLayout(int width, int height, boolean dimensionsChanged);
 
     // Intercepts touch event
     @Override
@@ -565,6 +572,7 @@ public abstract class WheelView extends View {
             first -= emptyItems;
             count += Math.asin(emptyItems);
         }
+
         return new ItemsRange(first, count);
     }
 
@@ -581,17 +589,19 @@ public abstract class WheelView extends View {
             int first = recycle.recycleItems(itemsLayout, firstItem, range);
             updated = firstItem != first;
             firstItem = first;
-            Log.e(LOG_TAG, "Hitpoint 01: " + updated);
         } else {
             createItemsLayout();
-            Log.e(LOG_TAG, "Hitpoint 02");
             updated = true;
         }
 
         if (!updated) {
-            updated = firstItem != range.getFirst() || itemsLayout.getChildCount() != range.getCount();
-            Log.e(LOG_TAG, "Hitpoint 03: " + (firstItem != range.getFirst()) + " || " + (itemsLayout.getChildCount() != range.getCount()) + ": " + updated);
-            Log.e(LOG_TAG, " -- items range: " + range.getFirst() + ".. " + range.getCount() + ", layout items: " + firstItem + ".. " + itemsLayout.getChildCount());
+            int frst = range.getFirst();
+            int cnt = range.getCount();
+            if (frst < 0)
+                frst = 0;
+            if (cnt > itemsLayout.getChildCount())
+                cnt = itemsLayout.getChildCount();
+            updated = firstItem != frst || itemsLayout.getChildCount() != cnt;
         }
 
         if (firstItem > range.getFirst() && firstItem <= range.getLast()) {
@@ -612,7 +622,6 @@ public abstract class WheelView extends View {
             }
         }
         firstItem = first;
-
         return updated;
     }
 

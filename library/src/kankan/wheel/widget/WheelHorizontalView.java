@@ -208,7 +208,7 @@ public class WheelHorizontalView extends WheelView {
      * @param height the layout height
      */
     @Override
-    protected void doLayout(int width, int height) {
+    protected void doLayout(int width, int height, boolean dimensionsChanged) {
         itemsLayout.layout(0, 0, width, height - 2 * PADDING);
     }
 
@@ -280,7 +280,7 @@ public class WheelHorizontalView extends WheelView {
     protected void updateView() {
         if (rebuildItems()) {
             calculateLayoutHeight(getHeight(), MeasureSpec.EXACTLY);
-            doLayout(getWidth(), getHeight());
+            doLayout(getWidth(), getHeight(), false);
         }
     }
 
