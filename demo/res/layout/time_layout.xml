@@ -15,10 +15,10 @@
         android:paddingRight="12dp"
         android:paddingTop="20dp">
 
-        <kankan.wheel.widget.WheelVerticalView android:id="@+id/hour"
+        <antistatic.widget.wheel.WheelVerticalView android:id="@+id/hour"
             android:layout_height="wrap_content"
             android:layout_width="140dp"/>
-        <kankan.wheel.widget.WheelVerticalView android:id="@+id/mins"
+        <antistatic.widget.wheel.WheelVerticalView android:id="@+id/mins"
             android:layout_height="wrap_content"
             android:layout_width="140dp"/>
     </LinearLayout>

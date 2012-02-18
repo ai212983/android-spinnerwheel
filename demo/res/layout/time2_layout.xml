@@ -16,25 +16,25 @@
             android:paddingRight="12dp"
             android:paddingTop="20dp">
       
-        <kankan.wheel.widget.WheelVerticalView android:id="@+id/day"
+        <antistatic.widget.wheel.WheelVerticalView android:id="@+id/day"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"/>
-        <kankan.wheel.widget.WheelVerticalView android:id="@+id/hour"
+        <antistatic.widget.wheel.WheelVerticalView android:id="@+id/hour"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"/>
-        <kankan.wheel.widget.WheelVerticalView android:id="@+id/mins"
+        <antistatic.widget.wheel.WheelVerticalView android:id="@+id/mins"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"/>
-        <kankan.wheel.widget.WheelVerticalView android:id="@+id/ampm"
+        <antistatic.widget.wheel.WheelVerticalView android:id="@+id/ampm"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"/>
     </LinearLayout>
 
-    <kankan.wheel.widget.WheelHorizontalView android:id="@+id/horizontal"
+    <antistatic.widget.wheel.WheelHorizontalView android:id="@+id/horizontal"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"/>
 
-    <kankan.wheel.widget.NumberPicker android:id="@+id/number_picker"
+    <antistatic.widget.wheel.NumberPicker android:id="@+id/number_picker"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"/>
 </LinearLayout>

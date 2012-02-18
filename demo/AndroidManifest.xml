@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="kankan.wheel.demo"
+      package="antistatic.widget.demo"
       android:versionCode="1"
       android:versionName="1.0">
 
@@ -11,54 +11,48 @@
 
     <application android:icon="@drawable/wheel" android:label="WheelDemo">
 
-        <activity android:name="kankan.wheel.demo.WheelDemo">
+        <activity android:name="antistatic.widget.demo.WheelDemo">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="kankan.wheel.demo.TimeActivity" android:label="Time">
+        <activity android:name="antistatic.widget.demo.TimeActivity" android:label="Time">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="kankan.wheel.WHEEL_SAMPLE"/>
+                <category android:name="antistatic.widget.WHEEL_SAMPLE"/>
             </intent-filter>
         </activity>
-        <activity android:name="kankan.wheel.demo.Time2Activity" android:label="Time 2">
+        <activity android:name="antistatic.widget.demo.Time2Activity" android:label="Time 2">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="kankan.wheel.WHEEL_SAMPLE"/>
+                <category android:name="antistatic.widget.WHEEL_SAMPLE"/>
             </intent-filter>
         </activity>
-        <activity android:name="kankan.wheel.demo.DateActivity" android:label="Date">
+        <activity android:name="antistatic.widget.demo.DateActivity" android:label="Date">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="kankan.wheel.WHEEL_SAMPLE"/>
+                <category android:name="antistatic.widget.WHEEL_SAMPLE"/>
             </intent-filter>
         </activity>
-        <activity android:name="kankan.wheel.demo.PasswActivity" android:label="Password">
+        <activity android:name="antistatic.widget.demo.PasswActivity" android:label="Password">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="kankan.wheel.WHEEL_SAMPLE"/>
+                <category android:name="antistatic.widget.WHEEL_SAMPLE"/>
             </intent-filter>
         </activity>
-        <activity android:name="kankan.wheel.demo.SlotMachineActivity" android:label="Slot Machine">
+        <activity android:name="antistatic.widget.demo.SlotMachineActivity" android:label="Slot Machine">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="kankan.wheel.WHEEL_SAMPLE"/>
+                <category android:name="antistatic.widget.WHEEL_SAMPLE"/>
             </intent-filter>
         </activity>
-        <activity android:name="kankan.wheel.demo.CitiesActivity" android:label="Cities">
+        <activity android:name="antistatic.widget.demo.CitiesActivity" android:label="Cities">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="kankan.wheel.WHEEL_SAMPLE"/>
+                <category android:name="antistatic.widget.WHEEL_SAMPLE"/>
             </intent-filter>
         </activity>
-        <!-- activity android:name="kankan.wheel.demo.SpeedActivity" android:label="Speed">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="kankan.wheel.WHEEL_SAMPLE"/>
-            </intent-filter>
-        </activity-->
 
     </application>
 
