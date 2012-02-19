@@ -37,5 +37,5 @@ public interface OnWheelChangedListener {
 	 * @param oldValue the old value of current item
 	 * @param newValue the new value of current item
 	 */
-	void onChanged(AbstractWheelView wheel, int oldValue, int newValue);
+	void onChanged(AbstractWheel wheel, int oldValue, int newValue);
 }

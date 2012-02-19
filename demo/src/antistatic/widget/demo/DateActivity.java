@@ -2,7 +2,7 @@ package antistatic.widget.demo;
 
 import java.util.Calendar;
 
-import antistatic.widget.wheel.AbstractWheelView;
+import antistatic.widget.wheel.AbstractWheel;
 import antistatic.widget.wheel.OnWheelChangedListener;
 import antistatic.widget.wheel.adapters.ArrayWheelAdapter;
 import antistatic.widget.wheel.adapters.NumericWheelAdapter;
@@ -23,12 +23,12 @@ public class DateActivity extends Activity {
 
         Calendar calendar = Calendar.getInstance();
 
-        final AbstractWheelView month = (AbstractWheelView) findViewById(R.id.month);
-        final AbstractWheelView year = (AbstractWheelView) findViewById(R.id.year);
-        final AbstractWheelView day = (AbstractWheelView) findViewById(R.id.day);
+        final AbstractWheel month = (AbstractWheel) findViewById(R.id.month);
+        final AbstractWheel year = (AbstractWheel) findViewById(R.id.year);
+        final AbstractWheel day = (AbstractWheel) findViewById(R.id.day);
         
         OnWheelChangedListener listener = new OnWheelChangedListener() {
-            public void onChanged(AbstractWheelView wheel, int oldValue, int newValue) {
+            public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
                 updateDays(year, month, day);
             }
         };
@@ -55,7 +55,7 @@ public class DateActivity extends Activity {
     /**
      * Updates day widget. Sets max days according to selected month and year
      */
-    void updateDays(AbstractWheelView year, AbstractWheelView month, AbstractWheelView day) {
+    void updateDays(AbstractWheel year, AbstractWheel month, AbstractWheel day) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR) + year.getCurrentItem());
         calendar.set(Calendar.MONTH, month.getCurrentItem());

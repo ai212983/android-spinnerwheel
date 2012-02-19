@@ -32,11 +32,11 @@ public interface OnWheelScrollListener {
 	 * Callback method to be invoked when scrolling started.
 	 * @param wheel the widget view whose state has changed.
 	 */
-	void onScrollingStarted(AbstractWheelView wheel);
+	void onScrollingStarted(AbstractWheel wheel);
 	
 	/**
 	 * Callback method to be invoked when scrolling ended.
 	 * @param wheel the widget view whose state has changed.
 	 */
-	void onScrollingFinished(AbstractWheelView wheel);
+	void onScrollingFinished(AbstractWheel wheel);
 }

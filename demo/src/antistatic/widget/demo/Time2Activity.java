@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-import antistatic.widget.wheel.AbstractWheelView;
+import antistatic.widget.wheel.AbstractWheel;
 import antistatic.widget.wheel.NumberPicker;
 import antistatic.widget.wheel.adapters.AbstractWheelTextAdapter;
 import antistatic.widget.wheel.adapters.ArrayWheelAdapter;
@@ -25,20 +25,20 @@ public class Time2Activity extends Activity {
 
         setContentView(R.layout.time2_layout);
     
-        final AbstractWheelView hours = (AbstractWheelView) findViewById(R.id.hour);
+        final AbstractWheel hours = (AbstractWheel) findViewById(R.id.hour);
         NumericWheelAdapter hourAdapter = new NumericWheelAdapter(this, 0, 23);
         hourAdapter.setItemResource(R.layout.wheel_text_item);
         hourAdapter.setItemTextResource(R.id.text);
         hours.setViewAdapter(hourAdapter);
     
-        final AbstractWheelView mins = (AbstractWheelView) findViewById(R.id.mins);
+        final AbstractWheel mins = (AbstractWheel) findViewById(R.id.mins);
         NumericWheelAdapter minAdapter = new NumericWheelAdapter(this, 0, 59, "%02d");
         minAdapter.setItemResource(R.layout.wheel_text_item);
         minAdapter.setItemTextResource(R.id.text);
         mins.setViewAdapter(minAdapter);
         mins.setCyclic(true);
         
-        final AbstractWheelView ampm = (AbstractWheelView) findViewById(R.id.ampm);
+        final AbstractWheel ampm = (AbstractWheel) findViewById(R.id.ampm);
         ArrayWheelAdapter<String> ampmAdapter =
             new ArrayWheelAdapter<String>(this, new String[] {"AM", "PM"});
         ampmAdapter.setItemResource(R.layout.wheel_text_item);
@@ -51,10 +51,10 @@ public class Time2Activity extends Activity {
         mins.setCurrentItem(calendar.get(Calendar.MINUTE));
         ampm.setCurrentItem(calendar.get(Calendar.AM_PM));
         
-        final AbstractWheelView day = (AbstractWheelView) findViewById(R.id.day);
+        final AbstractWheel day = (AbstractWheel) findViewById(R.id.day);
         day.setViewAdapter(new DayArrayAdapter(this, calendar));
 
-        final AbstractWheelView hor = (AbstractWheelView) findViewById(R.id.horizontal);
+        final AbstractWheel hor = (AbstractWheel) findViewById(R.id.horizontal);
         ArrayWheelAdapter<String> horAdapter =
                 new ArrayWheelAdapter<String>(this, new String[] {"H01", "H02", "H03", "H04", "H05", "H06", "H07"});
         horAdapter.setItemResource(R.layout.wheel_text_horizontal_item);

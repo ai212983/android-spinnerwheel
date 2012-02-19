@@ -1,6 +1,6 @@
 package antistatic.widget.demo;
 
-import antistatic.widget.wheel.AbstractWheelView;
+import antistatic.widget.wheel.AbstractWheel;
 import antistatic.widget.wheel.OnWheelChangedListener;
 import antistatic.widget.wheel.OnWheelScrollListener;
 import antistatic.widget.wheel.adapters.AbstractWheelTextAdapter;
@@ -23,7 +23,7 @@ public class CitiesActivity extends Activity {
 
         setContentView(R.layout.cities_layout);
                 
-        final AbstractWheelView country = (AbstractWheelView) findViewById(R.id.country);
+        final AbstractWheel country = (AbstractWheel) findViewById(R.id.country);
         country.setVisibleItems(3);
         country.setViewAdapter(new CountryAdapter(this));
 
@@ -34,11 +34,11 @@ public class CitiesActivity extends Activity {
                 new String[] {"Paris", "Bordeaux"},
         };
         
-        final AbstractWheelView city = (AbstractWheelView) findViewById(R.id.city);
+        final AbstractWheel city = (AbstractWheel) findViewById(R.id.city);
         city.setVisibleItems(5);
 
         country.addChangingListener(new OnWheelChangedListener() {
-            public void onChanged(AbstractWheelView wheel, int oldValue, int newValue) {
+            public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
                 if (!scrolling) {
                     updateCities(city, cities, newValue);
                 }
@@ -46,10 +46,10 @@ public class CitiesActivity extends Activity {
         });
         
         country.addScrollingListener( new OnWheelScrollListener() {
-            public void onScrollingStarted(AbstractWheelView wheel) {
+            public void onScrollingStarted(AbstractWheel wheel) {
                 scrolling = true;
             }
-            public void onScrollingFinished(AbstractWheelView wheel) {
+            public void onScrollingFinished(AbstractWheel wheel) {
                 scrolling = false;
                 updateCities(city, cities, country.getCurrentItem());
             }
@@ -61,7 +61,7 @@ public class CitiesActivity extends Activity {
     /**
      * Updates the city widget
      */
-    private void updateCities(AbstractWheelView city, String cities[][], int index) {
+    private void updateCities(AbstractWheel city, String cities[][], int index) {
         ArrayWheelAdapter<String> adapter =
             new ArrayWheelAdapter<String>(this, cities[index]);
         adapter.setTextSize(18);

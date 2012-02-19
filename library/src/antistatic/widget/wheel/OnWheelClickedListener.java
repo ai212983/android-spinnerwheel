@@ -36,5 +36,5 @@ public interface OnWheelClickedListener {
      * @param wheel the widget view
      * @param itemIndex the index of clicked item
      */
-    void onItemClicked(AbstractWheelView wheel, int itemIndex);
+    void onItemClicked(AbstractWheel wheel, int itemIndex);
 }

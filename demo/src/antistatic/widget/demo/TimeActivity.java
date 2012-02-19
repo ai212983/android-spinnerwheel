@@ -2,10 +2,10 @@ package antistatic.widget.demo;
 
 import java.util.Calendar;
 
+import antistatic.widget.wheel.AbstractWheel;
 import antistatic.widget.wheel.OnWheelChangedListener;
 import antistatic.widget.wheel.OnWheelClickedListener;
 import antistatic.widget.wheel.OnWheelScrollListener;
-import antistatic.widget.wheel.AbstractWheelView;
 import antistatic.widget.wheel.adapters.NumericWheelAdapter;
 
 import android.app.Activity;
@@ -25,10 +25,10 @@ public class TimeActivity extends Activity {
 
 		setContentView(R.layout.time_layout);
 	
-		final AbstractWheelView hours = (AbstractWheelView) findViewById(R.id.hour);
+		final AbstractWheel hours = (AbstractWheel) findViewById(R.id.hour);
 		hours.setViewAdapter(new NumericWheelAdapter(this, 0, 23));
 	
-		final AbstractWheelView mins = (AbstractWheelView) findViewById(R.id.mins);
+		final AbstractWheel mins = (AbstractWheel) findViewById(R.id.mins);
 		mins.setViewAdapter(new NumericWheelAdapter(this, 0, 59, "%02d"));
 		mins.setCyclic(true);
 	
@@ -51,7 +51,7 @@ public class TimeActivity extends Activity {
 		addChangingListener(hours, "hour");
 	
 		OnWheelChangedListener wheelListener = new OnWheelChangedListener() {
-			public void onChanged(AbstractWheelView wheel, int oldValue, int newValue) {
+			public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
 				if (!timeScrolled) {
 					timeChanged = true;
 					picker.setCurrentHour(hours.getCurrentItem());
@@ -64,7 +64,7 @@ public class TimeActivity extends Activity {
 		mins.addChangingListener(wheelListener);
 		
 		OnWheelClickedListener click = new OnWheelClickedListener() {
-            public void onItemClicked(AbstractWheelView wheel, int itemIndex) {
+            public void onItemClicked(AbstractWheel wheel, int itemIndex) {
                 wheel.setCurrentItem(itemIndex, true);
             }
         };
@@ -72,10 +72,10 @@ public class TimeActivity extends Activity {
         mins.addClickingListener(click);
 
 		OnWheelScrollListener scrollListener = new OnWheelScrollListener() {
-			public void onScrollingStarted(AbstractWheelView wheel) {
+			public void onScrollingStarted(AbstractWheel wheel) {
 				timeScrolled = true;
 			}
-			public void onScrollingFinished(AbstractWheelView wheel) {
+			public void onScrollingFinished(AbstractWheel wheel) {
 				timeScrolled = false;
 				timeChanged = true;
 				picker.setCurrentHour(hours.getCurrentItem());
@@ -102,9 +102,9 @@ public class TimeActivity extends Activity {
 	 * @param wheel the widget
 	 * @param label the widget label
 	 */
-	private void addChangingListener(final AbstractWheelView wheel, final String label) {
+	private void addChangingListener(final AbstractWheel wheel, final String label) {
 		wheel.addChangingListener(new OnWheelChangedListener() {
-			public void onChanged(AbstractWheelView wheel, int oldValue, int newValue) {
+			public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
 				//widget.setLabel(newValue != 1 ? label + "s" : label);
 			}
 		});

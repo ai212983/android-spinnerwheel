@@ -1,6 +1,6 @@
 package antistatic.widget.demo;
 
-import antistatic.widget.wheel.AbstractWheelView;
+import antistatic.widget.wheel.AbstractWheel;
 import antistatic.widget.wheel.OnWheelChangedListener;
 import antistatic.widget.wheel.adapters.ArrayWheelAdapter;
 import antistatic.widget.wheel.adapters.NumericWheelAdapter;
@@ -15,7 +15,7 @@ public class SpeedActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.speed1_layout);
-        final AbstractWheelView speed = (AbstractWheelView) findViewById(R.id.speed);
+        final AbstractWheel speed = (AbstractWheel) findViewById(R.id.speed);
         final SpeedAdapter speedAdapter = new SpeedAdapter(this, 245, 5);
         speed.setViewAdapter(speedAdapter);
         
@@ -25,7 +25,7 @@ public class SpeedActivity extends Activity {
                 "m/s",
         };
         
-        final AbstractWheelView units = (AbstractWheelView) findViewById(R.id.units);
+        final AbstractWheel units = (AbstractWheel) findViewById(R.id.units);
         ArrayWheelAdapter<String> unitsAdapter =
             new ArrayWheelAdapter<String>(this, unitsValues);
         unitsAdapter.setItemResource(R.layout.units_item);
@@ -36,7 +36,7 @@ public class SpeedActivity extends Activity {
         
         units.addChangingListener(new OnWheelChangedListener() {
             @Override
-            public void onChanged(AbstractWheelView wheel, int oldValue, int newValue) {
+            public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
                 String value = unitsValues[units.getCurrentItem()];
                 speedAdapter.setUnits(" " + value);
                 speed.invalidateWheel(false);

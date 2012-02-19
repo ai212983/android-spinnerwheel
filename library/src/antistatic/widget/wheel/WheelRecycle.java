@@ -41,13 +41,13 @@ public class WheelRecycle {
 	private List<View> emptyItems;
 	
 	// Wheel view
-	private AbstractWheelView wheel;
+	private AbstractWheel wheel;
 	
 	/**
 	 * Constructor
 	 * @param wheel the widget view
 	 */
-	public WheelRecycle(AbstractWheelView wheel) {
+	public WheelRecycle(AbstractWheel wheel) {
 		this.wheel = wheel;
 	}
 

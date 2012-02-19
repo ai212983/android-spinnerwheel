@@ -26,7 +26,6 @@ package antistatic.widget.wheel;
 
 import android.content.Context;
 import android.graphics.*;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.GradientDrawable.Orientation;
 import android.util.AttributeSet;
@@ -34,7 +33,6 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
-import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.ObjectAnimator;
 
 /**
@@ -50,77 +48,9 @@ public class WheelVerticalView extends AbstractWheelView {
 
     @SuppressWarnings("unused")
     private final String LOG_TAG = WheelVerticalView.class.getName() + " #" + (++itemID);
+
     
-    /**
-     * The {@link Paint} for drawing the selector.
-     */
-    protected Paint mSelectorWheelPaint;
-
-    /**
-     * Divider for showing item to be selected while scrolling
-     */
-    protected Drawable mSelectionDivider;
-
-    /**
-     * The height of the selection divider.
-     */
-    private int mSelectionDividerHeight;
-
-    /**
-     * The height of a selector element (text + gap).
-     */
-    protected int mSelectorElementHeight;
-
-    /**
-     * The {@link Paint} for drawing the separators.
-     */
-    protected Paint mSeparatorsPaint;
-
-    /**
-     * {@link com.nineoldandroids.animation.Animator} for dimming the selector widget.
-     */
-    protected Animator mDimSelectorWheelAnimator;
-
-    /**
-     * {@link com.nineoldandroids.animation.Animator} for dimming the selector widget.
-     */
-    protected Animator mDimSeparatorsAnimator;
-
-    /**
-     * The property for setting the selector paint.
-     */
-    protected static final String PROPERTY_SELECTOR_PAINT_COEFF = "selectorPaintCoeff";
-
-    /**
-     * The property for setting the separators paint.
-     */
-    protected static final String PROPERTY_SEPARATORS_PAINT_ALPHA = "separatorsPaintAlpha";
-
-    /**
-     * The alpha of the selector widget when it is dimmed.
-     */
-    protected static final int SELECTOR_WHEEL_DIM_ALPHA = 30; // 60 in ICS //TODO: Make this parameter customizable
-
-    /**
-     * The alpha of separators widget when they are shown.
-     */
-    protected static final int SEPARATORS_BRIGHT_ALPHA = 70; //TODO: Make this parameter customizable
-
-    /**
-     * The alpha of separators when they are is dimmed.
-     */
-    protected static final int SEPARATORS_DIM_ALPHA = 70; //TODO: Make this parameter customizable
-
-    /** Top and bottom items offset */
-    protected static final int ITEM_OFFSET_PERCENT = 10;
-
-    /** Left and right padding value */
-    protected static final int PADDING = 10;
-
-    protected Bitmap mSpinBitmap;
-    protected Bitmap mSeparatorsBitmap;
-    
-    // -------------- items above should be moved to AbstractWheelView
+    // -------------- items above should be moved to AbstractWheel
 
 
     // Item height
@@ -168,8 +98,8 @@ public class WheelVerticalView extends AbstractWheelView {
                 UNSCALED_DEFAULT_SELECTION_DIVIDER_HEIGHT,
                 getResources().getDisplayMetrics());
         */
-        mSelectionDividerHeight = 1;
-        //mSelectionDividerHeight = attributesArray.getDimensionPixelSize(
+        mSelectionDividerWidth = 1;
+        //mSelectionDividerWidth = attributesArray.getDimensionPixelSize(
         //        R.styleable.NumberPicker_selectionDividerHeight, defSelectionDividerHeight);
         
         mSeparatorsPaint = new Paint();
@@ -337,7 +267,8 @@ public class WheelVerticalView extends AbstractWheelView {
         return width;
     }
 
-    private void measureLayout() {
+    @Override
+    protected void measureLayout() {
 
         itemsLayout.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 
@@ -372,41 +303,15 @@ public class WheelVerticalView extends AbstractWheelView {
         setMeasuredDimension(width, height);
     }
 
-    /**
-     * Sets layouts width and height. This method should be invoked only if something has been changed.
-     * @param width the layout width
-     * @param height the layout height
-     */
+
     @Override
-    protected void doLayout(int width, int height, boolean dimensionsChanged) {
+    protected void doItemsLayout(int width, int height) {
         itemsLayout.layout(0, 0, width - 2 * PADDING, height);
-        
-        if (dimensionsChanged) {
-            int w = getMeasuredWidth();
-            int h = getMeasuredHeight();
-            mSpinBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-            mSeparatorsBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-            mSelectorElementHeight = getItemDimension();
-            setSelectorPaintCoeff(0);
-        }
     }
+
 
     @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-
-        if (viewAdapter != null && viewAdapter.getItemsCount() > 0) {
-            updateView();
-            drawItems(canvas);
-        }
-    }
-
-
-    /**
-     * Draws items
-     * @param canvas the canvas for drawing
-     */
-    private void drawItems(Canvas canvas) {
+    protected void drawItems(Canvas canvas) {
         canvas.save();
         int w = getMeasuredWidth();
         int h = getMeasuredHeight();
@@ -429,8 +334,8 @@ public class WheelVerticalView extends AbstractWheelView {
         if (mSelectionDivider != null) {
             // draw the top divider
             int topOfTopDivider =
-                    (getHeight() - mSelectorElementHeight - mSelectionDividerHeight) / 2;
-            int bottomOfTopDivider = topOfTopDivider + mSelectionDividerHeight;
+                    (getHeight() - mSelectorElementHeight - mSelectionDividerWidth) / 2;
+            int bottomOfTopDivider = topOfTopDivider + mSelectionDividerWidth;
             mSelectionDivider.setBounds(0, topOfTopDivider, getRight(), bottomOfTopDivider);
             mSelectionDivider.draw(cSeparators);
 
@@ -455,16 +360,6 @@ public class WheelVerticalView extends AbstractWheelView {
         return getHeight();
     }
 
-    /**
-     * Updates view. Rebuilds items and label if necessary, recalculate items sizes.
-     */
-    @Override
-    protected void updateView() {
-        if (rebuildItems()) {
-            measureLayout();
-            doLayout(getWidth(), getHeight(), false);
-        }
-    }
 
     /**
      * Creates item layouts if necessary

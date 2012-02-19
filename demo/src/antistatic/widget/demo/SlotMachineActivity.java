@@ -4,7 +4,7 @@ import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.List;
 
-import antistatic.widget.wheel.AbstractWheelView;
+import antistatic.widget.wheel.AbstractWheel;
 import antistatic.widget.wheel.OnWheelChangedListener;
 import antistatic.widget.wheel.OnWheelScrollListener;
 import antistatic.widget.wheel.adapters.AbstractWheelAdapter;
@@ -48,10 +48,10 @@ public class SlotMachineActivity extends Activity {
     
     // Wheel scrolled listener
     OnWheelScrollListener scrolledListener = new OnWheelScrollListener() {
-        public void onScrollingStarted(AbstractWheelView wheel) {
+        public void onScrollingStarted(AbstractWheel wheel) {
             wheelScrolled = true;
         }
-        public void onScrollingFinished(AbstractWheelView wheel) {
+        public void onScrollingFinished(AbstractWheel wheel) {
             wheelScrolled = false;
             updateStatus();
         }
@@ -59,7 +59,7 @@ public class SlotMachineActivity extends Activity {
     
     // Wheel changed listener
     private OnWheelChangedListener changedListener = new OnWheelChangedListener() {
-        public void onChanged(AbstractWheelView wheel, int oldValue, int newValue) {
+        public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
             if (!wheelScrolled) {
                 updateStatus();
             }
@@ -83,7 +83,7 @@ public class SlotMachineActivity extends Activity {
      * @param id the widget wheel Id
      */
     private void initWheel(int id) {
-        AbstractWheelView wheel = getWheel(id);
+        AbstractWheel wheel = getWheel(id);
         wheel.setViewAdapter(new SlotMachineAdapter(this));
         wheel.setCurrentItem((int)(Math.random() * 10));
         
@@ -98,8 +98,8 @@ public class SlotMachineActivity extends Activity {
      * @param id the widget Id
      * @return the widget with passed Id
      */
-    private AbstractWheelView getWheel(int id) {
-        return (AbstractWheelView) findViewById(id);
+    private AbstractWheel getWheel(int id) {
+        return (AbstractWheel) findViewById(id);
     }
     
     /**
@@ -126,7 +126,7 @@ public class SlotMachineActivity extends Activity {
      * @param id the widget id
      */
     private void mixWheel(int id) {
-        AbstractWheelView wheel = getWheel(id);
+        AbstractWheel wheel = getWheel(id);
         wheel.scroll(-350 + (int)(Math.random() * 50), 2000);
     }
     
