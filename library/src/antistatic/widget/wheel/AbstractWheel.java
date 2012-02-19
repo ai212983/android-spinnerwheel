@@ -30,6 +30,7 @@ import java.util.List;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import antistatic.widget.wheel.adapters.WheelViewAdapter;
 import android.content.Context;
 import android.database.DataSetObserver;
@@ -218,7 +219,7 @@ public abstract class AbstractWheel extends View {
             invalidateWheel(true);
         }
     };
-
+    abstract protected void measureLayout();
     /**
      * Sets view adapter. Usually new adapters contain different views, so
      * it needs to rebuild view by calling measure().
@@ -405,6 +406,7 @@ public abstract class AbstractWheel extends View {
      * @param clearCaches if true then cached views will be cleared
      */
     public void invalidateWheel(boolean clearCaches) {
+        Log.e(LOG_TAG, "Invalidating wheel: " + clearCaches);
         if (clearCaches) {
             recycle.clearAll();
             if (itemsLayout != null) {
@@ -424,6 +426,7 @@ public abstract class AbstractWheel extends View {
         if (changed) {
             int w = r - l;
             int h = b - t;
+            Log.e(LOG_TAG, "Performing items layout from onLayout");
             doItemsLayout(w, h);
             if (mLayoutWidth != w || mLayoutHeight != h) {
                 recreateAssets(getMeasuredWidth(), getMeasuredHeight());
@@ -623,6 +626,7 @@ public abstract class AbstractWheel extends View {
             }
         }
         firstItem = first;
+        Log.e(LOG_TAG, " rebuilding items: rebuilt = " + updated + " layout items: " + itemsLayout.getChildCount() + ", range: " + range.getFirst() + ".. " + range.getCount() );
         return updated;
     }
 

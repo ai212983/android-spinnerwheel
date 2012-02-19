@@ -1506,7 +1506,6 @@ public class NumberPicker extends LinearLayout {
      * Sets the <code>selectorWheelState</code>.
      */
     private void setSelectorWheelState(int selectorWheelState) {
-        Log.e("NumberPicker", " >>> " + selectorWheelState);
         mSelectorWheelState = selectorWheelState;
         if (selectorWheelState == SELECTOR_WHEEL_STATE_LARGE) {
             mSelectorWheelPaint.setAlpha(SELECTOR_WHEEL_BRIGHT_ALPHA);

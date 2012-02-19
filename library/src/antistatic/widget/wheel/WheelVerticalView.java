@@ -56,16 +56,12 @@ public class WheelVerticalView extends AbstractWheelView {
     // Item height
     private int itemHeight = 0;
 
-    /**
-     * Constructor
-     */
+
     public WheelVerticalView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 
-    /**
-     * Constructor
-     */
+
     public WheelVerticalView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
@@ -81,14 +77,9 @@ public class WheelVerticalView extends AbstractWheelView {
         return new WheelVerticalScroller(getContext(), scrollingListener);
     }
 
+    @Override
     protected void initData(Context context) {
         super.initData(context);
-        // create the animator for showing the input controls
-        mDimSelectorWheelAnimator = ObjectAnimator.ofFloat(this, PROPERTY_SELECTOR_PAINT_COEFF, 1, 0);
-
-        mDimSeparatorsAnimator = ObjectAnimator.ofInt(this, PROPERTY_SEPARATORS_PAINT_ALPHA,
-                SEPARATORS_BRIGHT_ALPHA, SEPARATORS_DIM_ALPHA
-        );
 
         int[] dividerColors = new int[] { 0xFF111111, 0xFF222222, 0xFF111111 };
         mSelectionDivider = new  GradientDrawable(Orientation.LEFT_RIGHT, dividerColors);
@@ -101,14 +92,7 @@ public class WheelVerticalView extends AbstractWheelView {
         mSelectionDividerWidth = 1;
         //mSelectionDividerWidth = attributesArray.getDimensionPixelSize(
         //        R.styleable.NumberPicker_selectionDividerHeight, defSelectionDividerHeight);
-        
-        mSeparatorsPaint = new Paint();
-        mSeparatorsPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
-        mSeparatorsPaint.setAlpha(SEPARATORS_DIM_ALPHA);
 
-        mSelectorWheelPaint = new Paint();
-        mSelectorWheelPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
-        Log.d(LOG_TAG, "Selector widget paint has been created");
     }
 
     //
@@ -135,11 +119,8 @@ public class WheelVerticalView extends AbstractWheelView {
         lightSeparators(500);
     }
 
-    /**
-     * Sets the <code>coeff</code> of the {@link Paint} for drawing
-     * the selector widget.
-     */
-    @SuppressWarnings("unused") // Called via reflection
+
+    @Override
     public void setSelectorPaintCoeff(float coeff) {
 
         int h = getMeasuredHeight();
@@ -214,6 +195,12 @@ public class WheelVerticalView extends AbstractWheelView {
         int desired =  - itemHeight * ITEM_OFFSET_PERCENT / 100;
         return Math.max(itemHeight * visibleItems, getSuggestedMinimumHeight());
     }
+
+    @Override
+    protected int getBaseDimension() {
+        return getHeight();
+    }
+
 
     /**
      * Returns height of widget item
@@ -354,12 +341,6 @@ public class WheelVerticalView extends AbstractWheelView {
         canvas.drawBitmap(mSeparatorsBitmap, 0, 0, null);
         canvas.restore();
     }
-
-    @Override
-    protected int getBaseDimension() {
-        return getHeight();
-    }
-
 
     /**
      * Creates item layouts if necessary

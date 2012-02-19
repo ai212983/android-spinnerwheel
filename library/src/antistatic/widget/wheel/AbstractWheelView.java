@@ -26,17 +26,17 @@ package antistatic.widget.wheel;
 
 import android.content.Context;
 import android.database.DataSetObserver;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
+import android.graphics.*;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Interpolator;
 import android.widget.LinearLayout;
 import antistatic.widget.wheel.adapters.WheelViewAdapter;
 import com.nineoldandroids.animation.Animator;
+import com.nineoldandroids.animation.ObjectAnimator;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -143,6 +143,25 @@ public abstract class AbstractWheelView extends AbstractWheel {
         super(context);
         initData(context);
     }
+    
+    @Override
+    protected void initData(Context context) {
+        super.initData(context);
+
+        // create the animator for showing the input controls
+        mDimSelectorWheelAnimator = ObjectAnimator.ofFloat(this, PROPERTY_SELECTOR_PAINT_COEFF, 1, 0);
+
+        mDimSeparatorsAnimator = ObjectAnimator.ofInt(this, PROPERTY_SEPARATORS_PAINT_ALPHA,
+                SEPARATORS_BRIGHT_ALPHA, SEPARATORS_DIM_ALPHA
+        );
+
+        mSeparatorsPaint = new Paint();
+        mSeparatorsPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
+        mSeparatorsPaint.setAlpha(SEPARATORS_DIM_ALPHA);
+
+        mSelectorWheelPaint = new Paint();
+        mSelectorWheelPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
+    }
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -150,6 +169,7 @@ public abstract class AbstractWheelView extends AbstractWheel {
 
         if (viewAdapter != null && viewAdapter.getItemsCount() > 0) {
             if (rebuildItems()) {
+                Log.e(LOG_TAG, "Items has been rebuilt, measuring and doing layout");
                 measureLayout();
                 doItemsLayout(getWidth(), getHeight());
             }
@@ -165,14 +185,37 @@ public abstract class AbstractWheelView extends AbstractWheel {
         setSelectorPaintCoeff(0);
     }
 
-    abstract protected void doItemsLayout(int width, int height);
-
-    abstract protected void setSelectorPaintCoeff(float coeff);
-
-    abstract protected void measureLayout();
+    // ------------------------------------------------------------------------
+    // ABSTRACT METHODS
+    // ------------------------------------------------------------------------
 
     /**
-     * Draws items
+     * Performs items layout
+     *
+     * @param width the layout width
+     * @param height the layout height
+     */
+    abstract protected void doItemsLayout(int width, int height);
+
+
+    /**
+     * Sets the <code>coeff</code> of the {@link Paint} for drawing
+     * the selector widget.
+     *
+     * @param coeff Coeffitient from 0 (selector is passive) to 1 (selector is active)
+     */
+    abstract public void setSelectorPaintCoeff(float coeff);
+
+    /**
+     * Perform layout measurements
+     */
+    abstract protected void measureLayout();
+
+
+
+    /**
+     * Draws items on specified canvas
+     *
      * @param canvas the canvas for drawing
      */
     abstract protected void drawItems(Canvas canvas);
