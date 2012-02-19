@@ -34,7 +34,7 @@ import android.view.animation.Interpolator;
 import android.widget.Scroller;
 
 /**
- * Scroller class handles scrolling events and updates the 
+ * Scroller class handles scrolling events and updates the widget
  */
 public abstract class WheelScroller {
     /**

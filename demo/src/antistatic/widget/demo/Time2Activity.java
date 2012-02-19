@@ -6,7 +6,6 @@ import java.util.Calendar;
 import java.util.Locale;
 
 import antistatic.widget.wheel.AbstractWheel;
-import antistatic.widget.wheel.NumberPicker;
 import antistatic.widget.wheel.adapters.AbstractWheelTextAdapter;
 import antistatic.widget.wheel.adapters.ArrayWheelAdapter;
 import antistatic.widget.wheel.adapters.NumericWheelAdapter;
@@ -60,10 +59,6 @@ public class Time2Activity extends Activity {
         horAdapter.setItemResource(R.layout.wheel_text_horizontal_item);
         horAdapter.setItemTextResource(R.id.text);
         hor.setViewAdapter(horAdapter);
-
-        NumberPicker numberPicker = (NumberPicker) findViewById(R.id.number_picker);
-        numberPicker.setMinValue(1);
-        numberPicker.setMaxValue(12);
 */
     }
     

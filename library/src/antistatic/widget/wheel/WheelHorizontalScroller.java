@@ -27,9 +27,6 @@ package antistatic.widget.wheel;
 import android.content.Context;
 import android.view.MotionEvent;
 
-/**
- * Scroller class handles scrolling events and updates the 
- */
 public class WheelHorizontalScroller extends WheelScroller {
 
     /**
