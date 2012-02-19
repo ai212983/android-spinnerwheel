@@ -39,7 +39,7 @@ public class SpeedActivity extends Activity {
             public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
                 String value = unitsValues[units.getCurrentItem()];
                 speedAdapter.setUnits(" " + value);
-                speed.invalidateWheel(false);
+                speed.invalidateItemsLayout(false);
             }
         });
         

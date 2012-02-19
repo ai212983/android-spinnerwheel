@@ -25,21 +25,13 @@
 package antistatic.widget.wheel;
 
 import android.content.Context;
-import android.database.DataSetObserver;
 import android.graphics.*;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.animation.Interpolator;
-import android.widget.LinearLayout;
-import antistatic.widget.wheel.adapters.WheelViewAdapter;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.ObjectAnimator;
 
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Abstract spinner widget view.
@@ -125,6 +117,13 @@ public abstract class AbstractWheelView extends AbstractWheel {
     protected Bitmap mSpinBitmap;
     protected Bitmap mSeparatorsBitmap;
 
+
+    //--------------------------------------------------------------------------
+    //
+    //  Constructors
+    //
+    //--------------------------------------------------------------------------
+
     public AbstractWheelView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         initData(context);
@@ -143,18 +142,25 @@ public abstract class AbstractWheelView extends AbstractWheel {
         super(context);
         initData(context);
     }
-    
+
+    //--------------------------------------------------------------------------
+    //
+    //  Initiating assets and setters for paints
+    //
+    //--------------------------------------------------------------------------
+
     @Override
     protected void initData(Context context) {
         super.initData(context);
 
-        // create the animator for showing the input controls
+        // creating animators
         mDimSelectorWheelAnimator = ObjectAnimator.ofFloat(this, PROPERTY_SELECTOR_PAINT_COEFF, 1, 0);
 
         mDimSeparatorsAnimator = ObjectAnimator.ofInt(this, PROPERTY_SEPARATORS_PAINT_ALPHA,
                 SEPARATORS_BRIGHT_ALPHA, SEPARATORS_DIM_ALPHA
         );
 
+        // creating paints
         mSeparatorsPaint = new Paint();
         mSeparatorsPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
         mSeparatorsPaint.setAlpha(SEPARATORS_DIM_ALPHA);
@@ -163,21 +169,12 @@ public abstract class AbstractWheelView extends AbstractWheel {
         mSelectorWheelPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
     }
 
-    @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-
-        if (viewAdapter != null && viewAdapter.getItemsCount() > 0) {
-            if (rebuildItems()) {
-                Log.e(LOG_TAG, "Items has been rebuilt, measuring and doing layout");
-                measureLayout();
-                doItemsLayout();
-            }
-            doItemsLayout();
-            drawItems(canvas);
-        }
-    }
-
+    /**
+     * Recreates assets (like bitmaps) when layout size has been changed
+     *
+     * @param width New widget width
+     * @param height New widget height
+     */
     @Override
     protected void recreateAssets(int width, int height) {
         mSpinBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
@@ -186,17 +183,82 @@ public abstract class AbstractWheelView extends AbstractWheel {
         setSelectorPaintCoeff(0);
     }
 
-    // ------------------------------------------------------------------------
-    // ABSTRACT METHODS
-    // ------------------------------------------------------------------------
+    /**
+     * Sets the <code>alpha</code> of the {@link Paint} for drawing separators
+     * widget.
+     * @param alpha
+     */
+    @SuppressWarnings("unused")  // Called via reflection
+    public void setSeparatorsPaintAlpha(int alpha) {
+        mSeparatorsPaint.setAlpha(alpha);
+        invalidate();
+    }
 
     /**
      * Sets the <code>coeff</code> of the {@link Paint} for drawing
      * the selector widget.
      *
-     * @param coeff Coeffitient from 0 (selector is passive) to 1 (selector is active)
+     * @param coeff Coefficient from 0 (selector is passive) to 1 (selector is active)
      */
     abstract public void setSelectorPaintCoeff(float coeff);
+
+
+    //--------------------------------------------------------------------------
+    //
+    //  Processing scroller events
+    //
+    //--------------------------------------------------------------------------
+
+    @Override
+    protected void onScrollTouched() {
+        mDimSelectorWheelAnimator.cancel();
+        mDimSeparatorsAnimator.cancel();
+        setSelectorPaintCoeff(1);
+        setSeparatorsPaintAlpha(SEPARATORS_BRIGHT_ALPHA);
+    }
+
+    @Override
+    protected void onScrollTouchedUp() {
+        fadeSelectorWheel(750);
+        lightSeparators(750);
+    }
+
+    @Override
+    protected void onScrollFinished() {
+        fadeSelectorWheel(500);
+        lightSeparators(500);
+    }
+
+    //----------------------------------
+    //  Animating components
+    //----------------------------------
+
+    /**
+     * Fade the selector widget via an animation.
+     *
+     * @param animationDuration The duration of the animation.
+     */
+    private void fadeSelectorWheel(long animationDuration) {
+        mDimSelectorWheelAnimator.setDuration(animationDuration);
+        mDimSelectorWheelAnimator.start();
+    }
+
+    /**
+     * Fade the selector widget via an animation.
+     *
+     * @param animationDuration The duration of the animation.
+     */
+    private void lightSeparators(long animationDuration) {
+        mDimSeparatorsAnimator.setDuration(animationDuration);
+        mDimSeparatorsAnimator.start();
+    }
+
+
+    //--------------------------------------------------------------------------
+    //
+    //  Layout measuring
+    //
+    //--------------------------------------------------------------------------
 
     /**
      * Perform layout measurements
@@ -204,6 +266,25 @@ public abstract class AbstractWheelView extends AbstractWheel {
     abstract protected void measureLayout();
 
 
+    //--------------------------------------------------------------------------
+    //
+    //  Drawing stuff
+    //
+    //--------------------------------------------------------------------------
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+
+        if (viewAdapter != null && viewAdapter.getItemsCount() > 0) {
+            if (rebuildItems()) {
+                measureLayout();
+                doItemsLayout();
+            }
+            doItemsLayout();
+            drawItems(canvas);
+        }
+    }
 
     /**
      * Draws items on specified canvas

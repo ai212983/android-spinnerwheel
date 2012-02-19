@@ -53,7 +53,7 @@ public class Time2Activity extends Activity {
         
         final AbstractWheel day = (AbstractWheel) findViewById(R.id.day);
         day.setViewAdapter(new DayArrayAdapter(this, calendar));
-
+/*
         final AbstractWheel hor = (AbstractWheel) findViewById(R.id.horizontal);
         ArrayWheelAdapter<String> horAdapter =
                 new ArrayWheelAdapter<String>(this, new String[] {"H01", "H02", "H03", "H04", "H05", "H06", "H07"});
@@ -64,7 +64,7 @@ public class Time2Activity extends Activity {
         NumberPicker numberPicker = (NumberPicker) findViewById(R.id.number_picker);
         numberPicker.setMinValue(1);
         numberPicker.setMaxValue(12);
-
+*/
     }
     
     /**

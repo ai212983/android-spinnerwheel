@@ -29,14 +29,12 @@ import android.graphics.*;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.GradientDrawable.Orientation;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
-import com.nineoldandroids.animation.ObjectAnimator;
 
 /**
- * Spinner wheel horizontal view.
+ * Spinner wheel vertical view.
  *
  * @author Yuri Kanivets
  * @author Dimitri Fedorov
@@ -49,13 +47,15 @@ public class WheelVerticalView extends AbstractWheelView {
     @SuppressWarnings("unused")
     private final String LOG_TAG = WheelVerticalView.class.getName() + " #" + (++itemID);
 
-    
-    // -------------- items above should be moved to AbstractWheel
 
+    // Cached item height
+    private int mItemHeight = 0;
 
-    // Item height
-    private int itemHeight = 0;
-
+    //--------------------------------------------------------------------------
+    //
+    //  Constructors
+    //
+    //--------------------------------------------------------------------------
 
     public WheelVerticalView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -72,10 +72,12 @@ public class WheelVerticalView extends AbstractWheelView {
     public WheelVerticalView(Context context) {
         super(context);
     }
-    
-    protected WheelScroller createScroller(WheelScroller.ScrollingListener scrollingListener) {
-        return new WheelVerticalScroller(getContext(), scrollingListener);
-    }
+
+    //--------------------------------------------------------------------------
+    //
+    //  Initiating assets and setter for selector paint
+    //
+    //--------------------------------------------------------------------------
 
     @Override
     protected void initData(Context context) {
@@ -94,31 +96,6 @@ public class WheelVerticalView extends AbstractWheelView {
         //        R.styleable.NumberPicker_selectionDividerHeight, defSelectionDividerHeight);
 
     }
-
-    //
-    // Methods related to scroll starting up/finishing
-    //
-
-    @Override
-    protected void onScrollTouched() {
-        mDimSelectorWheelAnimator.cancel();
-        mDimSeparatorsAnimator.cancel();
-        setSelectorPaintCoeff(1);
-        setSeparatorsPaintAlpha(SEPARATORS_BRIGHT_ALPHA);
-    }
-
-    @Override
-    protected void onScrollTouchedUp() {
-        fadeSelectorWheel(750);
-        lightSeparators(750);
-    }
-
-    @Override
-    protected void onScrollFinished() {
-        fadeSelectorWheel(500);
-        lightSeparators(500);
-    }
-
 
     @Override
     public void setSelectorPaintCoeff(float coeff) {
@@ -150,113 +127,77 @@ public class WheelVerticalView extends AbstractWheelView {
 
         invalidate();
     }
+    //--------------------------------------------------------------------------
+    //
+    //  Scroller-specific methods
+    //
+    //--------------------------------------------------------------------------
 
-    /**
-     * Sets the <code>alpha</code> of the {@link Paint} for drawing separators
-     * widget.
-     */
-    @SuppressWarnings("unused")  // Called via reflection
-    public void setSeparatorsPaintAlpha(int alpha) {
-        mSeparatorsPaint.setAlpha(alpha);
-        invalidate();
+    @Override
+    protected WheelScroller createScroller(WheelScroller.ScrollingListener scrollingListener) {
+        return new WheelVerticalScroller(getContext(), scrollingListener);
     }
 
-    /**
-     * Fade the selector widget via an animation.
-     *
-     * @param animationDuration The duration of the animation.
-     */
-    private void fadeSelectorWheel(long animationDuration) {
-        mDimSelectorWheelAnimator.setDuration(animationDuration);
-        mDimSelectorWheelAnimator.start();
+    @Override
+    protected float getMotionEventPosition(MotionEvent event) {
+        return event.getY();
     }
 
-    /**
-     * Fade the selector widget via an animation.
-     *
-     * @param animationDuration The duration of the animation.
-     */
-    private void lightSeparators(long animationDuration) {
-        mDimSeparatorsAnimator.setDuration(animationDuration);
-        mDimSeparatorsAnimator.start();
-    }
-
-    /**
-     * Calculates desired height for layout
-     *
-     * @param layout the source layout
-     * @return the desired layout height
-     */
-    private int getDesiredHeight(LinearLayout layout) {
-        if (layout != null && layout.getChildAt(0) != null) {
-            itemHeight = layout.getChildAt(0).getMeasuredHeight();
-        }
-
-        int desired =  - itemHeight * ITEM_OFFSET_PERCENT / 100;
-        return Math.max(itemHeight * visibleItems, getSuggestedMinimumHeight());
-    }
+    //--------------------------------------------------------------------------
+    //
+    //  Base measurements
+    //
+    //--------------------------------------------------------------------------
 
     @Override
     protected int getBaseDimension() {
         return getHeight();
     }
 
-
     /**
-     * Returns height of widget item
+     * Returns height of the widget
      * @return the item height
      */
     @Override
     protected int getItemDimension() {
-        if (itemHeight != 0) {
-            return itemHeight;
+        if (mItemHeight != 0) {
+            return mItemHeight;
         }
 
         if (itemsLayout != null && itemsLayout.getChildAt(0) != null) {
-            itemHeight = itemsLayout.getChildAt(0).getHeight();
-            return itemHeight;
+            mItemHeight = itemsLayout.getChildAt(0).getMeasuredHeight();
+            return mItemHeight;
         }
 
         return getBaseDimension() / visibleItems;
     }
 
+    //--------------------------------------------------------------------------
+    //
+    //  Layout creation and measurement operations
+    //
+    //--------------------------------------------------------------------------
+
     /**
-     * Calculates control width and creates text layouts
-     * @param widthSize the input layout width
-     * @param mode the layout mode
-     * @return the calculated control width
+     * Creates item layout if necessary
      */
-    private int calculateLayoutWidth(int widthSize, int mode) {
-        // TODO: make it static
-        itemsLayout.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-        itemsLayout.measure(MeasureSpec.makeMeasureSpec(widthSize, MeasureSpec.UNSPECIFIED),
-                    MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
-        int width = itemsLayout.getMeasuredWidth();
-
-        if (mode == MeasureSpec.EXACTLY) {
-            width = widthSize;
-        } else {
-            width += 2 * PADDING;
-
-            // Check against our minimum width
-            width = Math.max(width, getSuggestedMinimumWidth());
-
-            if (mode == MeasureSpec.AT_MOST && widthSize < width) {
-                width = widthSize;
-            }
+    @Override
+    protected void createItemsLayout() {
+        if (itemsLayout == null) {
+            itemsLayout = new LinearLayout(getContext());
+            itemsLayout.setOrientation(LinearLayout.VERTICAL);
         }
-
-        itemsLayout.measure(
-                MeasureSpec.makeMeasureSpec(width - 2 * PADDING, MeasureSpec.EXACTLY),
-                MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
-        );
-
-        return width;
     }
 
     @Override
-    protected void measureLayout() {
+    protected void doItemsLayout() {
+        // Log.e(LOG_TAG, "Items layout is about to be run: " + width + "x" + height);
+        itemsLayout.layout(0, 0, getMeasuredWidth() - 2 * PADDING, getMeasuredHeight());
+    }
 
+
+    @Override
+    protected void measureLayout() {
         itemsLayout.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 
         itemsLayout.measure(
@@ -264,6 +205,7 @@ public class WheelVerticalView extends AbstractWheelView {
                 MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
         );
     }
+
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -281,7 +223,10 @@ public class WheelVerticalView extends AbstractWheelView {
         if (heightMode == MeasureSpec.EXACTLY) {
             height = heightSize;
         } else {
-            height = getDesiredHeight(itemsLayout);
+            height = Math.max(
+                    getItemDimension() * (visibleItems - ITEM_OFFSET_PERCENT / 100),
+                    getSuggestedMinimumHeight()
+            );
 
             if (heightMode == MeasureSpec.AT_MOST) {
                 height = Math.min(height, heightSize);
@@ -290,13 +235,48 @@ public class WheelVerticalView extends AbstractWheelView {
         setMeasuredDimension(width, height);
     }
 
+    /**
+     * Calculates control width
+     * @param widthSize the input layout width
+     * @param mode the layout mode
+     * @return the calculated control width
+     */
+    private int calculateLayoutWidth(int widthSize, int mode) {
+        itemsLayout.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+        itemsLayout.measure(
+                MeasureSpec.makeMeasureSpec(widthSize, MeasureSpec.UNSPECIFIED),
+                MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
+        );
+        int width = itemsLayout.getMeasuredWidth();
 
-    @Override
-    protected void doItemsLayout() {
-        // Log.e(LOG_TAG, "Items layout is about to be run: " + width + "x" + height);
-        itemsLayout.layout(0, 0, getMeasuredWidth() - 2 * PADDING, getMeasuredHeight());
+        if (mode == MeasureSpec.EXACTLY) {
+            width = widthSize;
+        } else {
+            width += 2 * PADDING;
+
+            // Check against our minimum width
+            width = Math.max(width, getSuggestedMinimumWidth());
+
+            if (mode == MeasureSpec.AT_MOST && widthSize < width) {
+                width = widthSize;
+            }
+        }
+
+        // forcing recalculating
+        itemsLayout.measure(
+                MeasureSpec.makeMeasureSpec(width - 2 * PADDING, MeasureSpec.EXACTLY),
+                MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
+        );
+
+        return width;
     }
 
+
+    //--------------------------------------------------------------------------
+    //
+    //  Drawing items
+    //
+    //--------------------------------------------------------------------------
 
     @Override
     protected void drawItems(Canvas canvas) {
@@ -305,7 +285,8 @@ public class WheelVerticalView extends AbstractWheelView {
         int h = getMeasuredHeight();
         int ih = getItemDimension();
 
-        // resetting intermediate bitmap and canvas
+        // resetting intermediate bitmap and recreating canvases
+
         mSpinBitmap.eraseColor(0);
         Canvas c = new Canvas(mSpinBitmap);
         Canvas cSpin = new Canvas(mSpinBitmap);
@@ -341,22 +322,6 @@ public class WheelVerticalView extends AbstractWheelView {
         canvas.drawBitmap(mSpinBitmap, 0, 0, null);
         canvas.drawBitmap(mSeparatorsBitmap, 0, 0, null);
         canvas.restore();
-    }
-
-    /**
-     * Creates item layouts if necessary
-     */
-    @Override
-    protected void createItemsLayout() {
-        if (itemsLayout == null) {
-            itemsLayout = new LinearLayout(getContext());
-            itemsLayout.setOrientation(LinearLayout.VERTICAL);
-        }
-    }
-    
-    @Override
-    protected float getMotionEventPosition(MotionEvent event) {
-        return event.getY();
     }
 
 }

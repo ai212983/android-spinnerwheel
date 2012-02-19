@@ -1545,7 +1545,7 @@ public class NumberPicker extends LinearLayout {
     }
 
     /**
-     * Callback invoked upon completion of a given <code>scroller</code>.
+     * Callback invoked upon completion of a given <code>mScroller</code>.
      */
     private void onScrollerFinished(Scroller scroller) {
         if (scroller == mFlingScroller) {
