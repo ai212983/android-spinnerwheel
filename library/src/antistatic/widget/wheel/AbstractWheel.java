@@ -427,7 +427,7 @@ public abstract class AbstractWheel extends View {
             int w = r - l;
             int h = b - t;
             Log.e(LOG_TAG, "Performing items layout from onLayout");
-            doItemsLayout(w, h);
+            doItemsLayout();
             if (mLayoutWidth != w || mLayoutHeight != h) {
                 recreateAssets(getMeasuredWidth(), getMeasuredHeight());
             }
@@ -549,7 +549,16 @@ public abstract class AbstractWheel extends View {
     private ItemsRange getItemsRange() {
         int id = getItemDimension();
         if (id == 0) {
-            return null;
+            //return null;
+            int addItems = visibleItems / 2;
+/*
+            for (int i = currentItem + addItems; i >= currentItem - addItems; i--) {
+                if (addViewItem(i, true)) {
+                    firstItem = i;
+                }
+            }
+*/
+            return new ItemsRange(currentItem - addItems, visibleItems);
         }
 
         int first = currentItem;
@@ -607,7 +616,7 @@ public abstract class AbstractWheel extends View {
                 cnt = itemsLayout.getChildCount();
             updated = firstItem != first || itemsLayout.getChildCount() != cnt;
         }
-
+        
         if (firstItem > range.getFirst() && firstItem <= range.getLast()) {
             for (int i = firstItem - 1; i >= range.getFirst(); i--) {
                 if (!addViewItem(i, true)) {
@@ -630,15 +639,6 @@ public abstract class AbstractWheel extends View {
         return updated;
     }
 
-    /**
-     * Sets layout width and height
-     * @param width the layout width
-     * @param height the layout height
-     */
-    abstract protected void doItemsLayout(int width, int height);
-
-    abstract protected void recreateAssets(int width, int height);
-
     abstract protected int getBaseDimension();
 
     abstract protected int getItemDimension();
@@ -651,24 +651,11 @@ public abstract class AbstractWheel extends View {
     abstract protected void createItemsLayout();
 
     /**
-     * Builds view for measuring
+     * Sets layout width and height
      */
-    protected void buildViewForMeasuring() {
-        // clear all items
-        if (itemsLayout != null) {
-            recycle.recycleItems(itemsLayout, firstItem, new ItemsRange());
-        } else {
-            createItemsLayout();
-        }
+    abstract protected void doItemsLayout();
 
-        // add views
-        int addItems = visibleItems / 2;
-        for (int i = currentItem + addItems; i >= currentItem - addItems; i--) {
-            if (addViewItem(i, true)) {
-                firstItem = i;
-            }
-        }
-    }
+    abstract protected void recreateAssets(int width, int height);
 
     /**
      * Adds view for item to items layout

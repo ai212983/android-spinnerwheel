@@ -171,8 +171,9 @@ public abstract class AbstractWheelView extends AbstractWheel {
             if (rebuildItems()) {
                 Log.e(LOG_TAG, "Items has been rebuilt, measuring and doing layout");
                 measureLayout();
-                doItemsLayout(getWidth(), getHeight());
+                doItemsLayout();
             }
+            doItemsLayout();
             drawItems(canvas);
         }
     }
@@ -188,15 +189,6 @@ public abstract class AbstractWheelView extends AbstractWheel {
     // ------------------------------------------------------------------------
     // ABSTRACT METHODS
     // ------------------------------------------------------------------------
-
-    /**
-     * Performs items layout
-     *
-     * @param width the layout width
-     * @param height the layout height
-     */
-    abstract protected void doItemsLayout(int width, int height);
-
 
     /**
      * Sets the <code>coeff</code> of the {@link Paint} for drawing

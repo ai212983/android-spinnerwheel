@@ -273,7 +273,7 @@ public class WheelVerticalView extends AbstractWheelView {
         int widthSize = MeasureSpec.getSize(widthMeasureSpec);
         int heightSize = MeasureSpec.getSize(heightMeasureSpec);
 
-        buildViewForMeasuring();
+        rebuildItems(); // rebuilding before measuring
 
         int width = calculateLayoutWidth(widthSize, widthMode);
 
@@ -292,8 +292,9 @@ public class WheelVerticalView extends AbstractWheelView {
 
 
     @Override
-    protected void doItemsLayout(int width, int height) {
-        itemsLayout.layout(0, 0, width - 2 * PADDING, height);
+    protected void doItemsLayout() {
+        // Log.e(LOG_TAG, "Items layout is about to be run: " + width + "x" + height);
+        itemsLayout.layout(0, 0, getMeasuredWidth() - 2 * PADDING, getMeasuredHeight());
     }
 
 
