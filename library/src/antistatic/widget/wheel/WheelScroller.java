@@ -245,8 +245,9 @@ public abstract class WheelScroller {
      * Justifies widget
      */
     private void justify() {
-        listener.onJustify();
-        setNextMessage(MESSAGE_JUSTIFY);
+        //listener.onJustify();
+        // setNextMessage(MESSAGE_JUSTIFY);
+        finishScrolling(); //XXX: Finding bug
     }
 
     /**

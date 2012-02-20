@@ -25,7 +25,6 @@
 package antistatic.widget.wheel;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.*;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
@@ -53,29 +52,42 @@ public class WheelHorizontalView extends AbstractWheelView {
     // Center Line
     private Drawable centerDrawable;
 
+    //--------------------------------------------------------------------------
+    //
+    //  Constructors
+    //
+    //--------------------------------------------------------------------------
+
     /**
-     * Constructor
+     * Create a new wheel horizontal view.
+     *
+     * @param context The application environment.
+     */
+    public WheelHorizontalView(Context context) {
+        this(context, null);
+    }
+
+    /**
+     * Create a new wheel horizontal view.
+     *
+     * @param context The application environment.
+     * @param attrs A collection of attributes.
+     */
+    public WheelHorizontalView(Context context, AttributeSet attrs) {
+        this(context, attrs, R.attr.abstractWheelViewStyle);
+    }
+
+    /**
+     * Create a new wheel horizontal view.
+     *
+     * @param context the application environment.
+     * @param attrs a collection of attributes.
+     * @param defStyle The default style to apply to this view.
      */
     public WheelHorizontalView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        initializeResources(attrs);
     }
 
-    /**
-     * Constructor
-     */
-    public WheelHorizontalView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        initializeResources(attrs);
-    }
-
-    /**
-     * Constructor
-     */
-    public WheelHorizontalView(Context context) {
-        super(context);
-        initializeResources(null);
-    }
     
     protected WheelScroller createScroller(WheelScroller.ScrollingListener scrollingListener) {
         return new WheelHorizontalScroller(getContext(), scrollingListener);
@@ -91,7 +103,7 @@ public class WheelHorizontalView extends AbstractWheelView {
      * Initializes resources
      */
     private void initializeResources(AttributeSet attrs) {
-        int backgroundResourceID = -1;
+        int backgroundResourceID = -1;/*
         if (attrs != null) {
 
             // TODO: Move styling to AbstractWheel class
@@ -109,7 +121,7 @@ public class WheelHorizontalView extends AbstractWheelView {
         if (backgroundResourceID == -1) {
             backgroundResourceID = R.drawable.wheel_bg_hor;
         }
-
+*/
         // setBackgroundResource(backgroundResourceID); // there's no background in ICS spinner
     }
 
@@ -124,7 +136,7 @@ public class WheelHorizontalView extends AbstractWheelView {
             itemWidth = layout.getChildAt(0).getMeasuredWidth();
         }
 
-        int desired = itemWidth * visibleItems - itemWidth * ITEM_OFFSET_PERCENT / 50;
+        int desired = itemWidth * mVisibleItems - itemWidth * ITEM_OFFSET_PERCENT / 50;
         return Math.max(desired, getSuggestedMinimumWidth());
     }
 
@@ -138,12 +150,12 @@ public class WheelHorizontalView extends AbstractWheelView {
             return itemWidth;
         }
 
-        if (itemsLayout != null && itemsLayout.getChildAt(0) != null) {
-            itemWidth = itemsLayout.getChildAt(0).getWidth();
+        if (mItemsLayout != null && mItemsLayout.getChildAt(0) != null) {
+            itemWidth = mItemsLayout.getChildAt(0).getWidth();
             return itemWidth;
         }
 
-        return getBaseDimension() / visibleItems;
+        return getBaseDimension() / mVisibleItems;
     }
 
     /**
@@ -155,12 +167,12 @@ public class WheelHorizontalView extends AbstractWheelView {
     private int calculateLayoutHeight(int heightSize, int mode) {
 
         // TODO: make it static
-        itemsLayout.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-        itemsLayout.measure(
+        mItemsLayout.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+        mItemsLayout.measure(
                 MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
                 MeasureSpec.makeMeasureSpec(heightSize, MeasureSpec.UNSPECIFIED)
         );
-        int height = itemsLayout.getMeasuredHeight();
+        int height = mItemsLayout.getMeasuredHeight();
 
         if (mode == MeasureSpec.EXACTLY) {
             height = heightSize;
@@ -175,7 +187,7 @@ public class WheelHorizontalView extends AbstractWheelView {
             }
         }
 
-        itemsLayout.measure(
+        mItemsLayout.measure(
                 MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
                 MeasureSpec.makeMeasureSpec(height - 2 * PADDING, MeasureSpec.EXACTLY)
         );
@@ -199,7 +211,7 @@ public class WheelHorizontalView extends AbstractWheelView {
         if (widthMode == MeasureSpec.EXACTLY) {
             width = widthSize;
         } else {
-            width = getDesiredWidth(itemsLayout);
+            width = getDesiredWidth(mItemsLayout);
 
             if (widthMode == MeasureSpec.AT_MOST) {
                 width = Math.min(width, widthSize);
@@ -214,7 +226,7 @@ public class WheelHorizontalView extends AbstractWheelView {
      */
     @Override
     protected void doItemsLayout() {
-        itemsLayout.layout(0, 0, getMeasuredWidth(), getMeasuredHeight() - 2 * PADDING);
+        mItemsLayout.layout(0, 0, getMeasuredWidth(), getMeasuredHeight() - 2 * PADDING);
     }
 
 
@@ -231,9 +243,9 @@ public class WheelHorizontalView extends AbstractWheelView {
         // creating intermediate bitmap and canvas
         Bitmap b = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
         Canvas c = new Canvas(b);
-        int position = (currentItem - firstItem) * getItemDimension() + (getItemDimension() - getBaseDimension()) / 2;
-        c.translate(- position + scrollingOffset, PADDING);
-        itemsLayout.draw(c);
+        int position = (mCurrentItemIdx - mFirstItemIdx) * getItemDimension() + (getItemDimension() - getBaseDimension()) / 2;
+        c.translate(- position + mScrollingOffset, PADDING);
+        mItemsLayout.draw(c);
 
         //Create a shader that is a linear gradient that covers the reflection
         Paint paint = new Paint();
@@ -272,9 +284,9 @@ public class WheelHorizontalView extends AbstractWheelView {
      */
     @Override
     protected void createItemsLayout() {
-        if (itemsLayout == null) {
-            itemsLayout = new LinearLayout(getContext());
-            itemsLayout.setOrientation(LinearLayout.HORIZONTAL);
+        if (mItemsLayout == null) {
+            mItemsLayout = new LinearLayout(getContext());
+            mItemsLayout.setOrientation(LinearLayout.HORIZONTAL);
         }
     }
     

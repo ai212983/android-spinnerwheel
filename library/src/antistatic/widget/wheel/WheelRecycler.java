@@ -33,7 +33,7 @@ import android.widget.LinearLayout;
 /**
  * Recycle stored widget items to reuse.
  */
-public class WheelRecycle {
+public class WheelRecycler {
     // Cached items
     private List<View> items;
 
@@ -47,7 +47,7 @@ public class WheelRecycle {
      * Constructor
      * @param wheel the widget view
      */
-    public WheelRecycle(AbstractWheel wheel) {
+    public WheelRecycler(AbstractWheel wheel) {
         this.wheel = wheel;
     }
 

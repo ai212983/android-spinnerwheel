@@ -90,6 +90,7 @@ public class Time2Activity extends Activity {
             newCalendar.roll(Calendar.DAY_OF_YEAR, day);
             
             View view = super.getItem(index, cachedView, parent);
+
             TextView weekday = (TextView) view.findViewById(R.id.time2_weekday);
             if (day == 0) {
                 weekday.setText("");
@@ -107,7 +108,8 @@ public class Time2Activity extends Activity {
                 monthday.setText(format.format(newCalendar.getTime()));
                 monthday.setTextColor(0xFF111111);
             }
-
+            DateFormat dFormat = new SimpleDateFormat("MMM d");
+            view.setTag(dFormat.format(newCalendar.getTime()));
             return view;
         }
         

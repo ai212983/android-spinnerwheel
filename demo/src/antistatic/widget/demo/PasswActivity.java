@@ -78,7 +78,7 @@ public class PasswActivity extends Activity {
     private void initWheel(int id) {
         AbstractWheel wheel = getWheel(id);
         wheel.setViewAdapter(new NumericWheelAdapter(this, 0, 9));
-        wheel.setCurrentItem((int)(Math.random() * 10));
+        wheel.setCurrentItem((int) (Math.random() * 10));
         
         wheel.addChangingListener(changedListener);
         wheel.addScrollingListener(scrolledListener);

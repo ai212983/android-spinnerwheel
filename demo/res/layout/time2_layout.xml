@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res/antistatic.widget.demo"
         android:layout_height="fill_parent"
         android:layout_width="fill_parent"
         android:layout_marginTop="12dp"
@@ -17,12 +18,15 @@
             android:paddingTop="20dp">
       
         <antistatic.widget.wheel.WheelVerticalView android:id="@+id/day"
+                app:visibleItems="5"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"/>
         <antistatic.widget.wheel.WheelVerticalView android:id="@+id/hour"
+                app:visibleItems="3"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"/>
         <antistatic.widget.wheel.WheelVerticalView android:id="@+id/mins"
+                app:visibleItems="2"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"/>
         <antistatic.widget.wheel.WheelVerticalView android:id="@+id/ampm"

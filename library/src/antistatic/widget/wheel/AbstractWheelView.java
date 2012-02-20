@@ -25,10 +25,11 @@
 package antistatic.widget.wheel;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.*;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.util.Log;
+import antistatic.widget.R;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.ObjectAnimator;
 
@@ -47,26 +48,52 @@ public abstract class AbstractWheelView extends AbstractWheel {
     @SuppressWarnings("unused")
     private final String LOG_TAG = AbstractWheelView.class.getName() + " #" + (++itemID);
 
+    //----------------------------------
+    //  Default properties values
+    //----------------------------------
+
+    protected static final int DEF_ITEMS_DIMMED_ALPHA = 50; // 60 in ICS
+
+    protected static final int DEF_SELECTION_DIVIDER_ACTIVE_ALPHA = 70;
+
+    protected static final int DEF_SELECTION_DIVIDER_DIMMED_ALPHA = 70;
+
+    protected static final int DEF_ITEM_OFFSET_PERCENT = 10;
+
+    protected static final int DEF_ITEM_PADDING = 10;
+    
+    protected static final int DEF_SELECTION_DIVIDER_SIZE = 2;
+
+    //----------------------------------
+    //  Class properties
+    //----------------------------------
+
+    // configurable properties
+
+    /** The alpha of the selector widget when it is dimmed. */
+    protected int mItemsDimmedAlpha;
+
+    /** The alpha of separators widget when they are shown. */
+    protected int mSelectionDividerActiveAlpha;
+
+    /** The alpha of separators when they are is dimmed. */
+    protected int mSelectionDividerDimmedAlpha;
+
+    /** Top and bottom items offset */
+    protected int mItemOffsetPercent;
+
+    /** Left and right padding value */
+    protected int mItemPadding;
+
+    /** Divider for showing item to be selected while scrolling */
+    protected Drawable mSelectionDivider;
+
+    // the rest
 
     /**
      * The {@link android.graphics.Paint} for drawing the selector.
      */
     protected Paint mSelectorWheelPaint;
-
-    /**
-     * Divider for showing item to be selected while scrolling
-     */
-    protected Drawable mSelectionDivider;
-
-    /**
-     * The height of the selection divider.
-     */
-    protected int mSelectionDividerWidth;
-
-    /**
-     * The height of a selector element (text + gap).
-     */
-    protected int mSelectorElementHeight;
 
     /**
      * The {@link android.graphics.Paint} for drawing the separators.
@@ -93,26 +120,6 @@ public abstract class AbstractWheelView extends AbstractWheel {
      */
     protected static final String PROPERTY_SEPARATORS_PAINT_ALPHA = "separatorsPaintAlpha";
 
-    /**
-     * The alpha of the selector widget when it is dimmed.
-     */
-    protected static final int SELECTOR_WHEEL_DIM_ALPHA = 30; // 60 in ICS //TODO: Make this parameter customizable
-
-    /**
-     * The alpha of separators widget when they are shown.
-     */
-    protected static final int SEPARATORS_BRIGHT_ALPHA = 70; //TODO: Make this parameter customizable
-
-    /**
-     * The alpha of separators when they are is dimmed.
-     */
-    protected static final int SEPARATORS_DIM_ALPHA = 70; //TODO: Make this parameter customizable
-
-    /** Top and bottom items offset */
-    protected static final int ITEM_OFFSET_PERCENT = 10;
-
-    /** Left and right padding value */
-    protected static final int PADDING = 10;
 
     protected Bitmap mSpinBitmap;
     protected Bitmap mSeparatorsBitmap;
@@ -120,27 +127,12 @@ public abstract class AbstractWheelView extends AbstractWheel {
 
     //--------------------------------------------------------------------------
     //
-    //  Constructors
+    //  Constructor
     //
     //--------------------------------------------------------------------------
 
     public AbstractWheelView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        initData(context);
-    }
-
-    public AbstractWheelView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        initData(context);
-    }
-
-    /**
-     * Constructor
-     * @param context Context for creation
-     */
-    public AbstractWheelView(Context context) {
-        super(context);
-        initData(context);
     }
 
     //--------------------------------------------------------------------------
@@ -150,6 +142,20 @@ public abstract class AbstractWheelView extends AbstractWheel {
     //--------------------------------------------------------------------------
 
     @Override
+    protected void initAttributes(AttributeSet attrs, int defStyle) {
+        super.initAttributes(attrs, defStyle);
+        
+        TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.AbstractWheelView, defStyle, 0);
+        mItemsDimmedAlpha = a.getInt(R.styleable.AbstractWheelView_itemsDimmedAlpha, DEF_ITEMS_DIMMED_ALPHA);
+        mSelectionDividerActiveAlpha = a.getInt(R.styleable.AbstractWheelView_selectionDividerActiveAlpha, DEF_SELECTION_DIVIDER_ACTIVE_ALPHA);
+        mSelectionDividerDimmedAlpha = a.getInt(R.styleable.AbstractWheelView_selectionDividerDimmedAlpha, DEF_SELECTION_DIVIDER_DIMMED_ALPHA);
+        mItemOffsetPercent = a.getInt(R.styleable.AbstractWheelView_itemOffsetPercent, DEF_ITEM_OFFSET_PERCENT);
+        mItemPadding = a.getDimensionPixelSize(R.styleable.AbstractWheelView_itemPadding, DEF_ITEM_PADDING);
+        mSelectionDivider = a.getDrawable(R.styleable.AbstractWheelView_selectionDivider);
+        a.recycle();
+    }
+
+    @Override
     protected void initData(Context context) {
         super.initData(context);
 
@@ -157,13 +163,13 @@ public abstract class AbstractWheelView extends AbstractWheel {
         mDimSelectorWheelAnimator = ObjectAnimator.ofFloat(this, PROPERTY_SELECTOR_PAINT_COEFF, 1, 0);
 
         mDimSeparatorsAnimator = ObjectAnimator.ofInt(this, PROPERTY_SEPARATORS_PAINT_ALPHA,
-                SEPARATORS_BRIGHT_ALPHA, SEPARATORS_DIM_ALPHA
+                mSelectionDividerActiveAlpha, mSelectionDividerDimmedAlpha
         );
 
         // creating paints
         mSeparatorsPaint = new Paint();
         mSeparatorsPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
-        mSeparatorsPaint.setAlpha(SEPARATORS_DIM_ALPHA);
+        mSeparatorsPaint.setAlpha(mSelectionDividerDimmedAlpha);
 
         mSelectorWheelPaint = new Paint();
         mSelectorWheelPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
@@ -179,14 +185,13 @@ public abstract class AbstractWheelView extends AbstractWheel {
     protected void recreateAssets(int width, int height) {
         mSpinBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         mSeparatorsBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        mSelectorElementHeight = getItemDimension();
         setSelectorPaintCoeff(0);
     }
 
     /**
      * Sets the <code>alpha</code> of the {@link Paint} for drawing separators
      * widget.
-     * @param alpha
+     * @param alpha alpha value from 0 to 255
      */
     @SuppressWarnings("unused")  // Called via reflection
     public void setSeparatorsPaintAlpha(int alpha) {
@@ -214,11 +219,12 @@ public abstract class AbstractWheelView extends AbstractWheel {
         mDimSelectorWheelAnimator.cancel();
         mDimSeparatorsAnimator.cancel();
         setSelectorPaintCoeff(1);
-        setSeparatorsPaintAlpha(SEPARATORS_BRIGHT_ALPHA);
+        setSeparatorsPaintAlpha(mSelectionDividerActiveAlpha);
     }
 
     @Override
     protected void onScrollTouchedUp() {
+        super.onScrollTouchedUp();
         fadeSelectorWheel(750);
         lightSeparators(750);
     }
@@ -276,7 +282,7 @@ public abstract class AbstractWheelView extends AbstractWheel {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        if (viewAdapter != null && viewAdapter.getItemsCount() > 0) {
+        if (mViewAdapter != null && mViewAdapter.getItemsCount() > 0) {
             if (rebuildItems()) {
                 measureLayout();
                 doItemsLayout();

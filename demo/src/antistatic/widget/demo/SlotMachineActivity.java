@@ -85,7 +85,7 @@ public class SlotMachineActivity extends Activity {
     private void initWheel(int id) {
         AbstractWheel wheel = getWheel(id);
         wheel.setViewAdapter(new SlotMachineAdapter(this));
-        wheel.setCurrentItem((int)(Math.random() * 10));
+        wheel.setCurrentItem((int) (Math.random() * 10));
         
         wheel.addChangingListener(changedListener);
         wheel.addScrollingListener(scrolledListener);

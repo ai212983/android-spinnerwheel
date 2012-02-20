@@ -2,7 +2,7 @@
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="wrap_content"
-	android:layout_height="40dp"
+	android:layout_height="30dp"
 	android:orientation="horizontal">
   
     <FrameLayout
@@ -13,7 +13,7 @@
 		<TextView android:id="@+id/time2_weekday"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
-		    android:textSize="18dp"
+		    android:textSize="12dp"
 		    android:lines="1"
 		    android:textStyle="bold"
 		    android:textColor="#777"
@@ -28,7 +28,7 @@
 	        android:layout_marginLeft="3dp"
 	        android:lines="1"
 	        android:textStyle="bold"
-	        android:textSize="20dp"
+	        android:textSize="15dp"
 	        android:textColor="#FF111111"
 	        android:layout_gravity="left" />
      </FrameLayout>

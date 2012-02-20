@@ -27,6 +27,12 @@ package antistatic.widget.wheel;
 import java.util.LinkedList;
 import java.util.List;
 
+import android.content.res.Resources;
+import android.content.res.TypedArray;
+import android.util.Log;
+import android.view.ViewGroup;
+import android.widget.TextView;
+import antistatic.widget.R;
 import antistatic.widget.wheel.adapters.WheelViewAdapter;
 import android.content.Context;
 import android.database.DataSetObserver;
@@ -50,42 +56,51 @@ public abstract class AbstractWheel extends View {
     @SuppressWarnings("unused")
     private final String LOG_TAG = AbstractWheel.class.getName() + " #" + (++itemID);
 
+    //----------------------------------
+    //  Default properties values
+    //----------------------------------
+
     /** Default count of visible items */
     private static final int DEF_VISIBLE_ITEMS = 4;
+    private static final boolean DEF_IS_CYCLIC = false;
 
-    protected int currentItem = 0;
+    //----------------------------------
+    //  Class properties
+    //----------------------------------
+
+    protected int mCurrentItemIdx = 0;
 
     // Count of visible items
-    protected int visibleItems = DEF_VISIBLE_ITEMS;
+    protected int mVisibleItems;
+
+    protected boolean mIsCyclic;
 
     // Scrolling
     protected WheelScroller mScroller;
-    protected boolean isScrollingPerformed;
-    protected int scrollingOffset;
-
-    boolean isCyclic = false;
+    protected boolean mIsScrollingPerformed;
+    protected int mScrollingOffset;
 
     // Items layout
-    protected LinearLayout itemsLayout;
+    protected LinearLayout mItemsLayout;
 
     // The number of first item in layout
-    protected int firstItem;
+    protected int mFirstItemIdx;
 
     // View adapter
-    protected WheelViewAdapter viewAdapter;
+    protected WheelViewAdapter mViewAdapter;
     
     protected int mLayoutHeight;
     protected int mLayoutWidth;
 
     // Recycle
-    private WheelRecycle recycle = new WheelRecycle(this);
+    private WheelRecycler mRecycler = new WheelRecycler(this);
 
     // Listeners
     private List<OnWheelChangedListener> changingListeners = new LinkedList<OnWheelChangedListener>();
     private List<OnWheelScrollListener> scrollingListeners = new LinkedList<OnWheelScrollListener>();
     private List<OnWheelClickedListener> clickingListeners = new LinkedList<OnWheelClickedListener>();
 
-    //TODO: I don't like listeners the way as they are now. -df
+    //XXX: I don't like listeners the way as they are now. -df
 
     // Adapter listener
     private DataSetObserver mDataObserver;
@@ -93,29 +108,22 @@ public abstract class AbstractWheel extends View {
 
     //--------------------------------------------------------------------------
     //
-    //  Constructors
+    //  Constructor
     //
     //--------------------------------------------------------------------------
 
-    public AbstractWheel(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
-        initData(context);
-    }
-
-    public AbstractWheel(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        initData(context);
-    }
-
     /**
-     * Constructor
-     * @param context Context for creation
+     * Create a new AbstractWheel instance
+     *
+     * @param context the application environment.
+     * @param attrs a collection of attributes.
+     * @param defStyle The default style to apply to this view.
      */
-    public AbstractWheel(Context context) {
-        super(context);
+    public AbstractWheel(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs);
+        initAttributes(attrs, defStyle);
         initData(context);
     }
-
 
     //--------------------------------------------------------------------------
     //
@@ -125,6 +133,20 @@ public abstract class AbstractWheel extends View {
 
     /**
      * Initiates data and parameters from styles
+     *
+     * @param attrs a collection of attributes.
+     * @param defStyle The default style to apply to this view.
+     */
+    protected void initAttributes(AttributeSet attrs, int defStyle) {
+        TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.AbstractWheelView, defStyle, 0);
+        mVisibleItems = a.getInt(R.styleable.AbstractWheelView_visibleItems, DEF_VISIBLE_ITEMS);
+        mIsCyclic = a.getBoolean(R.styleable.AbstractWheelView_isCyclic, DEF_IS_CYCLIC);
+
+        a.recycle();
+    }
+
+    /**
+     * Initiates data
      *
      * @param context the context
      */
@@ -146,7 +168,7 @@ public abstract class AbstractWheel extends View {
         mScroller = createScroller(new WheelScroller.ScrollingListener() {
 
             public void onStarted() {
-                isScrollingPerformed = true;
+                mIsScrollingPerformed = true;
                 notifyScrollingListenersAboutStart();
                 onScrollStarted();
             }
@@ -156,7 +178,7 @@ public abstract class AbstractWheel extends View {
             }
 
             public void onTouchUp() {
-                if (!isScrollingPerformed)
+                if (!mIsScrollingPerformed)
                     onScrollTouchedUp(); // if scrolling IS performed, whe should use onFinished instead
             }
 
@@ -164,33 +186,34 @@ public abstract class AbstractWheel extends View {
                 doScroll(distance);
 
                 int dimension = getBaseDimension();
-                if (scrollingOffset >  dimension) {
-                    scrollingOffset =  dimension;
+                if (mScrollingOffset >  dimension) {
+                    mScrollingOffset =  dimension;
                     mScroller.stopScrolling();
-                } else if (scrollingOffset < - dimension) {
-                    scrollingOffset = - dimension;
+                } else if (mScrollingOffset < - dimension) {
+                    mScrollingOffset = - dimension;
                     mScroller.stopScrolling();
                 }
             }
 
             public void onFinished() {
-                if (isScrollingPerformed) {
+                if (mIsScrollingPerformed) {
                     notifyScrollingListenersAboutEnd();
-                    isScrollingPerformed = false;
-                    onScrollFinished();
+                    mIsScrollingPerformed = false;
+                    //onScrollFinished(); XXX: Fixing bug
                 }
 
-                scrollingOffset = 0;
+                //mScrollingOffset = 0; XXX: Fixing bug
                 invalidate();
             }
 
             public void onJustify() {
-                if (Math.abs(scrollingOffset) > WheelScroller.MIN_DELTA_FOR_SCROLLING) {
-                    mScroller.scroll(scrollingOffset, 0);
+                if (Math.abs(mScrollingOffset) > WheelScroller.MIN_DELTA_FOR_SCROLLING) {
+                    mScroller.scroll(mScrollingOffset, 0);
                 }
             }
         });
     }
+
 
     abstract protected void recreateAssets(int width, int height);
 
@@ -212,7 +235,18 @@ public abstract class AbstractWheel extends View {
     /* These methods are not abstract, as we may want to override only some of them */
     protected void onScrollStarted() {}
     protected void onScrollTouched() {}
-    protected void onScrollTouchedUp() {}
+    protected void onScrollTouchedUp() {
+        //XXX: Finding bug
+        int cnt = mItemsLayout.getChildCount();
+        Log.e(LOG_TAG, "We have " + cnt + " items");
+        for (int i = 0; i < cnt; i++ ) {
+            View v = mItemsLayout.getChildAt(i);
+            String dT = (String) v.getTag();
+
+            Log.e(LOG_TAG, "Item #" + i + ": " + dT + " at " + v.getTop() + ", " + v.getLeft());
+        }
+        mItemsLayout.requestLayout();
+    }
     protected void onScrollFinished() {}
 
     /**
@@ -236,7 +270,7 @@ public abstract class AbstractWheel extends View {
      * @param time scrolling duration
      */
     public void scroll(int itemsToScroll, int time) {
-        int distance = itemsToScroll * getItemDimension() - scrollingOffset;
+        int distance = itemsToScroll * getItemDimension() - mScrollingOffset;
         onScrollTouched(); // we have to emulate touch when scrolling widget programmatically to light up stuff
         mScroller.scroll(distance, time);
     }
@@ -246,19 +280,19 @@ public abstract class AbstractWheel extends View {
      * @param delta the scrolling value
      */
     private void doScroll(int delta) {
-        scrollingOffset += delta;
+        mScrollingOffset += delta;
 
         int itemDimension = getItemDimension();
-        int count = scrollingOffset / itemDimension;
+        int count = mScrollingOffset / itemDimension;
 
-        int pos = currentItem - count;
-        int itemCount = viewAdapter.getItemsCount();
+        int pos = mCurrentItemIdx - count;
+        int itemCount = mViewAdapter.getItemsCount();
 
-        int fixPos = scrollingOffset % itemDimension;
+        int fixPos = mScrollingOffset % itemDimension;
         if (Math.abs(fixPos) <= itemDimension / 2) {
             fixPos = 0;
         }
-        if (isCyclic && itemCount > 0) {
+        if (mIsCyclic && itemCount > 0) {
             if (fixPos > 0) {
                 pos--;
                 count++;
@@ -273,10 +307,10 @@ public abstract class AbstractWheel extends View {
             pos %= itemCount;
         } else {
             if (pos < 0) {
-                count = currentItem;
+                count = mCurrentItemIdx;
                 pos = 0;
             } else if (pos >= itemCount) {
-                count = currentItem - itemCount + 1;
+                count = mCurrentItemIdx - itemCount + 1;
                 pos = itemCount - 1;
             } else if (pos > 0 && fixPos > 0) {
                 pos--;
@@ -287,8 +321,8 @@ public abstract class AbstractWheel extends View {
             }
         }
 
-        int offset = scrollingOffset;
-        if (pos != currentItem) {
+        int offset = mScrollingOffset;
+        if (pos != mCurrentItemIdx) {
             setCurrentItem(pos, false);
         } else {
             invalidate();
@@ -296,9 +330,9 @@ public abstract class AbstractWheel extends View {
 
         // update offset
         int baseDimension = getBaseDimension();
-        scrollingOffset = offset - count * itemDimension;
-        if (scrollingOffset > baseDimension) {
-            scrollingOffset = scrollingOffset % baseDimension + baseDimension;
+        mScrollingOffset = offset - count * itemDimension;
+        if (mScrollingOffset > baseDimension) {
+            mScrollingOffset = mScrollingOffset % baseDimension + baseDimension;
         }
     }
 
@@ -369,14 +403,14 @@ public abstract class AbstractWheel extends View {
      */
     public void invalidateItemsLayout(boolean clearCaches) {
         if (clearCaches) {
-            recycle.clearAll();
-            if (itemsLayout != null) {
-                itemsLayout.removeAllViews();
+            mRecycler.clearAll();
+            if (mItemsLayout != null) {
+                mItemsLayout.removeAllViews();
             }
-            scrollingOffset = 0;
-        } else if (itemsLayout != null) {
+            mScrollingOffset = 0;
+        } else if (mItemsLayout != null) {
             // cache all items
-            recycle.recycleItems(itemsLayout, firstItem, new ItemsRange());
+            mRecycler.recycleItems(mItemsLayout, mFirstItemIdx, new ItemsRange());
         }
         invalidate();
     }
@@ -394,7 +428,7 @@ public abstract class AbstractWheel extends View {
      * @return the count of visible items
      */
     public int getVisibleItems() {
-        return visibleItems;
+        return mVisibleItems;
     }
 
     /**
@@ -405,7 +439,7 @@ public abstract class AbstractWheel extends View {
      * @param count the desired count for visible items
      */
     public void setVisibleItems(int count) {
-        visibleItems = count;
+        mVisibleItems = count;
     }
 
     /**
@@ -413,7 +447,7 @@ public abstract class AbstractWheel extends View {
      * @return the view adapter
      */
     public WheelViewAdapter getViewAdapter() {
-        return viewAdapter;
+        return mViewAdapter;
     }
 
 
@@ -424,12 +458,12 @@ public abstract class AbstractWheel extends View {
      * @param viewAdapter the view adapter
      */
     public void setViewAdapter(WheelViewAdapter viewAdapter) {
-        if (this.viewAdapter != null) {
-            this.viewAdapter.unregisterDataSetObserver(mDataObserver);
+        if (this.mViewAdapter != null) {
+            this.mViewAdapter.unregisterDataSetObserver(mDataObserver);
         }
-        this.viewAdapter = viewAdapter;
-        if (this.viewAdapter != null) {
-            this.viewAdapter.registerDataSetObserver(mDataObserver);
+        this.mViewAdapter = viewAdapter;
+        if (this.mViewAdapter != null) {
+            this.mViewAdapter.registerDataSetObserver(mDataObserver);
         }
         invalidateItemsLayout(true);
     }
@@ -440,7 +474,7 @@ public abstract class AbstractWheel extends View {
      * @return the current value
      */
     public int getCurrentItem() {
-        return currentItem;
+        return mCurrentItemIdx;
     }
 
     /**
@@ -450,13 +484,13 @@ public abstract class AbstractWheel extends View {
      * @param animated the animation flag
      */
     public void setCurrentItem(int index, boolean animated) {
-        if (viewAdapter == null || viewAdapter.getItemsCount() == 0) {
+        if (mViewAdapter == null || mViewAdapter.getItemsCount() == 0) {
             return; // throw?
         }
 
-        int itemCount = viewAdapter.getItemsCount();
+        int itemCount = mViewAdapter.getItemsCount();
         if (index < 0 || index >= itemCount) {
-            if (isCyclic) {
+            if (mIsCyclic) {
                 while (index < 0) {
                     index += itemCount;
                 }
@@ -465,21 +499,21 @@ public abstract class AbstractWheel extends View {
                 return; // throw?
             }
         }
-        if (index != currentItem) {
+        if (index != mCurrentItemIdx) {
             if (animated) {
-                int itemsToScroll = index - currentItem;
-                if (isCyclic) {
-                    int scroll = itemCount + Math.min(index, currentItem) - Math.max(index, currentItem);
+                int itemsToScroll = index - mCurrentItemIdx;
+                if (mIsCyclic) {
+                    int scroll = itemCount + Math.min(index, mCurrentItemIdx) - Math.max(index, mCurrentItemIdx);
                     if (scroll < Math.abs(itemsToScroll)) {
                         itemsToScroll = itemsToScroll < 0 ? scroll : -scroll;
                     }
                 }
                 scroll(itemsToScroll, 0);
             } else {
-                scrollingOffset = 0;
-                final int old = currentItem;
-                currentItem = index;
-                notifyChangingListeners(old, currentItem);
+                mScrollingOffset = 0;
+                final int old = mCurrentItemIdx;
+                mCurrentItemIdx = index;
+                notifyChangingListeners(old, mCurrentItemIdx);
                 invalidate();
             }
         }
@@ -499,7 +533,7 @@ public abstract class AbstractWheel extends View {
      * @return true if widget is cyclic
      */
     public boolean isCyclic() {
-        return isCyclic;
+        return mIsCyclic;
     }
 
     /**
@@ -507,7 +541,7 @@ public abstract class AbstractWheel extends View {
      * @param isCyclic the flag to set
      */
     public void setCyclic(boolean isCyclic) {
-        this.isCyclic = isCyclic;
+        this.mIsCyclic = isCyclic;
         invalidateItemsLayout(false);
     }
 
@@ -621,48 +655,58 @@ public abstract class AbstractWheel extends View {
         boolean updated;
         ItemsRange range = getItemsRange();
 
-        if (itemsLayout != null) {
-            int first = recycle.recycleItems(itemsLayout, firstItem, range);
-            updated = firstItem != first;
-            firstItem = first;
+        Log.e(LOG_TAG, "FirstItemIdx 01: " + mFirstItemIdx);
+
+        if (mItemsLayout != null) {
+            int first = mRecycler.recycleItems(mItemsLayout, mFirstItemIdx, range);
+            updated = mFirstItemIdx != first;
+            mFirstItemIdx = first;
         } else {
             createItemsLayout();
             updated = true;
         }
-        
-        if (itemsLayout.getChildCount() == 0) { // if itemsLayout was cleaned up, update it
+        Log.e(LOG_TAG, "FirstItemIdx 02: " + mFirstItemIdx);
+        if (mItemsLayout.getChildCount() == 0) { // if mItemsLayout was cleaned up, update it
             updated = true;
         }
 
         int first;
+        int rangeCount = range.getCount();
         if (!updated) {
             first = range.getFirst();
-            int cnt = range.getCount();
             if (first < 0)
                 first = 0;
-            if (cnt > itemsLayout.getChildCount())
-                cnt = itemsLayout.getChildCount();
-            updated = firstItem != first || itemsLayout.getChildCount() != cnt;
+            if (rangeCount > mItemsLayout.getChildCount())
+                rangeCount = mItemsLayout.getChildCount();
+            updated = mFirstItemIdx != first || mItemsLayout.getChildCount() != rangeCount;
         }
-        
-        if (firstItem > range.getFirst() && firstItem <= range.getLast()) {
-            for (int i = firstItem - 1; i >= range.getFirst(); i--) {
+        Log.e(LOG_TAG, "Range count: " + rangeCount);
+        if (mFirstItemIdx > range.getFirst() && mFirstItemIdx <= range.getLast()) {
+            for (int i = mFirstItemIdx - 1; i >= range.getFirst(); i--) {
+
                 if (!addItemView(i, true)) {
                     break;
                 }
-                firstItem = i;
+                mFirstItemIdx = i;
+                Log.e(LOG_TAG, "FirstItemIdx 02a: " + mFirstItemIdx);
             }
         } else {
-            firstItem = range.getFirst();
+            mFirstItemIdx = range.getFirst();
+            Log.e(LOG_TAG, "FirstItemIdx 02b: " + mFirstItemIdx);
         }
 
-        first = firstItem;
-        for (int i = itemsLayout.getChildCount(); i < range.getCount(); i++) {
-            if (!addItemView(firstItem + i, false) && itemsLayout.getChildCount() == 0) {
+        Log.e(LOG_TAG, "FirstItemIdx 03: " + mFirstItemIdx);
+        first = mFirstItemIdx;
+        int count = mItemsLayout.getChildCount();
+        Log.e(LOG_TAG, "populating items");
+        for (int i = count; i < range.getCount(); i++) {
+            Log.e(LOG_TAG, " adding item #" + i);
+            if (!addItemView(mFirstItemIdx + i, false) && mItemsLayout.getChildCount() == 0) {
                 first++;
             }
         }
-        firstItem = first;
+        Log.e(LOG_TAG, mItemsLayout.getChildCount() + " items populated");
+        mFirstItemIdx = first;
         return updated;
     }
 
@@ -675,31 +719,54 @@ public abstract class AbstractWheel extends View {
      * @return the items range
      */
     private ItemsRange getItemsRange() {
-        int id = getItemDimension();
-        if (id == 0) {
-            return new ItemsRange(currentItem - visibleItems / 2, visibleItems);
+        int itemSize = getItemDimension();
+        if (itemSize == 0 || true) {
+            Log.e(LOG_TAG, mScrollingOffset + " getItemsRange(), current item index: " + mCurrentItemIdx + ", visible items: " + mVisibleItems);
+            int start = mCurrentItemIdx - (int)Math.floor(mVisibleItems / 2);
+            int end = start + mVisibleItems - 1;
+            Log.e(LOG_TAG, "getItemsRange(), supposed start: " + start + ", supposed end: " + end);
+            if (!isCyclic()) {
+                if (start < 0)
+                    start = 0;
+                if (end > mViewAdapter.getItemsCount())
+                    end = mViewAdapter.getItemsCount();
+            }
+            Log.e(LOG_TAG, "getItemsRange(), range calculated, start: " + start + ", end: " + end);
+
+            return new ItemsRange(start, end - start + 1);
+
         }
 
-        int first = currentItem;
+        int first = mCurrentItemIdx;
         int count = 1;
 
-        while (count * id < getBaseDimension()) {
+        while (count * itemSize < getBaseDimension()) {
             first--;
             count += 2; // starting and ending items
         }
 
-        if (scrollingOffset != 0) {
-            if (scrollingOffset > 0) {
+        if (mScrollingOffset != 0) {
+            if (mScrollingOffset > 0) {
                 first--;
             }
             count++;
 
             // process empty items above the first or below the second
-            int emptyItems = scrollingOffset / id;
+            int emptyItems = mScrollingOffset / itemSize;
             first -= emptyItems;
-            count += Math.asin(emptyItems); // wtf is asin doing here? -df
+            count += Math.ceil(emptyItems); // wtf is asin doing here? -df
         }
 
+
+        int end = count - first;
+        if (!isCyclic()) {
+            if (first < 0)
+                first = 0;
+            if (end > mViewAdapter.getItemsCount())
+                end = mViewAdapter.getItemsCount();
+        }
+        count = end - first;
+        Log.e(LOG_TAG, "getItemsRange(), range calculated*, start: " + first + ", end: " + end );
         return new ItemsRange(first, count);
     }
 
@@ -709,8 +776,8 @@ public abstract class AbstractWheel extends View {
      * @return true if item index is not out of bounds or the widget is cyclic
      */
     protected boolean isValidItemIndex(int index) {
-        return viewAdapter != null && viewAdapter.getItemsCount() > 0 &&
-                (isCyclic || index >= 0 && index < viewAdapter.getItemsCount());
+        return (mViewAdapter != null) && (mViewAdapter.getItemsCount() > 0) &&
+                ((mIsCyclic || index >= 0) && (index < mViewAdapter.getItemsCount()));
     }
 
     //----------------------------------
@@ -727,9 +794,11 @@ public abstract class AbstractWheel extends View {
         View view = getItemView(index);
         if (view != null) {
             if (first) {
-                itemsLayout.addView(view, 0);
+                mItemsLayout.addView(view, 0);
+                Log.e(LOG_TAG, "  adding item #" + index + " / " + view.getTag() +" at first position");
             } else {
-                itemsLayout.addView(view);
+                mItemsLayout.addView(view);
+                Log.e(LOG_TAG, "  adding item #" + index + " / " + view.getTag());
             }
             return true;
         }
@@ -742,19 +811,19 @@ public abstract class AbstractWheel extends View {
      * @return item view or empty view if index is out of bounds
      */
     private View getItemView(int index) {
-        if (viewAdapter == null || viewAdapter.getItemsCount() == 0) {
+        if (mViewAdapter == null || mViewAdapter.getItemsCount() == 0) {
             return null;
         }
-        int count = viewAdapter.getItemsCount();
+        int count = mViewAdapter.getItemsCount();
         if (!isValidItemIndex(index)) {
-            return viewAdapter.getEmptyItem(recycle.getEmptyItem(), itemsLayout);
+            return mViewAdapter.getEmptyItem(mRecycler.getEmptyItem(), mItemsLayout);
         } else {
             while (index < 0) {
                 index = count + index;
             }
         }
         index %= count;
-        return viewAdapter.getItem(index, recycle.getItem(), itemsLayout);
+        return mViewAdapter.getItem(index, mRecycler.getItem(), mItemsLayout);
     }
 
 
@@ -778,7 +847,7 @@ public abstract class AbstractWheel extends View {
                 break;
 
             case MotionEvent.ACTION_UP:
-                if (!isScrollingPerformed) {
+                if (!mIsScrollingPerformed) {
                     int distance = (int) getMotionEventPosition(event) - getBaseDimension() / 2;
                     if (distance > 0) {
                         distance += getItemDimension() / 2;
@@ -786,8 +855,8 @@ public abstract class AbstractWheel extends View {
                         distance -= getItemDimension() / 2;
                     }
                     int items = distance / getItemDimension();
-                    if (items != 0 && isValidItemIndex(currentItem + items)) {
-                        notifyClickListenersAboutClick(currentItem + items);
+                    if (items != 0 && isValidItemIndex(mCurrentItemIdx + items)) {
+                        notifyClickListenersAboutClick(mCurrentItemIdx + items);
                     }
                 }
                 break;
