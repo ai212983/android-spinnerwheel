@@ -242,10 +242,11 @@ public abstract class AbstractWheel extends View {
         for (int i = 0; i < cnt; i++ ) {
             View v = mItemsLayout.getChildAt(i);
             String dT = (String) v.getTag();
-
-            Log.e(LOG_TAG, "Item #" + i + ": " + dT + " at " + v.getTop() + ", " + v.getLeft());
+            Log.e(LOG_TAG, "Item #" + i + ": " + dT + " at " + v.getTop() + ", " + v.getLeft() + " (" + v.getMeasuredWidth() + "x" + v.getMeasuredHeight() + ")");
         }
-        mItemsLayout.requestLayout();
+        if (mItemsLayout != null) {
+            mRecycler.recycleItems(mItemsLayout, mFirstItemIdx, new ItemsRange());
+        }
     }
     protected void onScrollFinished() {}
 
@@ -334,6 +335,7 @@ public abstract class AbstractWheel extends View {
         if (mScrollingOffset > baseDimension) {
             mScrollingOffset = mScrollingOffset % baseDimension + baseDimension;
         }
+        Log.e(LOG_TAG, ">>> mScrollingOffset: " + mScrollingOffset);
     }
 
     //--------------------------------------------------------------------------
@@ -409,8 +411,8 @@ public abstract class AbstractWheel extends View {
             }
             mScrollingOffset = 0;
         } else if (mItemsLayout != null) {
-            // cache all items
-            mRecycler.recycleItems(mItemsLayout, mFirstItemIdx, new ItemsRange());
+                // cache all items
+                mRecycler.recycleItems(mItemsLayout, mFirstItemIdx, new ItemsRange());
         }
         invalidate();
     }
@@ -655,21 +657,24 @@ public abstract class AbstractWheel extends View {
         boolean updated;
         ItemsRange range = getItemsRange();
 
-        Log.e(LOG_TAG, "FirstItemIdx 01: " + mFirstItemIdx);
-
+        //Log.e(LOG_TAG, "FirstItemIdx 01: " + mFirstItemIdx);
         if (mItemsLayout != null) {
             int first = mRecycler.recycleItems(mItemsLayout, mFirstItemIdx, range);
+            //int first = mRecycler.recycleItems(mItemsLayout, mFirstItemIdx, new ItemsRange());
+
             updated = mFirstItemIdx != first;
             mFirstItemIdx = first;
         } else {
             createItemsLayout();
             updated = true;
         }
-        Log.e(LOG_TAG, "FirstItemIdx 02: " + mFirstItemIdx);
+        //Log.e(LOG_TAG, "FirstItemIdx 02: " + mFirstItemIdx);
         if (mItemsLayout.getChildCount() == 0) { // if mItemsLayout was cleaned up, update it
             updated = true;
         }
 
+        updated = true;
+//XXX: Something wrong with updated calculation. With updated == true here everything is ok
         int first;
         int rangeCount = range.getCount();
         if (!updated) {
@@ -680,7 +685,7 @@ public abstract class AbstractWheel extends View {
                 rangeCount = mItemsLayout.getChildCount();
             updated = mFirstItemIdx != first || mItemsLayout.getChildCount() != rangeCount;
         }
-        Log.e(LOG_TAG, "Range count: " + rangeCount);
+        //Log.e(LOG_TAG, "Range count: " + rangeCount);
         if (mFirstItemIdx > range.getFirst() && mFirstItemIdx <= range.getLast()) {
             for (int i = mFirstItemIdx - 1; i >= range.getFirst(); i--) {
 
@@ -688,24 +693,24 @@ public abstract class AbstractWheel extends View {
                     break;
                 }
                 mFirstItemIdx = i;
-                Log.e(LOG_TAG, "FirstItemIdx 02a: " + mFirstItemIdx);
+                //Log.e(LOG_TAG, "FirstItemIdx 02a: " + mFirstItemIdx);
             }
         } else {
             mFirstItemIdx = range.getFirst();
-            Log.e(LOG_TAG, "FirstItemIdx 02b: " + mFirstItemIdx);
+            //Log.e(LOG_TAG, "FirstItemIdx 02b: " + mFirstItemIdx);
         }
 
-        Log.e(LOG_TAG, "FirstItemIdx 03: " + mFirstItemIdx);
+        //Log.e(LOG_TAG, "FirstItemIdx 03: " + mFirstItemIdx);
         first = mFirstItemIdx;
         int count = mItemsLayout.getChildCount();
-        Log.e(LOG_TAG, "populating items");
+        //Log.e(LOG_TAG, "populating items");
         for (int i = count; i < range.getCount(); i++) {
-            Log.e(LOG_TAG, " adding item #" + i);
+            //Log.e(LOG_TAG, " adding item #" + i);
             if (!addItemView(mFirstItemIdx + i, false) && mItemsLayout.getChildCount() == 0) {
                 first++;
             }
         }
-        Log.e(LOG_TAG, mItemsLayout.getChildCount() + " items populated");
+        // Log.e(LOG_TAG, mItemsLayout.getChildCount() + " items populated");
         mFirstItemIdx = first;
         return updated;
     }
@@ -721,20 +726,25 @@ public abstract class AbstractWheel extends View {
     private ItemsRange getItemsRange() {
         int itemSize = getItemDimension();
         if (itemSize == 0 || true) {
-            Log.e(LOG_TAG, mScrollingOffset + " getItemsRange(), current item index: " + mCurrentItemIdx + ", visible items: " + mVisibleItems);
+            //Log.e(LOG_TAG, mScrollingOffset + " getItemsRange(), current item index: " + mCurrentItemIdx + ", visible items: " + mVisibleItems);
             int start = mCurrentItemIdx - (int)Math.floor(mVisibleItems / 2);
             int end = start + mVisibleItems - 1;
-            Log.e(LOG_TAG, "getItemsRange(), supposed start: " + start + ", supposed end: " + end);
+            //Log.e(LOG_TAG, "getItemsRange(), supposed start: " + start + ", supposed end: " + end);
+            if (mScrollingOffset != 0) {
+                if (mScrollingOffset > 0) {
+                    start--;
+                } else {
+                    end++;
+                }
+            }
             if (!isCyclic()) {
                 if (start < 0)
                     start = 0;
                 if (end > mViewAdapter.getItemsCount())
                     end = mViewAdapter.getItemsCount();
             }
-            Log.e(LOG_TAG, "getItemsRange(), range calculated, start: " + start + ", end: " + end);
-
+            //Log.e(LOG_TAG, "getItemsRange(), range calculated, start: " + start + ", end: " + end);
             return new ItemsRange(start, end - start + 1);
-
         }
 
         int first = mCurrentItemIdx;
@@ -766,7 +776,7 @@ public abstract class AbstractWheel extends View {
                 end = mViewAdapter.getItemsCount();
         }
         count = end - first;
-        Log.e(LOG_TAG, "getItemsRange(), range calculated*, start: " + first + ", end: " + end );
+        //Log.e(LOG_TAG, "getItemsRange(), range calculated*, start: " + first + ", end: " + end );
         return new ItemsRange(first, count);
     }
 
@@ -800,6 +810,7 @@ public abstract class AbstractWheel extends View {
                 mItemsLayout.addView(view);
                 Log.e(LOG_TAG, "  adding item #" + index + " / " + view.getTag());
             }
+            Log.e(LOG_TAG, "   item size: " + view.getMeasuredWidth() + "x" + view.getMeasuredHeight());
             return true;
         }
         return false;
@@ -815,7 +826,8 @@ public abstract class AbstractWheel extends View {
             return null;
         }
         int count = mViewAdapter.getItemsCount();
-        if (!isValidItemIndex(index)) {
+        if (!isValidItemIndex(index)) { 
+            Log.e(LOG_TAG, "   - returning empty item");
             return mViewAdapter.getEmptyItem(mRecycler.getEmptyItem(), mItemsLayout);
         } else {
             while (index < 0) {
@@ -823,6 +835,7 @@ public abstract class AbstractWheel extends View {
             }
         }
         index %= count;
+        Log.e(LOG_TAG, "   - returning regular item: " + mRecycler.getItem());
         return mViewAdapter.getItem(index, mRecycler.getItem(), mItemsLayout);
     }
 
