@@ -35,8 +35,7 @@ public class Time2Activity extends Activity {
         minAdapter.setItemResource(R.layout.wheel_text_item);
         minAdapter.setItemTextResource(R.id.text);
         mins.setViewAdapter(minAdapter);
-        mins.setCyclic(true);
-        
+
         final AbstractWheel ampm = (AbstractWheel) findViewById(R.id.ampm);
         ArrayWheelAdapter<String> ampmAdapter =
             new ArrayWheelAdapter<String>(this, new String[] {"AM", "PM"});
