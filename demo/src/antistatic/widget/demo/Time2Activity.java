@@ -68,7 +68,7 @@ public class Time2Activity extends Activity {
      */
     private class DayArrayAdapter extends AbstractWheelTextAdapter {
         // Count of days to be shown
-        private final int daysCount = 20;
+        private final int daysCount = 4;
         
         // Calendar
         Calendar calendar;

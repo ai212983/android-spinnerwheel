@@ -27,6 +27,7 @@ package antistatic.widget.wheel;
 import java.util.LinkedList;
 import java.util.List;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -34,6 +35,11 @@ import android.widget.LinearLayout;
  * Recycle stored widget items to reuse.
  */
 public class WheelRecycler {
+
+
+    @SuppressWarnings("unused")
+    private static final String LOG_TAG = WheelRecycler.class.getName();
+
     // Cached items
     private List<View> items;
 

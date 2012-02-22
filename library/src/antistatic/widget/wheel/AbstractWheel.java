@@ -709,7 +709,7 @@ public abstract class AbstractWheel extends View {
      */
     protected boolean isValidItemIndex(int index) {
         return (mViewAdapter != null) && (mViewAdapter.getItemsCount() > 0) &&
-                ((mIsCyclic || index >= 0) && (index < mViewAdapter.getItemsCount()));
+                (mIsCyclic || (index >= 0 && index < mViewAdapter.getItemsCount()));
     }
 
     //----------------------------------
@@ -746,7 +746,9 @@ public abstract class AbstractWheel extends View {
         }
         int count = mViewAdapter.getItemsCount();
         if (!isValidItemIndex(index)) {
-            return mViewAdapter.getEmptyItem(mRecycler.getEmptyItem(), mItemsLayout);
+            View recItem = mRecycler.getEmptyItem();
+            View v =  mViewAdapter.getEmptyItem(recItem, mItemsLayout);
+            return v;
         } else {
             while (index < 0) {
                 index = count + index;

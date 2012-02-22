@@ -288,7 +288,6 @@ public abstract class AbstractWheelView extends AbstractWheel {
                 measureLayout();
                 doItemsLayout();
             }
-            doItemsLayout();
             drawItems(canvas);
         }
     }
