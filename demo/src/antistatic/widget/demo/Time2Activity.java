@@ -26,13 +26,13 @@ public class Time2Activity extends Activity {
     
         final AbstractWheel hours = (AbstractWheel) findViewById(R.id.hour_horizontal);
         NumericWheelAdapter hourAdapter = new NumericWheelAdapter(this, 0, 23);
-        hourAdapter.setItemResource(R.layout.wheel_text_horizontal_item_centered);
+        hourAdapter.setItemResource(R.layout.wheel_text_item);
         hourAdapter.setItemTextResource(R.id.text);
         hours.setViewAdapter(hourAdapter);
     
         final AbstractWheel mins = (AbstractWheel) findViewById(R.id.mins);
         NumericWheelAdapter minAdapter = new NumericWheelAdapter(this, 0, 59, "%02d");
-        minAdapter.setItemResource(R.layout.wheel_text_horizontal_item);
+        minAdapter.setItemResource(R.layout.wheel_text_item);
         minAdapter.setItemTextResource(R.id.text);
         mins.setViewAdapter(minAdapter);
 

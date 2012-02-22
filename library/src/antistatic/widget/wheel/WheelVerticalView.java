@@ -28,7 +28,9 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.*;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
 import antistatic.widget.R;
@@ -40,6 +42,11 @@ import antistatic.widget.R;
  * @author Dimitri Fedorov
  */
 public class WheelVerticalView extends AbstractWheelView {
+
+    private static int itemID = -1;
+
+    @SuppressWarnings("unused")
+    private final String LOG_TAG = WheelVerticalView.class.getName() + " #" + (++itemID);
 
     /**
      * The height of the selection divider.
@@ -176,8 +183,8 @@ public class WheelVerticalView extends AbstractWheelView {
             return mItemHeight;
         }
 
-        if (mItemsLayout != null && mItemsLayout.getChildAt(0) != null) {
-            mItemHeight = mItemsLayout.getChildAt(0).getMeasuredHeight();
+        if (this.getChildAt(0) != null) {
+            mItemHeight = this.getChildAt(0).getMeasuredHeight();
             return mItemHeight;
         }
 
@@ -195,38 +202,39 @@ public class WheelVerticalView extends AbstractWheelView {
      * Creates item layout if necessary
      */
     @Override
-    protected void createItemsLayout() {
-        if (mItemsLayout == null) {
-            mItemsLayout = new LinearLayout(getContext());
-            mItemsLayout.setOrientation(LinearLayout.VERTICAL);
-        }
+    protected void initData(Context context) {
+        super.initData(context);
+        this.setOrientation(LinearLayout.VERTICAL);
     }
 
-    @Override
-    protected void doItemsLayout() {
-        mItemsLayout.layout(0, 0, getMeasuredWidth() - 2 * mItemPadding, getMeasuredHeight());
-    }
-
+/*s
     @Override
     protected void measureLayout() {
-        mItemsLayout.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+        this.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 
-        mItemsLayout.measure(
+        this.measure(
                 MeasureSpec.makeMeasureSpec(getWidth() - 2 * mItemPadding, MeasureSpec.EXACTLY),
                 MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
         );
-    }
+    }*/
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
-        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
-        int widthSize = MeasureSpec.getSize(widthMeasureSpec);
-        int heightSize = MeasureSpec.getSize(heightMeasureSpec);
 
         rebuildItems(); // rebuilding before measuring
 
-        int width = calculateLayoutWidth(widthSize, widthMode);
+        final int newWidthMeasureSpec = makeMeasureSpec(widthMeasureSpec, 75);
+        final int newHeightMeasureSpec = makeMeasureSpec(heightMeasureSpec, 300);
+        super.onMeasure(newWidthMeasureSpec, newHeightMeasureSpec);
+        /*int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+        int widthSize = MeasureSpec.getSize(widthMeasureSpec);
+        int heightSize = MeasureSpec.getSize(heightMeasureSpec);
+*/
+
+/*
+        // int width = calculateLayoutWidth(widthSize, widthMode); XXX: This is causing stack overflow
+        int width = 100;
 
         int height;
         if (heightMode == MeasureSpec.EXACTLY) {
@@ -240,8 +248,37 @@ public class WheelVerticalView extends AbstractWheelView {
             if (heightMode == MeasureSpec.AT_MOST) {
                 height = Math.min(height, heightSize);
             }
+        }*/
+        int w = getMeasuredWidth(); 
+        int h = getMeasuredHeight();
+        w = 75; h = 300;
+        setMeasuredDimension(w, h);
+        Log.e(LOG_TAG, "onMeasure is invoked, resulting: "+getMeasuredWidth()+"x"+getMeasuredHeight());
+    }
+
+    /**
+     * Makes a measure spec that tries greedily to use the max value.
+     *
+     * @param measureSpec The measure spec.
+     * @param maxSize The max value for the size.
+     * @return A measure spec greedily imposing the max size.
+     */
+    private int makeMeasureSpec(int measureSpec, int maxSize) {
+        if (maxSize == -1) {
+            return measureSpec;
         }
-        setMeasuredDimension(width, height);
+        final int size = MeasureSpec.getSize(measureSpec);
+        final int mode = MeasureSpec.getMode(measureSpec);
+        switch (mode) {
+            case MeasureSpec.EXACTLY:
+                return measureSpec;
+            case MeasureSpec.AT_MOST:
+                return MeasureSpec.makeMeasureSpec(Math.min(size, maxSize), MeasureSpec.EXACTLY);
+            case MeasureSpec.UNSPECIFIED:
+                return MeasureSpec.makeMeasureSpec(maxSize, MeasureSpec.EXACTLY);
+            default:
+                throw new IllegalArgumentException("Unknown measure mode: " + mode);
+        }
     }
 
     /**
@@ -251,12 +288,12 @@ public class WheelVerticalView extends AbstractWheelView {
      * @return the calculated control width
      */
     private int calculateLayoutWidth(int widthSize, int mode) {
-        mItemsLayout.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-        mItemsLayout.measure(
+        this.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+        this.measure(
                 MeasureSpec.makeMeasureSpec(widthSize, MeasureSpec.UNSPECIFIED),
                 MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
         );
-        int width = mItemsLayout.getMeasuredWidth();
+        int width = this.getMeasuredWidth();
 
         if (mode == MeasureSpec.EXACTLY) {
             width = widthSize;
@@ -271,7 +308,7 @@ public class WheelVerticalView extends AbstractWheelView {
             }
         }
         // forcing recalculating
-        mItemsLayout.measure(
+        this.measure(
                 MeasureSpec.makeMeasureSpec(width - 2 * mItemPadding, MeasureSpec.EXACTLY),
                 MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
         );
@@ -288,7 +325,8 @@ public class WheelVerticalView extends AbstractWheelView {
 
     @Override
     protected void drawItems(Canvas canvas) {
-        canvas.save();
+
+        final int restoreCount = canvas.save();
         int w = getMeasuredWidth();
         int h = getMeasuredHeight();
         int ih = getItemDimension();
@@ -299,8 +337,18 @@ public class WheelVerticalView extends AbstractWheelView {
         Canvas cSpin = new Canvas(mSpinBitmap);
 
         int top = (mCurrentItemIdx - mFirstItemIdx) * ih + (ih - getHeight()) / 2;
-        c.translate(mItemPadding, - top + mScrollingOffset);
-        mItemsLayout.draw(c);
+        //c.translate(mItemPadding, - top + mScrollingOffset);
+
+        Log.e(LOG_TAG, "--------- drawingItems: "+ getChildCount());
+        long drawTime = getDrawingTime();
+        for (int i = 0, count = getChildCount(); i < count; i++) {
+            View child = getChildAt(i);
+            //if (!child.isShown()) {
+            //    continue;
+            //}
+            Log.e(LOG_TAG, "Item #" + i + ", " + child.getMeasuredWidth() + "x" + child.getMeasuredHeight() + " // "  + child.getLeft() + ", " + child.getTop() + ", " + child.getRight() + ", " + child.getBottom());
+            drawChild(c, getChildAt(i), drawTime);
+        }
 
         mSeparatorsBitmap.eraseColor(0);
         Canvas cSeparators = new Canvas(mSeparatorsBitmap);
@@ -324,7 +372,9 @@ public class WheelVerticalView extends AbstractWheelView {
 
         canvas.drawBitmap(mSpinBitmap, 0, 0, null);
         canvas.drawBitmap(mSeparatorsBitmap, 0, 0, null);
-        canvas.restore();
+
+        canvas.restoreToCount(restoreCount);
+
     }
 
 }

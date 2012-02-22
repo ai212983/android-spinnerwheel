@@ -160,6 +160,13 @@ public abstract class AbstractWheelView extends AbstractWheel {
     protected void initData(Context context) {
         super.initData(context);
 
+        // By default LinearLayout that we extend is not drawn. This is
+        // its draw() method is not called but dispatchDraw() is called
+        // directly (see ViewGroup.drawChild()). However, this class uses
+        // the fading edge effect implemented by View and we need our
+        // draw() method to be called. Therefore, we declare we will draw.
+        setWillNotDraw(false);
+
         // creating animators
         mDimSelectorWheelAnimator = ObjectAnimator.ofFloat(this, PROPERTY_SELECTOR_PAINT_COEFF, 1, 0);
 
@@ -270,7 +277,7 @@ public abstract class AbstractWheelView extends AbstractWheel {
     /**
      * Perform layout measurements
      */
-    abstract protected void measureLayout();
+    // abstract protected void measureLayout();
 
 
     //--------------------------------------------------------------------------
@@ -279,14 +286,15 @@ public abstract class AbstractWheelView extends AbstractWheel {
     //
     //--------------------------------------------------------------------------
 
+    // see https://github.com/ai212983/android-spinnerwheel/blob/affc0a53af5617649de772d75c3cdddfd2a691a4/library/src/antistatic/widget/wheel/NumberPicker.java#L1263
     @Override
     protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-
+        // super.onDraw(canvas);
+        Log.e(LOG_TAG, "Items total " + this.getChildCount());
         if (mViewAdapter != null && mViewAdapter.getItemsCount() > 0) {
             if (rebuildItems()) {
-                measureLayout();
-                doItemsLayout();
+                // measureLayout();
+                // doItemsLayout();
             }
             drawItems(canvas);
         }
