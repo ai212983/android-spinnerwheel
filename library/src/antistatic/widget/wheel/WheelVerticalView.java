@@ -56,9 +56,6 @@ public class WheelVerticalView extends AbstractWheelView {
 
     // Cached item height
     private int mItemHeight = 0;
-    
-    
-    private int mLocalStyle = 0;
 
     //--------------------------------------------------------------------------
     //
@@ -110,24 +107,6 @@ public class WheelVerticalView extends AbstractWheelView {
         TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.WheelVerticalView, defStyle, 0);
         mSelectionDividerHeight = a.getDimensionPixelSize(R.styleable.WheelVerticalView_selectionDividerHeight, DEF_SELECTION_DIVIDER_SIZE);
         a.recycle();
-    }
-
-    @Override
-    protected void initData(Context context) {
-        super.initData(context);
-
-        int[] dividerColors = new int[] { 0xFF111111, 0xFF222222, 0xFF111111 };
-        mSelectionDivider = new  GradientDrawable(Orientation.LEFT_RIGHT, dividerColors);
-        /*
-        mSelectionDivider = attributesArray.getDrawable(R.styleable.NumberPicker_selectionDivider);
-        int defSelectionDividerHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                UNSCALED_DEFAULT_SELECTION_DIVIDER_HEIGHT,
-                getResources().getDisplayMetrics());
-        */
-        mSelectionDividerHeight = 1;
-        //mSelectionDividerHeight = attributesArray.getDimensionPixelSize(
-        //        R.styleable.NumberPicker_selectionDividerHeight, defSelectionDividerHeight);
-
     }
 
     @Override

@@ -18,7 +18,12 @@
             android:paddingTop="20dp">
       
         <antistatic.widget.wheel.WheelVerticalView android:id="@+id/day"
-                app:visibleItems="5"
+                app:visibleItems="4"
+                app:isCyclic="true"
+                app:selectionDivider="@drawable/divider_dark"
+                app:selectionDividerHeight="1px"
+                app:selectionDividerActiveAlpha="100"
+                app:selectionDividerDimmedAlpha="255"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"/>
         <antistatic.widget.wheel.WheelVerticalView android:id="@+id/hour"
