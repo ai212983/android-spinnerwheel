@@ -27,8 +27,6 @@ package antistatic.widget.wheel;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.*;
-import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.GradientDrawable.Orientation;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.ViewGroup.LayoutParams;
@@ -40,14 +38,8 @@ import antistatic.widget.R;
  *
  * @author Yuri Kanivets
  * @author Dimitri Fedorov
- *
  */
 public class WheelVerticalView extends AbstractWheelView {
-
-    private static int itemID = -1;
-
-    @SuppressWarnings("unused")
-    private final String LOG_TAG = WheelVerticalView.class.getName() + " #" + (++itemID);
 
     /**
      * The height of the selection divider.
@@ -192,6 +184,7 @@ public class WheelVerticalView extends AbstractWheelView {
         return getBaseDimension() / mVisibleItems;
     }
 
+
     //--------------------------------------------------------------------------
     //
     //  Layout creation and measurement operations
@@ -211,9 +204,8 @@ public class WheelVerticalView extends AbstractWheelView {
 
     @Override
     protected void doItemsLayout() {
-        mItemsLayout.layout(0, 0, getMeasuredWidth() - 2 * mItemPadding, getMeasuredHeight() + 200);
+        mItemsLayout.layout(0, 0, getMeasuredWidth() - 2 * mItemPadding, getMeasuredHeight());
     }
-
 
     @Override
     protected void measureLayout() {
@@ -225,10 +217,8 @@ public class WheelVerticalView extends AbstractWheelView {
         );
     }
 
-
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);
         int widthSize = MeasureSpec.getSize(widthMeasureSpec);
@@ -280,7 +270,6 @@ public class WheelVerticalView extends AbstractWheelView {
                 width = widthSize;
             }
         }
-
         // forcing recalculating
         mItemsLayout.measure(
                 MeasureSpec.makeMeasureSpec(width - 2 * mItemPadding, MeasureSpec.EXACTLY),
@@ -305,7 +294,6 @@ public class WheelVerticalView extends AbstractWheelView {
         int ih = getItemDimension();
 
         // resetting intermediate bitmap and recreating canvases
-
         mSpinBitmap.eraseColor(0);
         Canvas c = new Canvas(mSpinBitmap);
         Canvas cSpin = new Canvas(mSpinBitmap);
@@ -313,8 +301,6 @@ public class WheelVerticalView extends AbstractWheelView {
         int top = (mCurrentItemIdx - mFirstItemIdx) * ih + (ih - getHeight()) / 2;
         c.translate(mItemPadding, - top + mScrollingOffset);
         mItemsLayout.draw(c);
-
-        // ----------------------------
 
         mSeparatorsBitmap.eraseColor(0);
         Canvas cSeparators = new Canvas(mSeparatorsBitmap);
@@ -332,7 +318,6 @@ public class WheelVerticalView extends AbstractWheelView {
             mSelectionDivider.setBounds(0, topOfBottomDivider, getRight(), bottomOfBottomDivider);
             mSelectionDivider.draw(cSeparators);
         }
-        // ----------------------------
 
         cSpin.drawRect(0, 0, w, h, mSelectorWheelPaint);
         cSeparators.drawRect(0, 0, w, h, mSeparatorsPaint);

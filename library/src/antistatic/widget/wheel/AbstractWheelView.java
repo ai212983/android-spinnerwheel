@@ -61,7 +61,7 @@ public abstract class AbstractWheelView extends AbstractWheel {
 
     protected static final int DEF_ITEM_OFFSET_PERCENT = 10;
 
-    protected static final int DEF_ITEM_PADDING = 10;
+    protected static final int DEF_ITEM_PADDING = 0;
     
     protected static final int DEF_SELECTION_DIVIDER_SIZE = 2;
 

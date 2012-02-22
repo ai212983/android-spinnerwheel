@@ -7,4 +7,6 @@
     android:textSize="20dp"
     android:singleLine="true"
     android:textColor="#FF111111"
-    android:background="@drawable/bg_align"/>
+    android:background="@drawable/bg_align"
+    android:gravity="right"
+    />

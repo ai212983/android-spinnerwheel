@@ -8,8 +8,54 @@
         android:orientation="vertical"
         android:gravity="center"
         android:background="#ffffff">
-    
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    <antistatic.widget.wheel.WheelHorizontalView android:id="@+id/hour_horizontal"
+            app:visibleItems="3"
+            app:selectionDivider="@drawable/divider_dark"
+            app:selectionDividerWidth="1px"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"/>
+    <antistatic.widget.wheel.WheelHorizontalView android:id="@+id/mins"
+            app:visibleItems="3"
+            app:selectionDivider="@drawable/divider_dark"
+            app:selectionDividerWidth="1px"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"/>
+
+    <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:orientation="horizontal">
+    <TextView
+              android:layout_width="50dp"
+              android:layout_height="25dp"
+              android:text="hi"
+              android:textSize="20dp"
+              android:singleLine="true"
+              android:textColor="#FF111111"
+              android:background="@drawable/bg_align"
+              android:gravity="center"/>
+        <TextView
+                android:layout_width="50dp"
+                android:layout_height="25dp"
+                android:text="!!"
+                android:textSize="20dp"
+                android:singleLine="true"
+                android:textColor="#FF111111"
+                android:background="@drawable/bg_align"
+                android:gravity="center"/>
+        <TextView
+                android:layout_width="50dp"
+                android:layout_height="25dp"
+                android:text=":)"
+                android:textSize="20dp"
+                android:singleLine="true"
+                android:textColor="#FF111111"
+                android:background="@drawable/bg_align"
+                android:gravity="center"/>
+    </LinearLayout>
+
+    <LinearLayout
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -24,14 +70,6 @@
                 app:selectionDividerHeight="1px"
                 app:selectionDividerActiveAlpha="100"
                 app:selectionDividerDimmedAlpha="255"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"/>
-        <antistatic.widget.wheel.WheelVerticalView android:id="@+id/hour"
-                app:visibleItems="3"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"/>
-        <antistatic.widget.wheel.WheelVerticalView android:id="@+id/mins"
-                app:visibleItems="2"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"/>
         <antistatic.widget.wheel.WheelVerticalView android:id="@+id/ampm"
