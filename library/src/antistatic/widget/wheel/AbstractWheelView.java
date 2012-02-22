@@ -29,6 +29,7 @@ import android.content.res.TypedArray;
 import android.graphics.*;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.Log;
 import antistatic.widget.R;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.ObjectAnimator;

@@ -228,7 +228,7 @@ public abstract class WheelScroller {
             // scrolling is not finished when it comes to final Y
             // so, finish it manually 
             if (Math.abs(currPosition - getFinalScrollerPosition()) < MIN_DELTA_FOR_SCROLLING) {
-                currPosition = getFinalScrollerPosition();
+                // currPosition = getFinalScrollerPosition();
                 scroller.forceFinished(true);
             }
             if (!scroller.isFinished()) {
@@ -245,9 +245,8 @@ public abstract class WheelScroller {
      * Justifies widget
      */
     private void justify() {
-        //listener.onJustify();
-        // setNextMessage(MESSAGE_JUSTIFY);
-        finishScrolling(); //XXX: Finding bug
+        listener.onJustify();
+        setNextMessage(MESSAGE_JUSTIFY);
     }
 
     /**

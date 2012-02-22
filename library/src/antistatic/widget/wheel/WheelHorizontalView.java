@@ -106,7 +106,6 @@ public class WheelHorizontalView extends AbstractWheelView {
         int backgroundResourceID = -1;/*
         if (attrs != null) {
 
-            // TODO: Move styling to AbstractWheel class
             TypedArray attr = getContext().obtainStyledAttributes(attrs, R.styleable.WheelHorizontalView);
             centerDrawable = attr.getDrawable(R.styleable.WheelHorizontalView_valueSelector);
             backgroundResourceID = attr.getResourceId(R.styleable.WheelHorizontalView_background, -1);
@@ -166,7 +165,6 @@ public class WheelHorizontalView extends AbstractWheelView {
      */
     private int calculateLayoutHeight(int heightSize, int mode) {
 
-        // TODO: make it static
         mItemsLayout.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
         mItemsLayout.measure(
                 MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),

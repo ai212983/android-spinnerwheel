@@ -199,10 +199,10 @@ public abstract class AbstractWheel extends View {
                 if (mIsScrollingPerformed) {
                     notifyScrollingListenersAboutEnd();
                     mIsScrollingPerformed = false;
-                    //onScrollFinished(); XXX: Fixing bug
+                    onScrollFinished();
                 }
 
-                //mScrollingOffset = 0; XXX: Fixing bug
+                mScrollingOffset = 0;
                 invalidate();
             }
 
@@ -335,7 +335,6 @@ public abstract class AbstractWheel extends View {
         if (mScrollingOffset > baseDimension) {
             mScrollingOffset = mScrollingOffset % baseDimension + baseDimension;
         }
-        Log.e(LOG_TAG, ">>> mScrollingOffset: " + mScrollingOffset);
     }
 
     //--------------------------------------------------------------------------
@@ -660,8 +659,6 @@ public abstract class AbstractWheel extends View {
         //Log.e(LOG_TAG, "FirstItemIdx 01: " + mFirstItemIdx);
         if (mItemsLayout != null) {
             int first = mRecycler.recycleItems(mItemsLayout, mFirstItemIdx, range);
-            //int first = mRecycler.recycleItems(mItemsLayout, mFirstItemIdx, new ItemsRange());
-
             updated = mFirstItemIdx != first;
             mFirstItemIdx = first;
         } else {
@@ -669,21 +666,11 @@ public abstract class AbstractWheel extends View {
             updated = true;
         }
         //Log.e(LOG_TAG, "FirstItemIdx 02: " + mFirstItemIdx);
-        if (mItemsLayout.getChildCount() == 0) { // if mItemsLayout was cleaned up, update it
-            updated = true;
-        }
 
-        updated = true;
-//XXX: Something wrong with updated calculation. With updated == true here everything is ok
-        int first;
-        int rangeCount = range.getCount();
+
+
         if (!updated) {
-            first = range.getFirst();
-            if (first < 0)
-                first = 0;
-            if (rangeCount > mItemsLayout.getChildCount())
-                rangeCount = mItemsLayout.getChildCount();
-            updated = mFirstItemIdx != first || mItemsLayout.getChildCount() != rangeCount;
+            updated = mFirstItemIdx != range.getFirst() || mItemsLayout.getChildCount() != range.getCount();
         }
         //Log.e(LOG_TAG, "Range count: " + rangeCount);
         if (mFirstItemIdx > range.getFirst() && mFirstItemIdx <= range.getLast()) {
@@ -701,7 +688,7 @@ public abstract class AbstractWheel extends View {
         }
 
         //Log.e(LOG_TAG, "FirstItemIdx 03: " + mFirstItemIdx);
-        first = mFirstItemIdx;
+        int first = mFirstItemIdx;
         int count = mItemsLayout.getChildCount();
         //Log.e(LOG_TAG, "populating items");
         for (int i = count; i < range.getCount(); i++) {
@@ -712,6 +699,9 @@ public abstract class AbstractWheel extends View {
         }
         // Log.e(LOG_TAG, mItemsLayout.getChildCount() + " items populated");
         mFirstItemIdx = first;
+
+        //XXX: Something wrong with updated calculation. With updated == true here everything is ok
+        Log.e(LOG_TAG, " -- rebuilding finished, is updated: " + updated);
         return updated;
     }
 
