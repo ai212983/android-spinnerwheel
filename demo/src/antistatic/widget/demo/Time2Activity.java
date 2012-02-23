@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Locale;
 
 import antistatic.widget.wheel.AbstractWheel;
+import antistatic.widget.wheel.WheelNewHorizontalView;
 import antistatic.widget.wheel.adapters.AbstractWheelTextAdapter;
 import antistatic.widget.wheel.adapters.ArrayWheelAdapter;
 import antistatic.widget.wheel.adapters.NumericWheelAdapter;
@@ -30,7 +31,7 @@ public class Time2Activity extends Activity {
         hourAdapter.setItemTextResource(R.id.text);
         hours.setViewAdapter(hourAdapter);
     
-        final AbstractWheel mins = (AbstractWheel) findViewById(R.id.mins);
+        final WheelNewHorizontalView mins = (WheelNewHorizontalView) findViewById(R.id.mins);
         NumericWheelAdapter minAdapter = new NumericWheelAdapter(this, 0, 59, "%02d");
         minAdapter.setItemResource(R.layout.wheel_text_item);
         minAdapter.setItemTextResource(R.id.text);

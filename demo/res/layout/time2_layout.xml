@@ -9,16 +9,14 @@
         android:gravity="center"
         android:background="#ffffff">
 
-    <antistatic.widget.wheel.WheelVerticalView android:id="@+id/hour_horizontal"
+    <antistatic.widget.wheel.WheelHorizontalView android:id="@+id/hour_horizontal"
             app:visibleItems="3"
             app:selectionDivider="@drawable/divider_dark"
             app:selectionDividerWidth="1px"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"/>
-    <antistatic.widget.wheel.WheelVerticalView android:id="@+id/mins"
+    <antistatic.widget.wheel.WheelNewHorizontalView android:id="@+id/mins"
             app:visibleItems="3"
-            app:selectionDivider="@drawable/divider_dark"
-            app:selectionDividerWidth="1px"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"/>
 
