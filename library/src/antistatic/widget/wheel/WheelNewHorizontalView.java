@@ -162,7 +162,7 @@ public class WheelNewHorizontalView extends LinearLayout {
     protected int mScrollingOffset;
 
     // Items layout
-    protected LinearLayout mItemsLayout;
+    // protected LinearLayout mItemsLayout;
 
     // The number of first item in layout
     protected int mFirstItemIdx;
@@ -222,7 +222,7 @@ public class WheelNewHorizontalView extends LinearLayout {
     public WheelNewHorizontalView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs);
 
-        this.setOrientation(LinearLayout.VERTICAL);
+        this.setOrientation(LinearLayout.HORIZONTAL);
         setWillNotDraw(false);
 
         initAttributes(attrs, defStyle);
@@ -473,8 +473,8 @@ public class WheelNewHorizontalView extends LinearLayout {
             return itemWidth;
         }
 
-        if (mItemsLayout != null && mItemsLayout.getChildAt(0) != null) {
-            itemWidth = mItemsLayout.getChildAt(0).getMeasuredWidth();
+        if (this.getChildAt(0) != null) {
+            itemWidth = this.getChildAt(0).getMeasuredWidth();
             return itemWidth;
         }
 
@@ -492,22 +492,9 @@ public class WheelNewHorizontalView extends LinearLayout {
      * Creates item layouts if necessary
      */
 
-    protected void createItemsLayout() {
-        if (mItemsLayout == null) {
-            mItemsLayout = new LinearLayout(getContext());
-            mItemsLayout.setOrientation(LinearLayout.HORIZONTAL);
-        }
-    }
-
-
-    protected void doItemsLayout() {
-        mItemsLayout.layout(0, 0, getMeasuredWidth(), getMeasuredHeight() - 2 * mItemPadding);
-    }
-
-
     protected void measureLayout() {
-        mItemsLayout.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-        mItemsLayout.measure(
+        this.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+        this.measure(
                 MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
                 MeasureSpec.makeMeasureSpec(getHeight() - 2 * mItemPadding, MeasureSpec.EXACTLY)
         );
@@ -525,7 +512,7 @@ public class WheelNewHorizontalView extends LinearLayout {
 
         rebuildItems(); // rebuilding before measuring
 
-        int height = calculateLayoutHeight(heightSize, heightMode);
+        int height = 50; // calculateLayoutHeight(heightSize, heightMode);
 
         int width;
         if (widthMode == MeasureSpec.EXACTLY) {
@@ -540,6 +527,10 @@ public class WheelNewHorizontalView extends LinearLayout {
                 width = Math.min(width, widthSize);
             }
         }
+        width = 400;
+        height = 50;
+        Log.e(LOG_TAG, ">>> Measured: " + width + "x" + height);
+        // 400x50
         setMeasuredDimension(width, height);
     }
 
@@ -551,12 +542,12 @@ public class WheelNewHorizontalView extends LinearLayout {
      * @return the calculated control height
      */
     private int calculateLayoutHeight(int heightSize, int mode) {
-        mItemsLayout.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-        mItemsLayout.measure(
+        this.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+        this.measure(
                 MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
                 MeasureSpec.makeMeasureSpec(heightSize, MeasureSpec.UNSPECIFIED)
         );
-        int height = mItemsLayout.getMeasuredHeight();
+        int height = this.getMeasuredHeight();
 
         if (mode == MeasureSpec.EXACTLY) {
             height = heightSize;
@@ -571,11 +562,11 @@ public class WheelNewHorizontalView extends LinearLayout {
             }
         }
         // forcing recalculating
-        mItemsLayout.measure(
+        this.measure(
                 MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
                 MeasureSpec.makeMeasureSpec(height - 2 * mItemPadding, MeasureSpec.EXACTLY)
         );
-
+        height = 50;
         return height;
     }
 
@@ -585,7 +576,6 @@ public class WheelNewHorizontalView extends LinearLayout {
         if (changed) {
             int w = r - l;
             int h = b - t;
-            doItemsLayout();
             if (mLayoutWidth != w || mLayoutHeight != h) {
                 //mLayoutWidth = w;
                 //mLayoutHeight = h;
@@ -611,13 +601,11 @@ public class WheelNewHorizontalView extends LinearLayout {
     public void invalidateItemsLayout(boolean clearCaches) {
         if (clearCaches) {
             mRecycler.clearAll();
-            if (mItemsLayout != null) {
-                mItemsLayout.removeAllViews();
-            }
+            this.removeAllViews();
             mScrollingOffset = 0;
-        } else if (mItemsLayout != null) {
+        } else {
             // cache all items
-            mRecycler.recycleItems(mItemsLayout, mFirstItemIdx, new ItemsRange());
+            mRecycler.recycleItems(this, mFirstItemIdx, new ItemsRange());
         }
         invalidate();
     }
@@ -714,18 +702,11 @@ public class WheelNewHorizontalView extends LinearLayout {
                 " range: " + range.getFirst() + ".. " + range.getLast()
         );
 
-        if (mItemsLayout != null) {
-            int first = mRecycler.recycleItems(mItemsLayout, mFirstItemIdx, range);
-            updated = mFirstItemIdx != first;
-            mFirstItemIdx = first;
-        } else {
-            createItemsLayout();
-            updated = true;
-        }
+        int first = mRecycler.recycleItems(this, mFirstItemIdx, range);
+        updated = mFirstItemIdx != first;
+        mFirstItemIdx = first;
 
-        if (!updated) {
-            updated = mFirstItemIdx != range.getFirst() || mItemsLayout.getChildCount() != range.getCount();
-        }
+        updated = mFirstItemIdx != range.getFirst() || this.getChildCount() != range.getCount();
 
         if (mFirstItemIdx > range.getFirst() && mFirstItemIdx <= range.getLast()) {
             for (int i = mFirstItemIdx - 1; i >= range.getFirst(); i--) {
@@ -738,10 +719,10 @@ public class WheelNewHorizontalView extends LinearLayout {
             mFirstItemIdx = range.getFirst();
         }
         Log.w(LOG_TAG, "rebuildItems() method has been invoked, " + mViewAdapter.getItemsCount() + " items total");
-        int first = mFirstItemIdx;
+        first = mFirstItemIdx;
         Log.w(LOG_TAG, "  populating items til #" + range.getCount());
-        for (int i = mItemsLayout.getChildCount(); i < range.getCount(); i++) {
-            if (!addItemView(mFirstItemIdx + i, false) && mItemsLayout.getChildCount() == 0) {
+        for (int i = this.getChildCount(); i < range.getCount(); i++) {
+            if (!addItemView(mFirstItemIdx + i, false) && this.getChildCount() == 0) {
                 first++;
             }
         }
@@ -802,9 +783,9 @@ public class WheelNewHorizontalView extends LinearLayout {
         View view = getItemView(index);
         if (view != null) {
             if (first) {
-                mItemsLayout.addView(view, 0);
+                this.addView(view, 0);
             } else {
-                mItemsLayout.addView(view);
+                this.addView(view);
             }
             return true;
         }
@@ -823,7 +804,7 @@ public class WheelNewHorizontalView extends LinearLayout {
         int count = mViewAdapter.getItemsCount();
         if (!isValidItemIndex(index)) {
             View recItem = mRecycler.getEmptyItem();
-            View v =  mViewAdapter.getEmptyItem(recItem, mItemsLayout);
+            View v =  mViewAdapter.getEmptyItem(recItem, this);
             return v;
         } else {
             while (index < 0) {
@@ -831,7 +812,7 @@ public class WheelNewHorizontalView extends LinearLayout {
             }
         }
         index %= count;
-        return mViewAdapter.getItem(index, mRecycler.getItem(), mItemsLayout);
+        return mViewAdapter.getItem(index, mRecycler.getItem(), this);
     }
 
 
@@ -850,9 +831,9 @@ public class WheelNewHorizontalView extends LinearLayout {
         if (mViewAdapter != null && mViewAdapter.getItemsCount() > 0) {
             if (rebuildItems()) {
                 measureLayout();
-                doItemsLayout();
+                //doItemsLayout();
             }
-            drawItems(canvas);
+           // drawItems(canvas);
         }
     }
 
@@ -870,8 +851,8 @@ public class WheelNewHorizontalView extends LinearLayout {
 
         int left = (mCurrentItemIdx - mFirstItemIdx) * iw + (iw - getWidth()) / 2;
         c.translate(- left + mScrollingOffset, mItemPadding);
-        mItemsLayout.draw(c);
-        Log.w(LOG_TAG, "Drawing mItemsLayout, children: " + mItemsLayout.getChildCount());
+        this.draw(c);
+        Log.w(LOG_TAG, "Drawing mItemsLayout, children: " + this.getChildCount());
 
         mSeparatorsBitmap.eraseColor(0);
         Canvas cSeparators = new Canvas(mSeparatorsBitmap);
