@@ -49,7 +49,7 @@ import java.util.List;
  * @author Yuri Kanivets
  * @author Dimitri Fedorov
  */
-public class WheelNewHorizontalView extends View {
+public class WheelNewHorizontalView extends LinearLayout {
 
 
     //----------------------------------
@@ -152,7 +152,7 @@ public class WheelNewHorizontalView extends View {
     protected int mCurrentItemIdx = 0;
 
     // Count of visible items
-    protected int mVisibleItems;
+    protected int mVisibleItems = DEF_VISIBLE_ITEMS;
 
     protected boolean mIsCyclic;
 
@@ -221,6 +221,10 @@ public class WheelNewHorizontalView extends View {
      */
     public WheelNewHorizontalView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs);
+
+        this.setOrientation(LinearLayout.VERTICAL);
+        setWillNotDraw(false);
+
         initAttributes(attrs, defStyle);
         initData(context);
     }
@@ -231,6 +235,7 @@ public class WheelNewHorizontalView extends View {
     //
     //--------------------------------------------------------------------------
     protected void initData(Context context) {
+
 
         mDataObserver = new DataSetObserver() {
             @Override
@@ -704,6 +709,11 @@ public class WheelNewHorizontalView extends View {
         boolean updated;
         ItemsRange range = getItemsRange();
 
+        Log.w(LOG_TAG, "rebuildItems() method has been invoked, " + mViewAdapter.getItemsCount() +
+                " items total, visible items: " + mVisibleItems +
+                " range: " + range.getFirst() + ".. " + range.getLast()
+        );
+
         if (mItemsLayout != null) {
             int first = mRecycler.recycleItems(mItemsLayout, mFirstItemIdx, range);
             updated = mFirstItemIdx != first;
@@ -727,8 +737,9 @@ public class WheelNewHorizontalView extends View {
         } else {
             mFirstItemIdx = range.getFirst();
         }
-
+        Log.w(LOG_TAG, "rebuildItems() method has been invoked, " + mViewAdapter.getItemsCount() + " items total");
         int first = mFirstItemIdx;
+        Log.w(LOG_TAG, "  populating items til #" + range.getCount());
         for (int i = mItemsLayout.getChildCount(); i < range.getCount(); i++) {
             if (!addItemView(mFirstItemIdx + i, false) && mItemsLayout.getChildCount() == 0) {
                 first++;
@@ -836,7 +847,6 @@ public class WheelNewHorizontalView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
         if (mViewAdapter != null && mViewAdapter.getItemsCount() > 0) {
             if (rebuildItems()) {
                 measureLayout();
@@ -861,6 +871,7 @@ public class WheelNewHorizontalView extends View {
         int left = (mCurrentItemIdx - mFirstItemIdx) * iw + (iw - getWidth()) / 2;
         c.translate(- left + mScrollingOffset, mItemPadding);
         mItemsLayout.draw(c);
+        Log.w(LOG_TAG, "Drawing mItemsLayout, children: " + mItemsLayout.getChildCount());
 
         mSeparatorsBitmap.eraseColor(0);
         Canvas cSeparators = new Canvas(mSeparatorsBitmap);

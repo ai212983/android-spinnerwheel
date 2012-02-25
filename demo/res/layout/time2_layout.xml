@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"/>
     <antistatic.widget.wheel.WheelNewHorizontalView android:id="@+id/mins"
-            app:visibleItems="3"
+            app:visibleItems="5"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"/>
 
