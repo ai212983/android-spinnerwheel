@@ -15,7 +15,7 @@
             app:selectionDividerWidth="1px"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"/>
-    <antistatic.widget.wheel.WheelNewHorizontalView android:id="@+id/mins"
+    <antistatic.widget.wheel.WheelHorizontalView android:id="@+id/mins"
             app:visibleItems="5"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"/>

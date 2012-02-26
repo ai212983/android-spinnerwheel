@@ -206,6 +206,7 @@ public class WheelHorizontalView extends AbstractWheelView {
         super.onScrollTouchedUp();
         int cnt = mItemsLayout.getChildCount();
         View itm;
+        Log.e(LOG_TAG, " ----- layout: " + mItemsLayout.getMeasuredWidth() + mItemsLayout.getMeasuredHeight());
         Log.e(LOG_TAG, " -------- dumping " + cnt + " items");
         for (int i = 0; i < cnt; i++) {
             itm = mItemsLayout.getChildAt(i);
