@@ -386,6 +386,7 @@ public class WheelNewHorizontalView extends LinearLayout {
      * @param delta the scrolling value
      */
     private void doScroll(int delta) {
+/*
         mScrollingOffset += delta;
 
         int itemDimension = getItemDimension();
@@ -440,6 +441,7 @@ public class WheelNewHorizontalView extends LinearLayout {
         if (mScrollingOffset > baseDimension) {
             mScrollingOffset = mScrollingOffset % baseDimension + baseDimension;
         }
+        */
     }
 
     protected WheelScroller createScroller(WheelScroller.ScrollingListener scrollingListener) {
@@ -529,7 +531,7 @@ public class WheelNewHorizontalView extends LinearLayout {
         }
         width = 400;
         height = 50;
-        Log.e(LOG_TAG, ">>> Measured: " + width + "x" + height);
+        //Log.e(LOG_TAG, ">>> Measured: " + width + "x" + height);
         // 400x50
         setMeasuredDimension(width, height);
     }
@@ -696,12 +698,12 @@ public class WheelNewHorizontalView extends LinearLayout {
     protected boolean rebuildItems() {
         boolean updated;
         ItemsRange range = getItemsRange();
-
+/*
         Log.w(LOG_TAG, "rebuildItems() method has been invoked, " + mViewAdapter.getItemsCount() +
                 " items total, visible items: " + mVisibleItems +
                 " range: " + range.getFirst() + ".. " + range.getLast()
         );
-
+*/
         int first = mRecycler.recycleItems(this, mFirstItemIdx, range);
         updated = mFirstItemIdx != first;
         mFirstItemIdx = first;
@@ -718,9 +720,9 @@ public class WheelNewHorizontalView extends LinearLayout {
         } else {
             mFirstItemIdx = range.getFirst();
         }
-        Log.w(LOG_TAG, "rebuildItems() method has been invoked, " + mViewAdapter.getItemsCount() + " items total");
+//        Log.w(LOG_TAG, "rebuildItems() method has been invoked, " + mViewAdapter.getItemsCount() + " items total");
         first = mFirstItemIdx;
-        Log.w(LOG_TAG, "  populating items til #" + range.getCount());
+//        Log.w(LOG_TAG, "  populating items til #" + range.getCount());
         for (int i = this.getChildCount(); i < range.getCount(); i++) {
             if (!addItemView(mFirstItemIdx + i, false) && this.getChildCount() == 0) {
                 first++;
