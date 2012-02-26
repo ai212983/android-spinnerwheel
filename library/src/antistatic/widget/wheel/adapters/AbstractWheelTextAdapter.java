@@ -285,7 +285,7 @@ public abstract class AbstractWheelTextAdapter extends AbstractWheelAdapter {
         case TEXT_VIEW_ITEM_RESOURCE:
             return new TextView(context);
         default:
-            return inflater.inflate(resource, parent, false);    
+            return inflater.inflate(resource, parent, true);
         }
     }
 }

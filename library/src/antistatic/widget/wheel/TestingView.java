@@ -55,8 +55,8 @@ public class TestingView extends View {
     //  Class properties
     //----------------------------------
 
-
-    protected Bitmap mBitmap;
+    private LinearLayout mLayout;
+    private Bitmap mBitmap;
 
     @SuppressWarnings("unused")
     private final String LOG_TAG = TestingView.class.getName();
@@ -76,14 +76,10 @@ public class TestingView extends View {
         this(context, null);
     }
 
-    /**
-     * Create a new wheel horizontal view.
-     *
-     * @param context The application environment.
-     * @param attrs A collection of attributes.
-     */
     public TestingView(Context context, AttributeSet attrs) {
-        this(context, attrs, R.attr.abstractWheelViewStyle);
+        super(context, attrs);
+        mLayout = new LinearLayout(getContext());
+        mLayout.setOrientation(LinearLayout.HORIZONTAL);
     }
 
     /**

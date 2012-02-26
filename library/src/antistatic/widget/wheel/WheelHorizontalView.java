@@ -241,8 +241,9 @@ public class WheelHorizontalView extends AbstractWheelView {
     @Override
     protected void measureLayout() {
         mItemsLayout.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+        // XXX: Locating bug
         mItemsLayout.measure(
-                MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
+                MeasureSpec.makeMeasureSpec(400, MeasureSpec.EXACTLY), // MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
                 MeasureSpec.makeMeasureSpec(getHeight() - 2 * mItemPadding, MeasureSpec.EXACTLY)
         );
     }
@@ -287,7 +288,8 @@ public class WheelHorizontalView extends AbstractWheelView {
     private int calculateLayoutHeight(int heightSize, int mode) {
         mItemsLayout.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
         mItemsLayout.measure(
-                MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
+                // MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
+                MeasureSpec.makeMeasureSpec(400, MeasureSpec.EXACTLY),
                 MeasureSpec.makeMeasureSpec(heightSize, MeasureSpec.UNSPECIFIED)
         );
         int height = mItemsLayout.getMeasuredHeight();
@@ -306,7 +308,8 @@ public class WheelHorizontalView extends AbstractWheelView {
         }
         // forcing recalculating
         mItemsLayout.measure(
-                MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
+                // MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
+                MeasureSpec.makeMeasureSpec(400, MeasureSpec.EXACTLY),
                 MeasureSpec.makeMeasureSpec(height - 2 * mItemPadding, MeasureSpec.EXACTLY)
         );
 
@@ -334,8 +337,7 @@ public class WheelHorizontalView extends AbstractWheelView {
 
         int left = (mCurrentItemIdx - mFirstItemIdx) * iw + (iw - getWidth()) / 2;
         c.translate(- left + mScrollingOffset, mItemPadding);
-        // mItemsLayout.draw(c);
-        mItemsLayout.getChildAt(2).draw(c);
+        mItemsLayout.draw(c);
 
         mSeparatorsBitmap.eraseColor(0);
         Canvas cSeparators = new Canvas(mSeparatorsBitmap);
