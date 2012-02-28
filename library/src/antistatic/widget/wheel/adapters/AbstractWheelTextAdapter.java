@@ -190,8 +190,7 @@ public abstract class AbstractWheelTextAdapter extends AbstractWheelAdapter {
     public void setEmptyItemResource(int emptyItemResourceId) {
         this.emptyItemResourceId = emptyItemResourceId;
     }
-    
-    
+
     /**
      * Returns text for specified item
      * @param index the item index
@@ -232,7 +231,7 @@ public abstract class AbstractWheelTextAdapter extends AbstractWheelAdapter {
         }
             
         return convertView;
-	}
+    }
 
     /**
      * Configures text view. Is called for the TEXT_VIEW_ITEM_RESOURCE views.
@@ -257,8 +256,8 @@ public abstract class AbstractWheelTextAdapter extends AbstractWheelAdapter {
      * @return the loaded text view
      */
     private TextView getTextView(View view, int textResource) {
-    	TextView text = null;
-    	try {
+        TextView text = null;
+        try {
             if (textResource == NO_RESOURCE && view instanceof TextView) {
                 text = (TextView) view;
             } else if (textResource != NO_RESOURCE) {
