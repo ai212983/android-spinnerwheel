@@ -23,7 +23,7 @@ public class Time2Activity extends Activity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.time2_layout);
-    
+
         final AbstractWheel hours = (AbstractWheel) findViewById(R.id.hour_horizontal);
         NumericWheelAdapter hourAdapter = new NumericWheelAdapter(this, 0, 23);
         hourAdapter.setItemResource(R.layout.wheel_text_item);

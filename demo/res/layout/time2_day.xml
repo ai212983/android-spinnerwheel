@@ -30,6 +30,6 @@
 	        android:textStyle="bold"
 	        android:textSize="15dp"
 	        android:textColor="#FF111111"
-	        android:layout_gravity="left" />
+	        android:layout_gravity="right" />
      </FrameLayout>
 </LinearLayout>

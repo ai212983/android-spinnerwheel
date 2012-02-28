@@ -3,7 +3,6 @@
     android:id="@+id/text"
     android:layout_width="50dp"
     android:layout_height="25dp"
-
     android:textSize="20dp"
     android:singleLine="true"
     android:textColor="#FF111111"

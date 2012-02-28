@@ -10,7 +10,7 @@
         android:background="#ffffff">
 
     <antistatic.widget.wheel.WheelHorizontalView android:id="@+id/hour_horizontal"
-            app:visibleItems="3"
+            app:visibleItems="4"
             app:selectionDivider="@drawable/divider_dark"
             app:selectionDividerWidth="1px"
             android:layout_height="wrap_content"
@@ -19,39 +19,6 @@
             app:visibleItems="5"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"/>
-
-    <LinearLayout
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:orientation="horizontal">
-    <TextView
-              android:layout_width="50dp"
-              android:layout_height="25dp"
-              android:text="hi"
-              android:textSize="20dp"
-              android:singleLine="true"
-              android:textColor="#FF111111"
-              android:background="@drawable/bg_align"
-              android:gravity="center"/>
-        <TextView
-                android:layout_width="50dp"
-                android:layout_height="25dp"
-                android:text="!!"
-                android:textSize="20dp"
-                android:singleLine="true"
-                android:textColor="#FF111111"
-                android:background="@drawable/bg_align"
-                android:gravity="center"/>
-        <TextView
-                android:layout_width="50dp"
-                android:layout_height="25dp"
-                android:text=":)"
-                android:textSize="20dp"
-                android:singleLine="true"
-                android:textColor="#FF111111"
-                android:background="@drawable/bg_align"
-                android:gravity="center"/>
-    </LinearLayout>
 
     <LinearLayout
             android:layout_height="wrap_content"
@@ -74,8 +41,4 @@
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"/>
     </LinearLayout>
-
-    <!--antistatic.widget.wheel.WheelHorizontalView android:id="@+id/horizontal"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"/-->
 </LinearLayout>
