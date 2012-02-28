@@ -50,7 +50,9 @@ public class Time2Activity extends Activity {
         ampm.setCurrentItem(calendar.get(Calendar.AM_PM));
         
         final AbstractWheel day = (AbstractWheel) findViewById(R.id.day);
-        day.setViewAdapter(new DayArrayAdapter(this, calendar));
+        DayArrayAdapter dayAdapter = new DayArrayAdapter(this, calendar);
+        day.setViewAdapter(dayAdapter);
+        day.setCurrentItem(dayAdapter.getToday());
     }
     
     /**
@@ -72,6 +74,9 @@ public class Time2Activity extends Activity {
             this.calendar = calendar;
             
             setItemTextResource(R.id.time2_monthday);
+        }
+        public int getToday() {
+            return daysCount / 2;
         }
 
         @Override

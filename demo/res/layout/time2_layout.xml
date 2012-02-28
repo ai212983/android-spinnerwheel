@@ -11,7 +11,7 @@
 
     <antistatic.widget.wheel.WheelHorizontalView android:id="@+id/hour_horizontal"
             app:visibleItems="3"
-            app:selectionDivider="@drawable/divider_dark_horizontal"
+            app:selectionDivider="@drawable/divider_dark_gradient_horizontal"
             app:selectionDividerWidth="1px"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"/>
@@ -26,8 +26,8 @@
 
     <antistatic.widget.wheel.WheelVerticalView android:id="@+id/day"
             app:visibleItems="4"
-            app:selectionDivider="@drawable/divider_dark_horizontal"
-            app:selectionDividerHeight="3px"
+            app:selectionDivider="@drawable/divider_dark_gradient_horizontal"
+            app:selectionDividerHeight="1px"
             app:selectionDividerActiveAlpha="100"
             app:selectionDividerDimmedAlpha="255"
             android:layout_height="wrap_content"

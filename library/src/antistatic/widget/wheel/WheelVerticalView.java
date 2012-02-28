@@ -28,6 +28,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.*;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
@@ -310,8 +311,6 @@ public class WheelVerticalView extends AbstractWheelView {
         c.translate(mItemPadding, - top + mScrollingOffset);
         mItemsLayout.draw(c);
 
-        // ----------------------------
-
         mSeparatorsBitmap.eraseColor(0);
         Canvas cSeparators = new Canvas(mSeparatorsBitmap);
 
@@ -319,16 +318,15 @@ public class WheelVerticalView extends AbstractWheelView {
             // draw the top divider
             int topOfTopDivider = (getHeight() - ih - mSelectionDividerHeight) / 2;
             int bottomOfTopDivider = topOfTopDivider + mSelectionDividerHeight;
-            mSelectionDivider.setBounds(0, topOfTopDivider, getRight(), bottomOfTopDivider);
+            mSelectionDivider.setBounds(0, topOfTopDivider, w, bottomOfTopDivider);
             mSelectionDivider.draw(cSeparators);
 
             // draw the bottom divider
             int topOfBottomDivider =  topOfTopDivider + ih;
             int bottomOfBottomDivider = bottomOfTopDivider + ih;
-            mSelectionDivider.setBounds(0, topOfBottomDivider, getRight(), bottomOfBottomDivider);
+            mSelectionDivider.setBounds(0, topOfBottomDivider, w, bottomOfBottomDivider);
             mSelectionDivider.draw(cSeparators);
         }
-        // ----------------------------
 
         cSpin.drawRect(0, 0, w, h, mSelectorWheelPaint);
         cSeparators.drawRect(0, 0, w, h, mSeparatorsPaint);
