@@ -1,35 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="wrap_content"
-	android:layout_height="30dp"
-	android:orientation="horizontal">
-  
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:orientation="horizontal">
+
     <FrameLayout
-        android:layout_width="48dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom">
-        
-		<TextView android:id="@+id/time2_weekday"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:textSize="12dp"
-		    android:lines="1"
-		    android:textStyle="bold"
-		    android:textColor="#777"
-		    android:layout_gravity="right"/>
-	 </FrameLayout>
+            android:layout_width="48dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" >
+
+        <TextView android:id="@+id/time2_weekday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14dp"
+                android:lines="1"
+                android:textColor="#777"
+                android:layout_gravity="right|center_vertical"/>
+     </FrameLayout>
     <FrameLayout
-        android:layout_width="80dp"
-        android:layout_height="wrap_content">
-	    <TextView android:id="@+id/time2_monthday"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_marginLeft="3dp"
-	        android:lines="1"
-	        android:textStyle="bold"
-	        android:textSize="15dp"
-	        android:textColor="#FF111111"
-	        android:layout_gravity="right" />
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" >
+        <TextView android:id="@+id/time2_monthday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:lines="1"
+                android:textSize="15dp"
+                android:textColor="#FF111111"
+                android:layout_gravity="left|center_vertical" />
      </FrameLayout>
 </LinearLayout>

@@ -17,10 +17,10 @@
 
         <antistatic.widget.wheel.WheelVerticalView android:id="@+id/hour"
             android:layout_height="wrap_content"
-            android:layout_width="140dp"/>
+            android:layout_width="50dp"/>
         <antistatic.widget.wheel.WheelVerticalView android:id="@+id/mins"
             android:layout_height="wrap_content"
-            android:layout_width="140dp"/>
+            android:layout_width="50dp"/>
     </LinearLayout>
 
     <TimePicker android:id="@+id/time"

@@ -10,35 +10,27 @@
         android:background="#ffffff">
 
     <antistatic.widget.wheel.WheelHorizontalView android:id="@+id/hour_horizontal"
-            app:visibleItems="4"
-            app:selectionDivider="@drawable/divider_dark"
+            app:visibleItems="3"
+            app:selectionDivider="@drawable/divider_dark_horizontal"
             app:selectionDividerWidth="1px"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"/>
+    <antistatic.widget.wheel.WheelHorizontalView android:id="@+id/ampm"
+                                                 android:layout_height="wrap_content"
+                                                 android:layout_width="wrap_content"/>
     <antistatic.widget.wheel.WheelHorizontalView android:id="@+id/mins"
-            app:visibleItems="5"
+            app:visibleItems="4"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"/>
 
-    <LinearLayout
+
+    <antistatic.widget.wheel.WheelVerticalView android:id="@+id/day"
+            app:visibleItems="4"
+            app:selectionDivider="@drawable/divider_dark_horizontal"
+            app:selectionDividerHeight="3px"
+            app:selectionDividerActiveAlpha="100"
+            app:selectionDividerDimmedAlpha="255"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp"
-            android:paddingTop="20dp">
-      
-        <antistatic.widget.wheel.WheelVerticalView android:id="@+id/day"
-                app:visibleItems="4"
-                app:isCyclic="true"
-                app:selectionDivider="@drawable/divider_dark"
-                app:selectionDividerHeight="1px"
-                app:selectionDividerActiveAlpha="100"
-                app:selectionDividerDimmedAlpha="255"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"/>
-        <antistatic.widget.wheel.WheelVerticalView android:id="@+id/ampm"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"/>
-    </LinearLayout>
+            android:layout_width="wrap_content" />
+
 </LinearLayout>
