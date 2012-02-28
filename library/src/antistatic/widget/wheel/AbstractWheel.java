@@ -45,7 +45,7 @@ import android.widget.LinearLayout;
  * @author Yuri Kanivets
  * @author Dimitri Fedorov
  */
-public abstract class AbstractWheel extends LinearLayout {
+public abstract class AbstractWheel extends View {
 
     private static int itemID = -1;
 
@@ -75,6 +75,9 @@ public abstract class AbstractWheel extends LinearLayout {
     protected WheelScroller mScroller;
     protected boolean mIsScrollingPerformed;
     protected int mScrollingOffset;
+
+    // Items layout
+    protected LinearLayout mItemsLayout;
 
     // The number of first item in layout
     protected int mFirstItemIdx;
@@ -353,21 +356,29 @@ public abstract class AbstractWheel extends LinearLayout {
     //
     //--------------------------------------------------------------------------
 
+    /**
+     * Creates item layouts if necessary
+     */
+    abstract protected void createItemsLayout();
 
-@Override
-protected void onLayout(boolean changed, int l, int t, int r, int b) {
+    /**
+     * Sets layout width and height
+     */
+    abstract protected void doItemsLayout();
 
-    Log.e(LOG_TAG, "onLayout invoked, measured size: " + getMeasuredWidth() + "x" + getMeasuredHeight());
-    if (changed) {
-        int w = r - l;
-        int h = b - t;
-        if (mLayoutWidth != w || mLayoutHeight != h) {
-            recreateAssets(getMeasuredWidth(), getMeasuredHeight());
+
+    @Override
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        if (changed) {
+            int w = r - l;
+            int h = b - t;
+            doItemsLayout();
+            if (mLayoutWidth != w || mLayoutHeight != h) {
+                recreateAssets(getMeasuredWidth(), getMeasuredHeight());
+            }
+            mLayoutWidth = w;
+            mLayoutHeight = h;
         }
-        mLayoutWidth = w;
-        mLayoutHeight = h;
-    }
-
     }
 
     /**
@@ -378,11 +389,13 @@ protected void onLayout(boolean changed, int l, int t, int r, int b) {
     public void invalidateItemsLayout(boolean clearCaches) {
         if (clearCaches) {
             mRecycler.clearAll();
-            this.removeAllViews();
+            if (mItemsLayout != null) {
+                mItemsLayout.removeAllViews();
+            }
             mScrollingOffset = 0;
-        } else {
-            // cache all items
-            mRecycler.recycleItems(this, mFirstItemIdx, new ItemsRange());
+        } else if (mItemsLayout != null) {
+                // cache all items
+                mRecycler.recycleItems(mItemsLayout, mFirstItemIdx, new ItemsRange());
         }
         invalidate();
     }
@@ -627,14 +640,17 @@ protected void onLayout(boolean changed, int l, int t, int r, int b) {
         boolean updated;
         ItemsRange range = getItemsRange();
 
-
-        int first = mRecycler.recycleItems(this, mFirstItemIdx, range);
-        updated = mFirstItemIdx != first;
-        mFirstItemIdx = first;
-
+        if (mItemsLayout != null) {
+            int first = mRecycler.recycleItems(mItemsLayout, mFirstItemIdx, range);
+            updated = mFirstItemIdx != first;
+            mFirstItemIdx = first;
+        } else {
+            createItemsLayout();
+            updated = true;
+        }
 
         if (!updated) {
-            updated = mFirstItemIdx != range.getFirst() || this.getChildCount() != range.getCount();
+            updated = mFirstItemIdx != range.getFirst() || mItemsLayout.getChildCount() != range.getCount();
         }
 
         if (mFirstItemIdx > range.getFirst() && mFirstItemIdx <= range.getLast()) {
@@ -648,9 +664,9 @@ protected void onLayout(boolean changed, int l, int t, int r, int b) {
             mFirstItemIdx = range.getFirst();
         }
 
-        first = mFirstItemIdx;
-        for (int i = this.getChildCount(); i < range.getCount(); i++) {
-            if (!addItemView(mFirstItemIdx + i, false) && this.getChildCount() == 0) {
+        int first = mFirstItemIdx;
+        for (int i = mItemsLayout.getChildCount(); i < range.getCount(); i++) {
+            if (!addItemView(mFirstItemIdx + i, false) && mItemsLayout.getChildCount() == 0) {
                 first++;
             }
         }
@@ -710,9 +726,9 @@ protected void onLayout(boolean changed, int l, int t, int r, int b) {
         View view = getItemView(index);
         if (view != null) {
             if (first) {
-                this.addView(view, 0);
+                mItemsLayout.addView(view, 0);
             } else {
-                this.addView(view);
+                mItemsLayout.addView(view);
             }
             return true;
         }
@@ -731,7 +747,7 @@ protected void onLayout(boolean changed, int l, int t, int r, int b) {
         int count = mViewAdapter.getItemsCount();
         if (!isValidItemIndex(index)) {
             View recItem = mRecycler.getEmptyItem();
-            View v =  mViewAdapter.getEmptyItem(recItem, this);
+            View v =  mViewAdapter.getEmptyItem(recItem, mItemsLayout);
             return v;
         } else {
             while (index < 0) {
@@ -739,7 +755,7 @@ protected void onLayout(boolean changed, int l, int t, int r, int b) {
             }
         }
         index %= count;
-        return mViewAdapter.getItem(index, mRecycler.getItem(), this);
+        return mViewAdapter.getItem(index, mRecycler.getItem(), mItemsLayout);
     }
 
 
