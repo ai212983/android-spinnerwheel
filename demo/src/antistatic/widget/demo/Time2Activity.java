@@ -51,14 +51,6 @@ public class Time2Activity extends Activity {
         
         final AbstractWheel day = (AbstractWheel) findViewById(R.id.day);
         day.setViewAdapter(new DayArrayAdapter(this, calendar));
-/*
-        final AbstractWheel hor = (AbstractWheel) findViewById(R.id.horizontal);
-        ArrayWheelAdapter<String> horAdapter =
-                new ArrayWheelAdapter<String>(this, new String[] {"H01", "H02", "H03", "H04", "H05", "H06", "H07"});
-        horAdapter.setItemResource(R.layout.wheel_text_horizontal_item);
-        horAdapter.setItemTextResource(R.id.text);
-        hor.setViewAdapter(horAdapter);
-*/
     }
     
     /**
