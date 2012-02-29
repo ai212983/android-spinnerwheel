@@ -9,7 +9,7 @@
             android:minSdkVersion="4"
             android:targetSdkVersion="13" />
 
-    <application android:icon="@drawable/wheel" android:label="WheelDemo">
+    <application android:icon="@drawable/ic_launcher_demo" android:label="WheelDemo">
 
         <activity android:name="antistatic.widget.demo.WheelDemo">
             <intent-filter>
