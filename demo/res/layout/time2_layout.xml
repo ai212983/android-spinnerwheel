@@ -16,13 +16,12 @@
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"/>
     <antistatic.widget.wheel.WheelHorizontalView android:id="@+id/ampm"
-                                                 android:layout_height="wrap_content"
-                                                 android:layout_width="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"/>
     <antistatic.widget.wheel.WheelHorizontalView android:id="@+id/mins"
             app:visibleItems="4"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"/>
-
 
     <antistatic.widget.wheel.WheelVerticalView android:id="@+id/day"
             app:visibleItems="4"

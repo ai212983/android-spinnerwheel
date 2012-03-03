@@ -65,7 +65,7 @@ public class PasswActivity extends Activity {
     private void updateStatus() {
         TextView text = (TextView) findViewById(R.id.pwd_status);
         if (testPin(2, 4, 6, 1)) {
-            text.setText("Congratulation!");
+            text.setText("PIN accepted!");
         } else {
             text.setText("Invalid PIN");
         }
@@ -92,7 +92,7 @@ public class PasswActivity extends Activity {
      * @return the widget with passed Id
      */
     private AbstractWheel getWheel(int id) {
-    	return (AbstractWheel) findViewById(id);
+        return (AbstractWheel) findViewById(id);
     }
     
     /**
@@ -104,8 +104,8 @@ public class PasswActivity extends Activity {
      * @return true 
      */
     private boolean testPin(int v1, int v2, int v3, int v4) {
-    	return testWheelValue(R.id.passw_1, v1) && testWheelValue(R.id.passw_2, v2) &&
-    		testWheelValue(R.id.passw_3, v3) && testWheelValue(R.id.passw_4, v4);
+        return testWheelValue(R.id.passw_1, v1) && testWheelValue(R.id.passw_2, v2) &&
+                testWheelValue(R.id.passw_3, v3) && testWheelValue(R.id.passw_4, v4);
     }
     
     /**
@@ -115,7 +115,7 @@ public class PasswActivity extends Activity {
      * @return true if widget value is equal to passed value
      */
     private boolean testWheelValue(int id, int value) {
-    	return getWheel(id).getCurrentItem() == value;
+        return getWheel(id).getCurrentItem() == value;
     }
     
     /**

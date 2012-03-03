@@ -17,6 +17,12 @@ public class CitiesActivity extends Activity {
     // Scrolling flag
     private boolean scrolling = false;
 
+    private int mActiveCities[] = new int[] {
+            1, 1, 1, 1
+    };
+    
+    private int mActiveCountry;
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,14 +34,23 @@ public class CitiesActivity extends Activity {
         country.setViewAdapter(new CountryAdapter(this));
 
         final String cities[][] = new String[][] {
-                new String[] {"New York", "Washington", "Chicago", "Atlanta", "Orlando"},
-                new String[] {"Ottawa", "Vancouver", "Toronto", "Windsor", "Montreal"},
-                new String[] {"Kiev", "Dnipro", "Lviv", "Kharkiv"},
-                new String[] {"Paris", "Bordeaux"},
+                new String[] {"New York", "Washington", "Chicago", "Atlanta", "Orlando", "Los Angeles", "Houston", "New Orleans"},
+                new String[] {"Ottawa", "Vancouver", "Toronto", "Windsor", "Montreal", "Calgary", "Winnipeg", "Edmonton"},
+                new String[] {"Kyiv", "Simferopol", "Lviv", "Kharkiv", "Odessa", "Mariupol", "Lugansk", "Sevastopol"},
+                new String[] {"Paris", "Bordeaux", "Le Mans", "Orleans", "Valence", "Amiens", "Rouen", "Touluse", "La Rochelle"},
         };
-        
+
+
         final AbstractWheel city = (AbstractWheel) findViewById(R.id.city);
         city.setVisibleItems(5);
+
+        city.addChangingListener(new OnWheelChangedListener() {
+            public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
+                if (!scrolling) {
+                    mActiveCities[mActiveCountry] = newValue;
+                }
+            }
+        });
 
         country.addChangingListener(new OnWheelChangedListener() {
             public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
@@ -62,11 +77,12 @@ public class CitiesActivity extends Activity {
      * Updates the city widget
      */
     private void updateCities(AbstractWheel city, String cities[][], int index) {
+        mActiveCountry = index;
         ArrayWheelAdapter<String> adapter =
             new ArrayWheelAdapter<String>(this, cities[index]);
         adapter.setTextSize(18);
         city.setViewAdapter(adapter);
-        city.setCurrentItem(cities[index].length / 2);
+        city.setCurrentItem(mActiveCities[index]);
     }
     
     /**

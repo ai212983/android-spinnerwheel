@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="fill_parent"
-    android:layout_width="fill_parent"
-    android:layout_marginTop="12dp"
-    android:orientation="vertical"
-    android:background="@drawable/layout_bg">
+        android:layout_height="fill_parent"
+        android:layout_width="fill_parent"
+        android:layout_marginTop="12dp"
+        android:orientation="vertical"
+        android:background="@drawable/layout_bg">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp"
-        android:paddingTop="20dp">
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:paddingTop="20dp">
 
         <antistatic.widget.wheel.WheelVerticalView android:id="@+id/hour"
-            android:layout_height="wrap_content"
-            android:layout_width="50dp"/>
+                android:layout_height="wrap_content"
+                android:layout_width="50dp"/>
         <antistatic.widget.wheel.WheelVerticalView android:id="@+id/mins"
-            android:layout_height="wrap_content"
-            android:layout_width="50dp"/>
+                android:layout_height="wrap_content"
+                android:layout_width="50dp"/>
     </LinearLayout>
 
     <TimePicker android:id="@+id/time"
-        android:layout_marginTop="20dp"
-        android:layout_height="wrap_content"
-        android:layout_width="fill_parent"
-        android:layout_weight="1"/>
+            android:layout_marginTop="20dp"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_weight="1"/>
 
 </LinearLayout>
