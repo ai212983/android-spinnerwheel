@@ -32,7 +32,7 @@ public class Time2Activity extends Activity {
     
         final AbstractWheel mins = (AbstractWheel) findViewById(R.id.mins);
         NumericWheelAdapter minAdapter = new NumericWheelAdapter(this, 0, 59, "%02d");
-        minAdapter.setItemResource(R.layout.wheel_text_centered);
+        minAdapter.setItemResource(R.layout.wheel_text_centered_with_back_wide);
         minAdapter.setItemTextResource(R.id.text);
         mins.setViewAdapter(minAdapter);
 
