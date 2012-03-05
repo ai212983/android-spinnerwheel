@@ -211,10 +211,7 @@ public abstract class AbstractWheelTextAdapter extends AbstractWheelAdapter {
                     text = "";
                 }
                 textView.setText(text);
-    
-                if (itemResourceId == TEXT_VIEW_ITEM_RESOURCE) {
-                    configureTextView(textView);
-                }
+                configureTextView(textView);
             }
             return convertView;
         }
@@ -226,7 +223,7 @@ public abstract class AbstractWheelTextAdapter extends AbstractWheelAdapter {
         if (convertView == null) {
             convertView = getView(emptyItemResourceId, parent);
         }
-        if (emptyItemResourceId == TEXT_VIEW_ITEM_RESOURCE && convertView instanceof TextView) {
+        if (convertView instanceof TextView) {
             configureTextView((TextView)convertView);
         }
             
@@ -238,10 +235,12 @@ public abstract class AbstractWheelTextAdapter extends AbstractWheelAdapter {
      * @param view the text view to be configured
      */
     protected void configureTextView(TextView view) {
-        view.setTextColor(textColor);
-        view.setGravity(Gravity.CENTER);
-        view.setTextSize(textSize);
-        view.setLines(1);
+        if (itemResourceId == TEXT_VIEW_ITEM_RESOURCE) {
+            view.setTextColor(textColor);
+            view.setGravity(Gravity.CENTER);
+            view.setTextSize(textSize);
+            view.setLines(1);
+        }
         if (textTypeface != null) {
             view.setTypeface(textTypeface);
         } else {
