@@ -29,7 +29,6 @@ import android.content.res.TypedArray;
 import android.graphics.*;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.util.Log;
 import antistatic.widget.R;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.ObjectAnimator;
@@ -84,7 +83,7 @@ public abstract class AbstractWheelView extends AbstractWheel {
     protected int mItemOffsetPercent;
 
     /** Left and right padding value */
-    protected int mItemPadding;
+    protected int mItemsPadding;
 
     /** Divider for showing item to be selected while scrolling */
     protected Drawable mSelectionDivider;
@@ -151,7 +150,7 @@ public abstract class AbstractWheelView extends AbstractWheel {
         mSelectionDividerActiveAlpha = a.getInt(R.styleable.AbstractWheelView_selectionDividerActiveAlpha, DEF_SELECTION_DIVIDER_ACTIVE_ALPHA);
         mSelectionDividerDimmedAlpha = a.getInt(R.styleable.AbstractWheelView_selectionDividerDimmedAlpha, DEF_SELECTION_DIVIDER_DIMMED_ALPHA);
         mItemOffsetPercent = a.getInt(R.styleable.AbstractWheelView_itemOffsetPercent, DEF_ITEM_OFFSET_PERCENT);
-        mItemPadding = a.getDimensionPixelSize(R.styleable.AbstractWheelView_itemPadding, DEF_ITEM_PADDING);
+        mItemsPadding = a.getDimensionPixelSize(R.styleable.AbstractWheelView_itemsPadding, DEF_ITEM_PADDING);
         mSelectionDivider = a.getDrawable(R.styleable.AbstractWheelView_selectionDivider);
         a.recycle();
     }

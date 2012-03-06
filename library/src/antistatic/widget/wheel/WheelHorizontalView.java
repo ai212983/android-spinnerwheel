@@ -236,7 +236,7 @@ public class WheelHorizontalView extends AbstractWheelView {
 
     @Override
     protected void doItemsLayout() {
-        mItemsLayout.layout(0, 0, getMeasuredWidth(), getMeasuredHeight() - 2 * mItemPadding);
+        mItemsLayout.layout(0, 0, getMeasuredWidth(), getMeasuredHeight() - 2 * mItemsPadding);
     }
 
     @Override
@@ -245,7 +245,7 @@ public class WheelHorizontalView extends AbstractWheelView {
         // XXX: Locating bug
         mItemsLayout.measure(
                 MeasureSpec.makeMeasureSpec(400, MeasureSpec.EXACTLY), // MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
-                MeasureSpec.makeMeasureSpec(getHeight() - 2 * mItemPadding, MeasureSpec.EXACTLY)
+                MeasureSpec.makeMeasureSpec(getHeight() - 2 * mItemsPadding, MeasureSpec.EXACTLY)
         );
     }
 
@@ -298,7 +298,7 @@ public class WheelHorizontalView extends AbstractWheelView {
         if (mode == MeasureSpec.EXACTLY) {
             height = heightSize;
         } else {
-            height += 2 * mItemPadding;
+            height += 2 * mItemsPadding;
 
             // Check against our minimum width
             height = Math.max(height, getSuggestedMinimumHeight());
@@ -311,7 +311,7 @@ public class WheelHorizontalView extends AbstractWheelView {
         mItemsLayout.measure(
                 // MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
                 MeasureSpec.makeMeasureSpec(400, MeasureSpec.EXACTLY),
-                MeasureSpec.makeMeasureSpec(height - 2 * mItemPadding, MeasureSpec.EXACTLY)
+                MeasureSpec.makeMeasureSpec(height - 2 * mItemsPadding, MeasureSpec.EXACTLY)
         );
 
         return height;
@@ -337,7 +337,7 @@ public class WheelHorizontalView extends AbstractWheelView {
         Canvas cSpin = new Canvas(mSpinBitmap);
 
         int left = (mCurrentItemIdx - mFirstItemIdx) * iw + (iw - getWidth()) / 2;
-        c.translate(- left + mScrollingOffset, mItemPadding);
+        c.translate(- left + mScrollingOffset, mItemsPadding);
         mItemsLayout.draw(c);
 
         mSeparatorsBitmap.eraseColor(0);

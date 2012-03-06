@@ -3,13 +3,12 @@
     <declare-styleable name="AbstractWheelView">
         <attr name="visibleItems" format="integer"/>
         <attr name="itemOffsetPercent" format="integer"/>
-        <attr name="itemPadding" format="dimension"/>
+        <attr name="itemsPadding" format="dimension"/>
         <attr name="selectionDividerDimmedAlpha" format="integer"/>
         <attr name="selectionDividerActiveAlpha" format="integer"/>
         <attr name="selectionDivider" format="reference"/>
         <attr name="itemsDimmedAlpha" format="integer"/>
         <attr name="isCyclic" format="boolean"/>
-        <attr name="background" format="color|reference"/>
     </declare-styleable>
     <declare-styleable name="WheelVerticalView">
         <attr name="selectionDividerHeight" format="dimension"/>

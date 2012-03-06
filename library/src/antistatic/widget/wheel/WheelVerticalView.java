@@ -28,7 +28,6 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.*;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
@@ -209,7 +208,7 @@ public class WheelVerticalView extends AbstractWheelView {
 
     @Override
     protected void doItemsLayout() {
-        mItemsLayout.layout(0, 0, getMeasuredWidth() - 2 * mItemPadding, getMeasuredHeight() + 200);
+        mItemsLayout.layout(0, 0, getMeasuredWidth() - 2 * mItemsPadding, getMeasuredHeight() + 200);
     }
 
 
@@ -218,7 +217,7 @@ public class WheelVerticalView extends AbstractWheelView {
         mItemsLayout.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 
         mItemsLayout.measure(
-                MeasureSpec.makeMeasureSpec(getWidth() - 2 * mItemPadding, MeasureSpec.EXACTLY),
+                MeasureSpec.makeMeasureSpec(getWidth() - 2 * mItemsPadding, MeasureSpec.EXACTLY),
                 MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
         );
     }
@@ -269,7 +268,7 @@ public class WheelVerticalView extends AbstractWheelView {
         if (mode == MeasureSpec.EXACTLY) {
             width = widthSize;
         } else {
-            width += 2 * mItemPadding;
+            width += 2 * mItemsPadding;
 
             // Check against our minimum width
             width = Math.max(width, getSuggestedMinimumWidth());
@@ -281,7 +280,7 @@ public class WheelVerticalView extends AbstractWheelView {
 
         // forcing recalculating
         mItemsLayout.measure(
-                MeasureSpec.makeMeasureSpec(width - 2 * mItemPadding, MeasureSpec.EXACTLY),
+                MeasureSpec.makeMeasureSpec(width - 2 * mItemsPadding, MeasureSpec.EXACTLY),
                 MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
         );
 
@@ -308,7 +307,7 @@ public class WheelVerticalView extends AbstractWheelView {
         Canvas cSpin = new Canvas(mSpinBitmap);
 
         int top = (mCurrentItemIdx - mFirstItemIdx) * ih + (ih - getHeight()) / 2;
-        c.translate(mItemPadding, - top + mScrollingOffset);
+        c.translate(mItemsPadding, - top + mScrollingOffset);
         mItemsLayout.draw(c);
 
         mSeparatorsBitmap.eraseColor(0);
