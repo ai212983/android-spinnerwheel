@@ -285,8 +285,8 @@ public abstract class AbstractWheelView extends AbstractWheel {
         if (mViewAdapter != null && mViewAdapter.getItemsCount() > 0) {
             if (rebuildItems()) {
                 measureLayout();
-                doItemsLayout();
             }
+            doItemsLayout();
             drawItems(canvas);
         }
     }

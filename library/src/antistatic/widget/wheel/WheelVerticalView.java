@@ -28,6 +28,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.*;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
@@ -208,7 +209,7 @@ public class WheelVerticalView extends AbstractWheelView {
 
     @Override
     protected void doItemsLayout() {
-        mItemsLayout.layout(0, 0, getMeasuredWidth() - 2 * mItemsPadding, getMeasuredHeight() + 200);
+        mItemsLayout.layout(0, 0, getMeasuredWidth() - 2 * mItemsPadding, getMeasuredHeight());
     }
 
 
@@ -220,6 +221,7 @@ public class WheelVerticalView extends AbstractWheelView {
                 MeasureSpec.makeMeasureSpec(getWidth() - 2 * mItemsPadding, MeasureSpec.EXACTLY),
                 MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
         );
+        
     }
 
 

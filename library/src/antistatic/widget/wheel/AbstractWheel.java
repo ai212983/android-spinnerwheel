@@ -746,9 +746,7 @@ public abstract class AbstractWheel extends View {
         }
         int count = mViewAdapter.getItemsCount();
         if (!isValidItemIndex(index)) {
-            View recItem = mRecycler.getEmptyItem();
-            View v =  mViewAdapter.getEmptyItem(recItem, mItemsLayout);
-            return v;
+            return mViewAdapter.getEmptyItem( mRecycler.getEmptyItem(), mItemsLayout);
         } else {
             while (index < 0) {
                 index = count + index;

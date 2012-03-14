@@ -1,5 +1,6 @@
 package antistatic.widget.demo;
 
+import android.util.Log;
 import antistatic.widget.wheel.AbstractWheel;
 import antistatic.widget.wheel.OnWheelChangedListener;
 import antistatic.widget.wheel.OnWheelScrollListener;
@@ -54,7 +55,7 @@ public class ProgrammaticSwitchingActivity extends Activity {
     private OnWheelChangedListener changedListener = new OnWheelChangedListener() {
         public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
             if (!wheelScrolled) {
-                updateStatus();
+              updateStatus();
             }
         }
     };
@@ -79,7 +80,6 @@ public class ProgrammaticSwitchingActivity extends Activity {
         AbstractWheel wheel = getWheel(id);
         wheel.setViewAdapter(new NumericWheelAdapter(this, 0, 9));
         wheel.setCurrentItem((int) (Math.random() * 10));
-        
         wheel.addChangingListener(changedListener);
         wheel.addScrollingListener(scrolledListener);
         wheel.setCyclic(true);
