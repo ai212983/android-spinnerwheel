@@ -27,7 +27,7 @@ public class CitiesActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.cities_layout);
+        setContentView(R.layout.repopulating_data);
                 
         final AbstractWheel country = (AbstractWheel) findViewById(R.id.country);
         country.setVisibleItems(3);
@@ -100,7 +100,7 @@ public class CitiesActivity extends Activity {
          * Constructor
          */
         protected CountryAdapter(Context context) {
-            super(context, R.layout.country_layout, NO_RESOURCE);
+            super(context, R.layout.country_item, NO_RESOURCE);
             
             setItemTextResource(R.id.country_name);
         }
