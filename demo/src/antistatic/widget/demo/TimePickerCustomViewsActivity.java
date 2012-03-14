@@ -17,35 +17,35 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class Time2Activity extends Activity {
+public class TimePickerCustomViewsActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.time2_layout);
+        setContentView(R.layout.time_picker_custom);
 
         final AbstractWheel hours = (AbstractWheel) findViewById(R.id.hour_horizontal);
-        NumericWheelAdapter hourAdapter = new NumericWheelAdapter(this, 1, 12);
+        NumericWheelAdapter hourAdapter = new NumericWheelAdapter(this, 0, 23, "%02d");
         hourAdapter.setItemResource(R.layout.wheel_text_centered);
         hourAdapter.setItemTextResource(R.id.text);
         hours.setViewAdapter(hourAdapter);
     
         final AbstractWheel mins = (AbstractWheel) findViewById(R.id.mins);
         NumericWheelAdapter minAdapter = new NumericWheelAdapter(this, 0, 59, "%02d");
-        minAdapter.setItemResource(R.layout.wheel_text_centered_with_back_wide);
+        minAdapter.setItemResource(R.layout.wheel_text_centered_dark_back);
         minAdapter.setItemTextResource(R.id.text);
         mins.setViewAdapter(minAdapter);
 
         final AbstractWheel ampm = (AbstractWheel) findViewById(R.id.ampm);
         ArrayWheelAdapter<String> ampmAdapter =
-            new ArrayWheelAdapter<String>(this, new String[] {"AM", "PM"});
-        ampmAdapter.setItemResource(R.layout.wheel_text_item);
+            new ArrayWheelAdapter<String>(this, new String[] {"01", "02", "03"});
+        ampmAdapter.setItemResource(R.layout.wheel_text_centered);
         ampmAdapter.setItemTextResource(R.id.text);
         ampm.setViewAdapter(ampmAdapter);
 
         // set current time
         Calendar calendar = Calendar.getInstance(Locale.US);
-        hours.setCurrentItem(calendar.get(Calendar.HOUR));
+        hours.setCurrentItem(calendar.get(Calendar.HOUR_OF_DAY));
         mins.setCurrentItem(calendar.get(Calendar.MINUTE));
         ampm.setCurrentItem(calendar.get(Calendar.AM_PM));
         
@@ -70,7 +70,7 @@ public class Time2Activity extends Activity {
          * Constructor
          */
         protected DayArrayAdapter(Context context, Calendar calendar) {
-            super(context, R.layout.time2_day, NO_RESOURCE);
+            super(context, R.layout.time_picker_custom_day, NO_RESOURCE);
             this.calendar = calendar;
             
             setItemTextResource(R.id.time2_monthday);

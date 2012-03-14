@@ -12,12 +12,12 @@ import android.view.animation.AnticipateOvershootInterpolator;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class PasswActivity extends Activity {
+public class ProgrammaticSwitchingActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.passw_layout);
+        setContentView(R.layout.password);
         initWheel(R.id.passw_1);
         initWheel(R.id.passw_2);
         initWheel(R.id.passw_3);

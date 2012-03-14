@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res/antistatic.widget.demo"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+        >
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="15sp"
+            android:layout_alignParentTop="true"
+            android:textSize="14sp"
+            android:text="Using customized and horizontal wheel views"
+            />
+    <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_centerInParent="true">
+
+        <antistatic.widget.wheel.WheelHorizontalView android:id="@+id/hour_horizontal"
+                app:visibleItems="3"
+                app:selectionDivider="@drawable/divider_dark_gradient_horizontal"
+                app:selectionDividerWidth="1px"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"/>
+        <antistatic.widget.wheel.WheelHorizontalView android:id="@+id/mins"
+                app:visibleItems="4"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"/>
+
+        <antistatic.widget.wheel.WheelVerticalView android:id="@+id/day"
+                app:visibleItems="4"
+                app:selectionDivider="@drawable/divider_dark_gradient_horizontal"
+                app:selectionDividerHeight="1px"
+                app:selectionDividerActiveAlpha="100"
+                app:selectionDividerDimmedAlpha="255"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content" />
+        <antistatic.widget.wheel.WheelHorizontalView android:id="@+id/ampm"
+                                                     android:layout_height="wrap_content"
+                                                     android:layout_width="wrap_content"/>
+    </LinearLayout>
+</RelativeLayout>

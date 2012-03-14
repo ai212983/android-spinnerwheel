@@ -12,7 +12,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TimePicker;
 
-public class TimeActivity extends Activity {
+public class TimePickerActivity extends Activity {
     // Time changed flag
     private boolean timeChanged = false;
 
@@ -23,10 +23,11 @@ public class TimeActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.time_layout);
+        setContentView(R.layout.time_picker);
 
         final AbstractWheel hours = (AbstractWheel) findViewById(R.id.hour);
         hours.setViewAdapter(new NumericWheelAdapter(this, 0, 23));
+        hours.setCyclic(true);
 
         final AbstractWheel mins = (AbstractWheel) findViewById(R.id.mins);
         mins.setViewAdapter(new NumericWheelAdapter(this, 0, 59, "%02d"));
