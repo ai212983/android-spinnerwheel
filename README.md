@@ -1,4 +1,4 @@
-This widget is based on [wheel widget][1] by Yuri Kanivets.
+This widget is based on [wheel widget][1] by Yuri Kanivets. See 'downloads' section for demo.
 
 ![Example Image][2]
 
