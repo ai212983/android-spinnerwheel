@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-package antistatic.widget.wheel;
+package antistatic.spinnerwheel;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -35,7 +35,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
-import antistatic.widget.R;
 
 /**
  * Spinner wheel horizontal view.
@@ -177,7 +176,7 @@ public class WheelHorizontalView extends AbstractWheelView {
     }
 
     /**
-     * Returns height of widget item
+     * Returns height of spinnerwheel item
      * @return the item height
      */
     @Override

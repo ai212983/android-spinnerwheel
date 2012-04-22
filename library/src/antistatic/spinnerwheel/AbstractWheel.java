@@ -22,14 +22,12 @@
  * limitations under the License.
  */
 
-package antistatic.widget.wheel;
+package antistatic.spinnerwheel;
 
 import java.util.LinkedList;
 import java.util.List;
 import android.content.res.TypedArray;
-import android.util.Log;
-import antistatic.widget.R;
-import antistatic.widget.wheel.adapters.WheelViewAdapter;
+import antistatic.spinnerwheel.adapters.WheelViewAdapter;
 import android.content.Context;
 import android.database.DataSetObserver;
 import android.util.AttributeSet;
@@ -39,7 +37,7 @@ import android.view.animation.Interpolator;
 import android.widget.LinearLayout;
 
 /**
- * Abstract spinner widget view.
+ * Abstract spinner spinnerwheel view.
  * This class should be subclassed.
  *
  * @author Yuri Kanivets
@@ -250,18 +248,18 @@ public abstract class AbstractWheel extends View {
     }
 
     /**
-     * Scroll the widget
+     * Scroll the spinnerwheel
      * @param itemsToScroll items to scroll
      * @param time scrolling duration
      */
     public void scroll(int itemsToScroll, int time) {
         int distance = itemsToScroll * getItemDimension() - mScrollingOffset;
-        onScrollTouched(); // we have to emulate touch when scrolling widget programmatically to light up stuff
+        onScrollTouched(); // we have to emulate touch when scrolling spinnerwheel programmatically to light up stuff
         mScroller.scroll(distance, time);
     }
 
     /**
-     * Scrolls the widget
+     * Scrolls the spinnerwheel
      * @param delta the scrolling value
      */
     private void doScroll(int delta) {
@@ -328,21 +326,21 @@ public abstract class AbstractWheel extends View {
     //--------------------------------------------------------------------------
 
     /**
-     * Returns base dimension of the widget — width for horizontal widget, height for vertical
+     * Returns base dimension of the spinnerwheel — width for horizontal spinnerwheel, height for vertical
      *
-     * @return width or height of the widget
+     * @return width or height of the spinnerwheel
      */
     abstract protected int getBaseDimension();
 
     /**
-     * Returns base dimension of base item — width for horizontal widget, height for vertical
+     * Returns base dimension of base item — width for horizontal spinnerwheel, height for vertical
      *
      * @return width or height of base item
      */
     abstract protected int getItemDimension();
 
     /**
-     * Processes MotionEvent and returns relevant position — x for horizontal widget, y for vertical
+     * Processes MotionEvent and returns relevant position — x for horizontal spinnerwheel, y for vertical
      *
      * @param event MotionEvent to be processed
      * @return relevant position of the MotionEvent
@@ -418,7 +416,7 @@ public abstract class AbstractWheel extends View {
 
     /**
      * Sets the desired count of visible items.
-     * Actual amount of visible items depends on widget layout parameters.
+     * Actual amount of visible items depends on spinnerwheel layout parameters.
      * To apply changes and rebuild view call measure().
      *
      * @param count the desired count for visible items
@@ -514,15 +512,15 @@ public abstract class AbstractWheel extends View {
     }
 
     /**
-     * Tests if widget is cyclic. That means before the 1st item there is shown the last one
-     * @return true if widget is cyclic
+     * Tests if spinnerwheel is cyclic. That means before the 1st item there is shown the last one
+     * @return true if spinnerwheel is cyclic
      */
     public boolean isCyclic() {
         return mIsCyclic;
     }
 
     /**
-     * Set widget cyclic flag
+     * Set spinnerwheel cyclic flag
      * @param isCyclic the flag to set
      */
     public void setCyclic(boolean isCyclic) {
@@ -538,7 +536,7 @@ public abstract class AbstractWheel extends View {
     //--------------------------------------------------------------------------
 
     /**
-     * Adds widget changing listener
+     * Adds spinnerwheel changing listener
      * @param listener the listener
      */
     public void addChangingListener(OnWheelChangedListener listener) {
@@ -546,7 +544,7 @@ public abstract class AbstractWheel extends View {
     }
 
     /**
-     * Removes widget changing listener
+     * Removes spinnerwheel changing listener
      * @param listener the listener
      */
     public void removeChangingListener(OnWheelChangedListener listener) {
@@ -555,8 +553,8 @@ public abstract class AbstractWheel extends View {
 
     /**
      * Notifies changing listeners
-     * @param oldValue the old widget value
-     * @param newValue the new widget value
+     * @param oldValue the old spinnerwheel value
+     * @param newValue the new spinnerwheel value
      */
     protected void notifyChangingListeners(int oldValue, int newValue) {
         for (OnWheelChangedListener listener : changingListeners) {
@@ -565,7 +563,7 @@ public abstract class AbstractWheel extends View {
     }
 
     /**
-     * Adds widget scrolling listener
+     * Adds spinnerwheel scrolling listener
      * @param listener the listener
      */
     public void addScrollingListener(OnWheelScrollListener listener) {
@@ -573,7 +571,7 @@ public abstract class AbstractWheel extends View {
     }
 
     /**
-     * Removes widget scrolling listener
+     * Removes spinnerwheel scrolling listener
      * @param listener the listener
      */
     public void removeScrollingListener(OnWheelScrollListener listener) {
@@ -599,7 +597,7 @@ public abstract class AbstractWheel extends View {
     }
 
     /**
-     * Adds widget clicking listener
+     * Adds spinnerwheel clicking listener
      * @param listener the listener
      */
     public void addClickingListener(OnWheelClickedListener listener) {
@@ -607,7 +605,7 @@ public abstract class AbstractWheel extends View {
     }
 
     /**
-     * Removes widget clicking listener
+     * Removes spinnerwheel clicking listener
      * @param listener the listener
      */
     public void removeClickingListener(OnWheelClickedListener listener) {
@@ -632,7 +630,7 @@ public abstract class AbstractWheel extends View {
     //--------------------------------------------------------------------------
 
     /**
-     * Rebuilds widget items if necessary. Caches all unused items.
+     * Rebuilds spinnerwheel items if necessary. Caches all unused items.
      *
      * @return true if items are rebuilt
      */
@@ -680,7 +678,7 @@ public abstract class AbstractWheel extends View {
     //----------------------------------
 
     /**
-     * Calculates range for widget items
+     * Calculates range for spinnerwheel items
      * @return the items range
      */
     private ItemsRange getItemsRange() {
@@ -705,7 +703,7 @@ public abstract class AbstractWheel extends View {
     /**
      * Checks whether item index is valid
      * @param index the item index
-     * @return true if item index is not out of bounds or the widget is cyclic
+     * @return true if item index is not out of bounds or the spinnerwheel is cyclic
      */
     protected boolean isValidItemIndex(int index) {
         return (mViewAdapter != null) && (mViewAdapter.getItemsCount() > 0) &&

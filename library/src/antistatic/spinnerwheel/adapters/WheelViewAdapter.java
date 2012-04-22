@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-package antistatic.widget.wheel.adapters;
+package antistatic.spinnerwheel.adapters;
 
 import android.database.DataSetObserver;
 import android.view.View;
@@ -34,7 +34,7 @@ import android.view.ViewGroup;
 public interface WheelViewAdapter {
     /**
      * Gets items count
-     * @return the count of widget items
+     * @return the count of spinnerwheel items
      */
     public int getItemsCount();
 
@@ -44,13 +44,13 @@ public interface WheelViewAdapter {
      * @param index the item index
      * @param convertView the old view to reuse if possible
      * @param parent the parent that this view will eventually be attached to
-     * @return the widget item View
+     * @return the spinnerwheel item View
      */
     public View getItem(int index, View convertView, ViewGroup parent);
 
     /**
-     * Get a View that displays an empty widget item placed before the first or after
-     * the last widget item.
+     * Get a View that displays an empty spinnerwheel item placed before the first or after
+     * the last spinnerwheel item.
      *
      * @param convertView the old view to reuse if possible
      * @param parent the parent that this view will eventually be attached to

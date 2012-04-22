@@ -1,14 +1,14 @@
-package antistatic.widget.demo;
+package antistatic.spinnerwheel.demo;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-import antistatic.widget.wheel.AbstractWheel;
-import antistatic.widget.wheel.adapters.AbstractWheelTextAdapter;
-import antistatic.widget.wheel.adapters.ArrayWheelAdapter;
-import antistatic.widget.wheel.adapters.NumericWheelAdapter;
+import antistatic.spinnerwheel.AbstractWheel;
+import antistatic.spinnerwheel.adapters.AbstractWheelTextAdapter;
+import antistatic.spinnerwheel.adapters.ArrayWheelAdapter;
+import antistatic.spinnerwheel.adapters.NumericWheelAdapter;
 
 import android.app.Activity;
 import android.content.Context;

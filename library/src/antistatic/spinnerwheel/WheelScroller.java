@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-package antistatic.widget.wheel;
+package antistatic.spinnerwheel;
 
 import android.content.Context;
 import android.os.Handler;
@@ -34,7 +34,7 @@ import android.view.animation.Interpolator;
 import android.widget.Scroller;
 
 /**
- * Scroller class handles scrolling events and updates the widget
+ * Scroller class handles scrolling events and updates the spinnerwheel
  */
 public abstract class WheelScroller {
     /**
@@ -101,7 +101,7 @@ public abstract class WheelScroller {
         gestureDetector = new GestureDetector(context, new SimpleOnGestureListener() {
             public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
                 // Do scrolling in onTouchEvent() since onScroll() are not call immediately
-                //  when user touch and move the widget
+                //  when user touch and move the spinnerwheel
                 return true;
             }
 
@@ -133,7 +133,7 @@ public abstract class WheelScroller {
     }
     
     /**
-     * Scroll the widget
+     * Scroll the spinnerwheel
      * @param distance the scrolling distance
      * @param time the scrolling duration
      */
@@ -242,7 +242,7 @@ public abstract class WheelScroller {
     };
     
     /**
-     * Justifies widget
+     * Justifies spinnerwheel
      */
     private void justify() {
         listener.onJustify();

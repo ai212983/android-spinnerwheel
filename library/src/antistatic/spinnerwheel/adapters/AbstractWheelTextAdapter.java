@@ -21,7 +21,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package antistatic.widget.wheel.adapters;
+package antistatic.spinnerwheel.adapters;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -33,7 +33,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 /**
- * Abstract widget adapter provides common functionality for adapters.
+ * Abstract spinnerwheel adapter provides common functionality for adapters.
  */
 public abstract class AbstractWheelTextAdapter extends AbstractWheelAdapter {
     

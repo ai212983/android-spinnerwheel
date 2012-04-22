@@ -1,10 +1,9 @@
-package antistatic.widget.demo;
+package antistatic.spinnerwheel.demo;
 
-import android.util.Log;
-import antistatic.widget.wheel.AbstractWheel;
-import antistatic.widget.wheel.OnWheelChangedListener;
-import antistatic.widget.wheel.OnWheelScrollListener;
-import antistatic.widget.wheel.adapters.NumericWheelAdapter;
+import antistatic.spinnerwheel.AbstractWheel;
+import antistatic.spinnerwheel.OnWheelChangedListener;
+import antistatic.spinnerwheel.OnWheelScrollListener;
+import antistatic.spinnerwheel.adapters.NumericWheelAdapter;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
@@ -73,8 +72,8 @@ public class ProgrammaticSwitchingActivity extends Activity {
     }
 
     /**
-     * Initializes widget
-     * @param id the widget wheel Id
+     * Initializes spinnerwheel
+     * @param id the spinnerwheel wheel Id
      */
     private void initWheel(int id) {
         AbstractWheel wheel = getWheel(id);
@@ -87,9 +86,9 @@ public class ProgrammaticSwitchingActivity extends Activity {
     }
     
     /**
-     * Returns widget by Id
-     * @param id the widget Id
-     * @return the widget with passed Id
+     * Returns spinnerwheel by Id
+     * @param id the spinnerwheel Id
+     * @return the spinnerwheel with passed Id
      */
     private AbstractWheel getWheel(int id) {
         return (AbstractWheel) findViewById(id);
@@ -109,18 +108,18 @@ public class ProgrammaticSwitchingActivity extends Activity {
     }
     
     /**
-     * Tests widget value
-     * @param id the widget Id
+     * Tests spinnerwheel value
+     * @param id the spinnerwheel Id
      * @param value the value to test
-     * @return true if widget value is equal to passed value
+     * @return true if spinnerwheel value is equal to passed value
      */
     private boolean testWheelValue(int id, int value) {
         return getWheel(id).getCurrentItem() == value;
     }
     
     /**
-     * Mixes widget
-     * @param id the widget id
+     * Mixes spinnerwheel
+     * @param id the spinnerwheel id
      */
     private void mixWheel(int id) {
         AbstractWheel wheel = getWheel(id);

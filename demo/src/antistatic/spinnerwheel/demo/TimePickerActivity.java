@@ -1,12 +1,12 @@
-package antistatic.widget.demo;
+package antistatic.spinnerwheel.demo;
 
 import java.util.Calendar;
 
-import antistatic.widget.wheel.AbstractWheel;
-import antistatic.widget.wheel.OnWheelChangedListener;
-import antistatic.widget.wheel.OnWheelClickedListener;
-import antistatic.widget.wheel.OnWheelScrollListener;
-import antistatic.widget.wheel.adapters.NumericWheelAdapter;
+import antistatic.spinnerwheel.AbstractWheel;
+import antistatic.spinnerwheel.OnWheelChangedListener;
+import antistatic.spinnerwheel.OnWheelClickedListener;
+import antistatic.spinnerwheel.OnWheelScrollListener;
+import antistatic.spinnerwheel.adapters.NumericWheelAdapter;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -99,14 +99,14 @@ public class TimePickerActivity extends Activity {
     }
 
     /**
-     * Adds changing listener for widget that updates the widget label
-     * @param wheel the widget
-     * @param label the widget label
+     * Adds changing listener for spinnerwheel that updates the spinnerwheel label
+     * @param wheel the spinnerwheel
+     * @param label the spinnerwheel label
      */
     private void addChangingListener(final AbstractWheel wheel, final String label) {
         wheel.addChangingListener(new OnWheelChangedListener() {
             public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
-                //widget.setLabel(newValue != 1 ? label + "s" : label);
+                //spinnerwheel.setLabel(newValue != 1 ? label + "s" : label);
             }
         });
     }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="antistatic.widget.demo"
+      package="antistatic.spinnerwheel.demo"
       android:versionCode="1"
       android:versionName="1.0">
 
@@ -11,10 +11,10 @@
 
     <application
             android:icon="@drawable/ic_launcher_demo"
-            android:label="Wheel widget demo"
+            android:label="Spinner wheel demo"
             android:theme="@style/WheelDemoTheme.Light">
 
-        <activity android:name="antistatic.widget.demo.WheelDemo">
+        <activity android:name="antistatic.spinnerwheel.demo.WheelDemo">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -23,25 +23,25 @@
         <activity android:name=".TimePickerActivity" android:label="Time picker">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="antistatic.widget.WHEEL_SAMPLE"/>
+                <category android:name="antistatic.spinnerwheel.WHEEL_SAMPLE"/>
             </intent-filter>
         </activity>
         <activity android:name=".TimePickerCustomViewsActivity" android:label="Time picker with custom views">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="antistatic.widget.WHEEL_SAMPLE"/>
+                <category android:name="antistatic.spinnerwheel.WHEEL_SAMPLE"/>
             </intent-filter>
         </activity>
         <activity android:name=".ProgrammaticSwitchingActivity" android:label="Programmatic switching (shuffle)">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="antistatic.widget.WHEEL_SAMPLE"/>
+                <category android:name="antistatic.spinnerwheel.WHEEL_SAMPLE"/>
             </intent-filter>
         </activity>
-        <activity android:name="antistatic.widget.demo.CitiesActivity" android:label="Repopulating data">
+        <activity android:name="antistatic.spinnerwheel.demo.CitiesActivity" android:label="Repopulating data">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="antistatic.widget.WHEEL_SAMPLE"/>
+                <category android:name="antistatic.spinnerwheel.WHEEL_SAMPLE"/>
             </intent-filter>
         </activity>
 

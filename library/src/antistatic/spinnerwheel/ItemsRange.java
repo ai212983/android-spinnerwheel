@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-package antistatic.widget.wheel;
+package antistatic.spinnerwheel;
 
     /**
      * Range for visible items.

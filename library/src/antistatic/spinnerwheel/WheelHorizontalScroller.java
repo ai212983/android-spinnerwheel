@@ -22,50 +22,47 @@
  * limitations under the License.
  */
 
-package antistatic.widget.wheel;
+package antistatic.spinnerwheel;
 
 import android.content.Context;
 import android.view.MotionEvent;
 
-/**
- * Scroller class handles scrolling events and updates the 
- */
-public class WheelVerticalScroller extends WheelScroller {
+public class WheelHorizontalScroller extends WheelScroller {
 
     /**
      * Constructor
      * @param context the current context
      * @param listener the scrolling listener
      */
-    public WheelVerticalScroller(Context context, ScrollingListener listener) {
+    public WheelHorizontalScroller(Context context, ScrollingListener listener) {
         super(context, listener);
     }
 
     @Override
     protected int getCurrentScrollerPosition() {
-        return scroller.getCurrY();
+        return scroller.getCurrX();
     }
 
     @Override
     protected int getFinalScrollerPosition() {
-        return scroller.getFinalY();
+        return scroller.getFinalX();
     }
 
     @Override
     protected float getMotionEventPosition(MotionEvent event) {
         // should be overriden
-        return event.getY();
+        return event.getX();
     }
 
     @Override
     protected void scrollerStartScroll(int distance, int time) {
-        scroller.startScroll(0, 0, 0, distance, time);
+        scroller.startScroll(0, 0, distance, 0, time);
     }
 
     @Override
     protected void scrollerFling(int position, int velocityX, int velocityY) {
         final int maxPosition = 0x7FFFFFFF;
         final int minPosition = -maxPosition;
-        scroller.fling(0, position, 0, -velocityY, 0, 0, minPosition, maxPosition);
+        scroller.fling(position, 0, -velocityX, 0, minPosition, maxPosition, 0, 0);
     }
 }

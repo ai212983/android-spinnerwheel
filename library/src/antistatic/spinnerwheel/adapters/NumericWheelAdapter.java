@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-package antistatic.widget.wheel.adapters;
+package antistatic.spinnerwheel.adapters;
 
 import android.content.Context;
 
@@ -55,8 +55,8 @@ public class NumericWheelAdapter extends AbstractWheelTextAdapter {
     /**
      * Constructor
      * @param context the current context
-     * @param minValue the widget min value
-     * @param maxValue the widget max value
+     * @param minValue the spinnerwheel min value
+     * @param maxValue the spinnerwheel max value
      */
     public NumericWheelAdapter(Context context, int minValue, int maxValue) {
         this(context, minValue, maxValue, null);
@@ -65,8 +65,8 @@ public class NumericWheelAdapter extends AbstractWheelTextAdapter {
     /**
      * Constructor
      * @param context the current context
-     * @param minValue the widget min value
-     * @param maxValue the widget max value
+     * @param minValue the spinnerwheel min value
+     * @param maxValue the spinnerwheel max value
      * @param format the format string
      */
     public NumericWheelAdapter(Context context, int minValue, int maxValue, String format) {

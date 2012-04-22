@@ -21,12 +21,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package antistatic.widget.wheel.adapters;
+package antistatic.spinnerwheel.adapters;
 
 import android.content.Context;
 
 /**
- * The simple Array widget adapter
+ * The simple Array spinnerwheel adapter
  * @param <T> the element type
  */
 public class ArrayWheelAdapter<T> extends AbstractWheelTextAdapter {

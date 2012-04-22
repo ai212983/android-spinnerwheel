@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-package antistatic.widget.wheel.adapters;
+package antistatic.spinnerwheel.adapters;
 
 import java.util.LinkedList;
 import java.util.List;

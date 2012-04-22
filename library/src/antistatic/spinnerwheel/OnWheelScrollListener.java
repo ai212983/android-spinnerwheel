@@ -22,19 +22,21 @@
  * limitations under the License.
  */
 
-package antistatic.widget.wheel;
+package antistatic.spinnerwheel;
 
 /**
- * Wheel clicked listener interface.
- * <p>The onItemClicked() method is called whenever a widget item is clicked
- * <li> New Wheel position is set
- * <li> Wheel view is scrolled
+ * Wheel scrolled listener interface.
  */
-public interface OnWheelClickedListener {
-    /**
-     * Callback method to be invoked when current item clicked
-     * @param wheel the widget view
-     * @param itemIndex the index of clicked item
-     */
-    void onItemClicked(AbstractWheel wheel, int itemIndex);
+public interface OnWheelScrollListener {
+	/**
+	 * Callback method to be invoked when scrolling started.
+	 * @param wheel the spinnerwheel view whose state has changed.
+	 */
+	void onScrollingStarted(AbstractWheel wheel);
+	
+	/**
+	 * Callback method to be invoked when scrolling ended.
+	 * @param wheel the spinnerwheel view whose state has changed.
+	 */
+	void onScrollingFinished(AbstractWheel wheel);
 }

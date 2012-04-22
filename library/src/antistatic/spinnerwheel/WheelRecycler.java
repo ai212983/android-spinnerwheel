@@ -22,17 +22,16 @@
  * limitations under the License.
  */
 
-package antistatic.widget.wheel;
+package antistatic.spinnerwheel;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
 /**
- * Recycle stored widget items to reuse.
+ * Recycle stored spinnerwheel items to reuse.
  */
 public class WheelRecycler {
 
@@ -51,7 +50,7 @@ public class WheelRecycler {
 
     /**
      * Constructor
-     * @param wheel the widget view
+     * @param wheel the spinnerwheel view
      */
     public WheelRecycler(AbstractWheel wheel) {
         this.wheel = wheel;
@@ -64,7 +63,7 @@ public class WheelRecycler {
      *
      * @param layout the layout containing items to be cached
      * @param firstItem the number of first item in layout
-     * @param range the range of current widget items
+     * @param range the range of current spinnerwheel items
      * @return the new value of first item number
      */
     public int recycleItems(LinearLayout layout, int firstItem, ItemsRange range) {

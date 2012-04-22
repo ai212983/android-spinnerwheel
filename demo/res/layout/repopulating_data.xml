@@ -23,11 +23,11 @@
                 android:layout_marginTop="24dp"
                 android:orientation="horizontal">
 
-            <antistatic.widget.wheel.WheelVerticalView android:id="@+id/country"
+            <antistatic.spinnerwheel.WheelVerticalView android:id="@+id/country"
                     android:layout_height="wrap_content"
                     android:layout_width="150dp"/>
 
-            <antistatic.widget.wheel.WheelVerticalView android:id="@+id/city"
+            <antistatic.spinnerwheel.WheelVerticalView android:id="@+id/city"
                     android:layout_height="wrap_content"
                     android:layout_width="150dp"/>
 

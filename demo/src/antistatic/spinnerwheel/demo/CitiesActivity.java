@@ -1,10 +1,10 @@
-package antistatic.widget.demo;
+package antistatic.spinnerwheel.demo;
 
-import antistatic.widget.wheel.AbstractWheel;
-import antistatic.widget.wheel.OnWheelChangedListener;
-import antistatic.widget.wheel.OnWheelScrollListener;
-import antistatic.widget.wheel.adapters.AbstractWheelTextAdapter;
-import antistatic.widget.wheel.adapters.ArrayWheelAdapter;
+import antistatic.spinnerwheel.AbstractWheel;
+import antistatic.spinnerwheel.OnWheelChangedListener;
+import antistatic.spinnerwheel.OnWheelScrollListener;
+import antistatic.spinnerwheel.adapters.AbstractWheelTextAdapter;
+import antistatic.spinnerwheel.adapters.ArrayWheelAdapter;
 
 import android.app.Activity;
 import android.content.Context;
@@ -74,7 +74,7 @@ public class CitiesActivity extends Activity {
     }
     
     /**
-     * Updates the city widget
+     * Updates the city spinnerwheel
      */
     private void updateCities(AbstractWheel city, String cities[][], int index) {
         mActiveCountry = index;

@@ -1,4 +1,4 @@
-package antistatic.widget.demo;
+package antistatic.spinnerwheel.demo;
 
 import java.text.Collator;
 import java.util.ArrayList;
@@ -38,7 +38,7 @@ public class WheelDemo extends ListActivity {
         List<Map> myData = new ArrayList<Map>();
 
         Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
-        mainIntent.addCategory("antistatic.widget.WHEEL_SAMPLE");
+        mainIntent.addCategory("antistatic.spinnerwheel.WHEEL_SAMPLE");
 
         PackageManager pm = getPackageManager();
         List<ResolveInfo> list = pm.queryIntentActivities(mainIntent, 0);
