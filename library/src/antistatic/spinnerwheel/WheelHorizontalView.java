@@ -180,7 +180,7 @@ public class WheelHorizontalView extends AbstractWheelView {
 
     /**
      * Returns height of spinnerwheel item
-     * @return the item height
+     * @return the item width
      */
     @Override
     protected int getItemDimension() {
@@ -246,9 +246,8 @@ public class WheelHorizontalView extends AbstractWheelView {
         mItemsLayout.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
         // XXX: Locating bug
         mItemsLayout.measure(
-                MeasureSpec.makeMeasureSpec(400, MeasureSpec.EXACTLY), // MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
-                MeasureSpec.makeMeasureSpec(getHeight() - 2 * mItemsPadding, MeasureSpec.EXACTLY)
-        );
+                MeasureSpec.makeMeasureSpec(getWidth() + getItemDimension(), MeasureSpec.EXACTLY),
+                MeasureSpec.makeMeasureSpec(getHeight(), MeasureSpec.AT_MOST));
     }
 
     //XXX: Most likely, measurements of mItemsLayout or/and its children are done inconrrectly.
@@ -291,10 +290,9 @@ public class WheelHorizontalView extends AbstractWheelView {
     private int calculateLayoutHeight(int heightSize, int mode) {
         mItemsLayout.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
         mItemsLayout.measure(
-                // MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
-                MeasureSpec.makeMeasureSpec(400, MeasureSpec.EXACTLY),
+                MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
                 MeasureSpec.makeMeasureSpec(heightSize, MeasureSpec.UNSPECIFIED)
-        );
+                );
         int height = mItemsLayout.getMeasuredHeight();
 
         if (mode == MeasureSpec.EXACTLY) {
