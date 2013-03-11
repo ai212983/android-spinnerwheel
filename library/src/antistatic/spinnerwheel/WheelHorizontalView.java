@@ -163,7 +163,7 @@ public class WheelHorizontalView extends AbstractWheelView {
 
     @Override
     protected float getMotionEventPosition(MotionEvent event) {
-        return event.getY();
+        return event.getX();
     }
 
 
