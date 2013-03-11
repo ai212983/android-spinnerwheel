@@ -66,6 +66,8 @@ public abstract class AbstractWheel extends View {
 
     // Count of visible items
     protected int mVisibleItems;
+    // Should all items be visible
+    protected boolean mIsAllVisible;
 
     protected boolean mIsCyclic;
 
@@ -134,6 +136,7 @@ public abstract class AbstractWheel extends View {
     protected void initAttributes(AttributeSet attrs, int defStyle) {
         TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.AbstractWheelView, defStyle, 0);
         mVisibleItems = a.getInt(R.styleable.AbstractWheelView_visibleItems, DEF_VISIBLE_ITEMS);
+        mIsAllVisible = a.getBoolean(R.styleable.AbstractWheelView_isAllVisible, false);
         mIsCyclic = a.getBoolean(R.styleable.AbstractWheelView_isCyclic, DEF_IS_CYCLIC);
 
         a.recycle();
@@ -426,6 +429,15 @@ public abstract class AbstractWheel extends View {
     }
 
     /**
+     * Sets all items to have no dim and makes them visible
+     * @param isAllVisible
+     */
+    public void setAllItemsVisible(boolean isAllVisible){
+        mIsAllVisible = isAllVisible;
+        invalidateItemsLayout(false);
+    }
+
+    /**
      * Gets view adapter
      * @return the view adapter
      */
@@ -682,6 +694,13 @@ public abstract class AbstractWheel extends View {
      * @return the items range
      */
     private ItemsRange getItemsRange() {
+        if (mIsAllVisible) {
+            int baseDimension = getBaseDimension();
+            int itemDimension = getItemDimension();
+            if (itemDimension != 0)
+                mVisibleItems = baseDimension / itemDimension;
+        }
+
         int start = mCurrentItemIdx - mVisibleItems / 2;
         int end = start + mVisibleItems - (mVisibleItems % 2 == 0 ? 0 : 1);
         if (mScrollingOffset != 0) {

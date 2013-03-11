@@ -2,6 +2,7 @@
 <resources>
     <declare-styleable name="AbstractWheelView">
         <attr name="visibleItems" format="integer"/>
+        <attr name="isAllVisible" format="boolean"/>
         <attr name="itemOffsetPercent" format="integer"/>
         <attr name="itemsPadding" format="dimension"/>
         <attr name="selectionDividerDimmedAlpha" format="integer"/>
