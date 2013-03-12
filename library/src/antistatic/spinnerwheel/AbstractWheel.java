@@ -24,17 +24,20 @@
 
 package antistatic.spinnerwheel;
 
-import java.util.LinkedList;
-import java.util.List;
-import android.content.res.TypedArray;
-import antistatic.spinnerwheel.adapters.WheelViewAdapter;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.database.DataSetObserver;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Interpolator;
 import android.widget.LinearLayout;
+import antistatic.spinnerwheel.adapters.WheelViewAdapter;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Abstract spinner spinnerwheel view.
@@ -211,6 +214,70 @@ public abstract class AbstractWheel extends View {
         });
     }
 
+    @Override
+    public Parcelable onSaveInstanceState() {
+        //begin boilerplate code that allows parent classes to save state
+        Parcelable superState = super.onSaveInstanceState();
+        SavedState ss = new SavedState(superState);
+        //end
+
+        ss.currentItem = this.getCurrentItem();
+
+        return ss;
+    }
+
+    @Override
+    public void onRestoreInstanceState(Parcelable state) {
+        //begin boilerplate code so parent classes can restore state
+        if(!(state instanceof SavedState)) {
+            super.onRestoreInstanceState(state);
+            return;
+        }
+
+        final SavedState ss = (SavedState)state;
+        super.onRestoreInstanceState(ss.getSuperState());
+        //end
+
+        mCurrentItemIdx = ss.currentItem;
+
+        // dirty hack to re-draw child items correctly
+        postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                invalidateItemsLayout(false);
+            }
+        }, 100);
+    }
+
+    static class SavedState extends BaseSavedState {
+        int currentItem;
+
+        SavedState(Parcelable superState) {
+            super(superState);
+        }
+
+        private SavedState(Parcel in) {
+            super(in);
+            this.currentItem = in.readInt();
+        }
+
+        @Override
+        public void writeToParcel(Parcel out, int flags) {
+            super.writeToParcel(out, flags);
+            out.writeInt(this.currentItem);
+        }
+
+        //required field that makes Parcelables from a Parcel
+        public static final Parcelable.Creator<SavedState> CREATOR =
+                new Parcelable.Creator<SavedState>() {
+                    public SavedState createFromParcel(Parcel in) {
+                        return new SavedState(in);
+                    }
+                    public SavedState[] newArray(int size) {
+                        return new SavedState[size];
+                    }
+                };
+    }
 
     abstract protected void recreateAssets(int width, int height);
 
@@ -698,7 +765,7 @@ public abstract class AbstractWheel extends View {
             int baseDimension = getBaseDimension();
             int itemDimension = getItemDimension();
             if (itemDimension != 0)
-                mVisibleItems = baseDimension / itemDimension;
+                mVisibleItems = baseDimension / itemDimension + 1;
         }
 
         int start = mCurrentItemIdx - mVisibleItems / 2;
