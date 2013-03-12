@@ -246,7 +246,7 @@ public class WheelHorizontalView extends AbstractWheelView {
         mItemsLayout.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
         // XXX: Locating bug
         mItemsLayout.measure(
-                MeasureSpec.makeMeasureSpec(getWidth() + getItemDimension(), MeasureSpec.EXACTLY),
+                MeasureSpec.makeMeasureSpec(getWidth() + getItemDimension(), MeasureSpec.UNSPECIFIED),
                 MeasureSpec.makeMeasureSpec(getHeight(), MeasureSpec.AT_MOST));
     }
 
