@@ -111,6 +111,9 @@ public class WheelHorizontalView extends AbstractWheelView {
 
     @Override
     public void setSelectorPaintCoeff(float coeff) {
+        if (mItemsDimmedAlpha >= 100)
+            return;
+
         LinearGradient shader;
 
         int w = getMeasuredWidth();
@@ -138,8 +141,8 @@ public class WheelHorizontalView extends AbstractWheelView {
             int c2 = Math.round( c2f ) << 24;
             int c3 = Math.round( c3f ) << 24;
 
-            int[] colors =      {0, c3, c2, c1, 0xff000000, 0xff000000, c1, c2, c3, 0};
-            float[] positions = {0, p3, p3, p1,     p1,         p2,     p2, p4, p4, 1};
+            int[] colors = { c2, c2, c2, c2, 0xff000000, 0xff000000, c2, c2, c2, c2 };
+            float[] positions = { 0, p3, p3, p1, p1, p2, p2, p4, p4, 1 };
             shader = new LinearGradient(0, 0, w, 0, colors, positions, Shader.TileMode.CLAMP);
         }
         mSelectorWheelPaint.setShader(shader);
@@ -160,7 +163,7 @@ public class WheelHorizontalView extends AbstractWheelView {
 
     @Override
     protected float getMotionEventPosition(MotionEvent event) {
-        return event.getY();
+        return event.getX();
     }
 
 
@@ -177,7 +180,7 @@ public class WheelHorizontalView extends AbstractWheelView {
 
     /**
      * Returns height of spinnerwheel item
-     * @return the item height
+     * @return the item width
      */
     @Override
     protected int getItemDimension() {
@@ -243,9 +246,8 @@ public class WheelHorizontalView extends AbstractWheelView {
         mItemsLayout.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
         // XXX: Locating bug
         mItemsLayout.measure(
-                MeasureSpec.makeMeasureSpec(400, MeasureSpec.EXACTLY), // MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
-                MeasureSpec.makeMeasureSpec(getHeight() - 2 * mItemsPadding, MeasureSpec.EXACTLY)
-        );
+                MeasureSpec.makeMeasureSpec(getWidth() + getItemDimension(), MeasureSpec.EXACTLY),
+                MeasureSpec.makeMeasureSpec(getHeight(), MeasureSpec.AT_MOST));
     }
 
     //XXX: Most likely, measurements of mItemsLayout or/and its children are done inconrrectly.
@@ -288,10 +290,9 @@ public class WheelHorizontalView extends AbstractWheelView {
     private int calculateLayoutHeight(int heightSize, int mode) {
         mItemsLayout.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
         mItemsLayout.measure(
-                // MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
-                MeasureSpec.makeMeasureSpec(400, MeasureSpec.EXACTLY),
+                MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
                 MeasureSpec.makeMeasureSpec(heightSize, MeasureSpec.UNSPECIFIED)
-        );
+                );
         int height = mItemsLayout.getMeasuredHeight();
 
         if (mode == MeasureSpec.EXACTLY) {
