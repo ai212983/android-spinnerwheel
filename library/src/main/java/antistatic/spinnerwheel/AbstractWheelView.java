@@ -206,6 +206,9 @@ public abstract class AbstractWheelView extends AbstractWheel {
      */
     abstract public void setSelectorPaintCoeff(float coeff);
 
+    public void setSelectionDivider(Drawable selectionDivider) {
+        this.mSelectionDivider = selectionDivider;
+    }
 
     //--------------------------------------------------------------------------
     //

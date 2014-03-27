@@ -17,5 +17,7 @@
     <declare-styleable name="WheelHorizontalView">
         <attr name="selectionDividerWidth" format="dimension"/>
     </declare-styleable>
+
+
     <attr name="abstractWheelViewStyle" format="reference" />
 </resources>

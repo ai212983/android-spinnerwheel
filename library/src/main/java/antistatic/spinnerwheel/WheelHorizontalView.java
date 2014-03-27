@@ -109,6 +109,10 @@ public class WheelHorizontalView extends AbstractWheelView {
         a.recycle();
     }
 
+    public void setSelectionDividerWidth(int selectionDividerWidth) {
+        this.mSelectionDividerWidth = selectionDividerWidth;
+    }
+
     @Override
     public void setSelectorPaintCoeff(float coeff) {
         if (mItemsDimmedAlpha >= 100)
