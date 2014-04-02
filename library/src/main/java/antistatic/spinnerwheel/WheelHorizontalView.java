@@ -351,14 +351,22 @@ public class WheelHorizontalView extends AbstractWheelView {
             // draw the top divider
             int leftOfLeftDivider = (getWidth() - iw - mSelectionDividerWidth) / 2;
             int rightOfLeftDivider = leftOfLeftDivider + mSelectionDividerWidth;
-            mSelectionDivider.setBounds(leftOfLeftDivider, 0, rightOfLeftDivider, getHeight());
+            cSeparators.save();
+            // On Gingerbread setBounds() is ignored resulting in an ugly visual bug.
+            cSeparators.clipRect(leftOfLeftDivider, 0, rightOfLeftDivider, h);
+            mSelectionDivider.setBounds(leftOfLeftDivider, 0, rightOfLeftDivider, h);
             mSelectionDivider.draw(cSeparators);
+            cSeparators.restore();
 
+            cSeparators.save();
             // draw the bottom divider
             int leftOfRightDivider =  leftOfLeftDivider + iw;
             int rightOfRightDivider = rightOfLeftDivider + iw;
-            mSelectionDivider.setBounds(leftOfRightDivider, 0, rightOfRightDivider, getHeight());
+            // On Gingerbread setBounds() is ignored resulting in an ugly visual bug.
+            cSeparators.clipRect(leftOfRightDivider, 0, rightOfRightDivider, h);
+            mSelectionDivider.setBounds(leftOfRightDivider, 0, rightOfRightDivider, h);
             mSelectionDivider.draw(cSeparators);
+            cSeparators.restore();
         }
 
         cSpin.drawRect(0, 0, w, h, mSelectorWheelPaint);
