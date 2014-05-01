@@ -77,6 +77,16 @@ public class NumericWheelAdapter extends AbstractWheelTextAdapter {
         this.format = format;
     }
 
+    public void setMinValue(int minValue) {
+        this.minValue = minValue;
+        notifyDataInvalidatedEvent();
+    }
+
+    public void setMaxValue(int maxValue) {
+        this.maxValue = maxValue;
+        notifyDataInvalidatedEvent();
+    }
+
     @Override
     public CharSequence getItemText(int index) {
         if (index >= 0 && index < getItemsCount()) {
