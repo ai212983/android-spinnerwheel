@@ -1,3 +1,9 @@
+**Update Oct 2014** I am thinking of rewriting this control. Update will contain most requested features, numerous improvements and optimizations. But main point in update is to discontinue ICS lookalike and support Material Design (Android 5.0 Lollipop) look and feel instead. Sadly I wasn't able to find any reference images of something like it. 
+
+So if someone will find it - please drop me a line via creating issue, and I'll start tinkering.
+
+---
+
 This widget is based on [wheel widget][1] by Yuri Kanivets. See 'downloads' section for demo or [download it][2] from Google Play.
 
 ![Example Image][3]
