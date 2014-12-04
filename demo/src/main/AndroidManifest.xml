@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
       package="antistatic.spinnerwheel.demo"
       android:versionCode="1"
       android:versionName="1.0">
@@ -12,7 +11,8 @@
     <application
             android:icon="@drawable/ic_launcher_demo"
             android:label="Spinner wheel demo"
-            android:theme="@style/WheelDemoTheme.Light">
+            android:theme="@style/WheelDemoTheme.Light"
+            tools:replace="android:label">
 
         <activity android:name="antistatic.spinnerwheel.demo.WheelDemo">
             <intent-filter>
