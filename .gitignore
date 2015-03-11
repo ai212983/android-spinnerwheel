@@ -6,3 +6,7 @@
 out
 gen
 library/build
+
+#for ant
+bin
+local.properties
