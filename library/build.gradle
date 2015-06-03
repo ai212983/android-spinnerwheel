@@ -1,9 +1,12 @@
 buildscript {
     repositories {
         mavenCentral()
+        maven {
+            url "https://jitpack.io"
+        }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.9.+'
+        classpath 'com.android.tools.build:gradle:1.2.+'
     }
 }
 apply plugin: 'android-library'
@@ -14,6 +17,7 @@ repositories {
 
 dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
+    compile 'com.github.User:Repo:Tag'
 }
 
 android {
