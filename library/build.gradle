@@ -2,7 +2,7 @@ apply plugin: 'android-library'
 apply plugin: 'android-maven'
 
 dependencies {
-    compile fileTree(dir: 'libs', include: '*.jar')
+    provided files('libs/nineoldandroids-2.2.0.jar')
 }
 
 android {
