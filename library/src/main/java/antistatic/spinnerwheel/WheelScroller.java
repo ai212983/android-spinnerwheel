@@ -25,6 +25,7 @@
 package antistatic.spinnerwheel;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.view.GestureDetector;
@@ -151,7 +152,17 @@ public abstract class WheelScroller {
     public void stopScrolling() {
         scroller.forceFinished(true);
     }
-    
+
+    /**
+     * Set the friction of the scroller. This function is available over Android 3.0 (API Level 11).
+     * @param friction the amount of friction
+     */
+    public void setFriction(float friction) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB){
+            scroller.setFriction(friction);
+        }
+    }
+
     /**
      * Handles Touch event 
      * @param event the motion event

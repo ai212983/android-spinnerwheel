@@ -340,6 +340,14 @@ public abstract class AbstractWheel extends View {
     }
 
     /**
+     * Set the friction of the scroller. This function is available over Android 3.0 (API Level 11).
+     * @param friction the amount of friction
+     */
+    public void SetFriction(float friction) {
+        mScroller.setFriction(friction);
+    }
+
+    /**
      * Scrolls the spinnerwheel
      *
      * @param delta the scrolling value
