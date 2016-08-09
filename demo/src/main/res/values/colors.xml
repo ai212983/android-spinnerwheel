@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="pink_500" type="color">#FF1691</item>
+    <item name="deepOrange_500" type="color">#FF5722</item>
+    <item name="amber_500" type="color">#FFC107</item>
+    <item name="lightBlue_500" type="color">#03A9F4</item>
+    <item name="deepPurple_500" type="color">#673AB7</item>
+</resources>

@@ -44,6 +44,12 @@
                 <category android:name="antistatic.spinnerwheel.WHEEL_SAMPLE"/>
             </intent-filter>
         </activity>
+        <activity android:name=".ColorPickerActivity" android:label="Color picker with custom views">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="antistatic.spinnerwheel.WHEEL_SAMPLE"/>
+            </intent-filter>
+        </activity>
 
     </application>
 
