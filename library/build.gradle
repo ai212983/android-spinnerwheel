@@ -2,7 +2,7 @@ apply plugin: 'android-library'
 apply plugin: 'android-maven'
 
 dependencies {
-    provided files('libs/nineoldandroids-2.2.0.jar')
+    provided 'com.nineoldandroids:library:2.4.0'
 }
 
 android {
