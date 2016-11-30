@@ -87,6 +87,12 @@ public abstract class AbstractWheelView extends AbstractWheel {
     /** Divider for showing item to be selected while scrolling */
     protected Drawable mSelectionDivider;
 
+    /** Passive coeff */
+    protected float mPassiveCoeff = 0f;
+
+    /** Active coeff */
+    protected float mActiveCoeff = 1f;
+
     // the rest
 
     /**
@@ -159,7 +165,7 @@ public abstract class AbstractWheelView extends AbstractWheel {
         super.initData(context);
 
         // creating animators
-        mDimSelectorWheelAnimator = ObjectAnimator.ofFloat(this, PROPERTY_SELECTOR_PAINT_COEFF, 1, 0);
+        buildDimSelectorWheelAnimator();
 
         mDimSeparatorsAnimator = ObjectAnimator.ofInt(this, PROPERTY_SEPARATORS_PAINT_ALPHA,
                 mSelectionDividerActiveAlpha, mSelectionDividerDimmedAlpha
@@ -174,6 +180,10 @@ public abstract class AbstractWheelView extends AbstractWheel {
         mSelectorWheelPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
     }
 
+    private void buildDimSelectorWheelAnimator() {
+        mDimSelectorWheelAnimator = ObjectAnimator.ofFloat(this, PROPERTY_SELECTOR_PAINT_COEFF, mActiveCoeff, mPassiveCoeff);
+    }
+
     /**
      * Recreates assets (like bitmaps) when layout size has been changed
      *
@@ -184,7 +194,7 @@ public abstract class AbstractWheelView extends AbstractWheel {
     protected void recreateAssets(int width, int height) {
         mSpinBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         mSeparatorsBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        setSelectorPaintCoeff(0);
+        setSelectorPaintCoeff(mPassiveCoeff);
     }
 
     /**
@@ -204,10 +214,20 @@ public abstract class AbstractWheelView extends AbstractWheel {
      *
      * @param coeff Coefficient from 0 (selector is passive) to 1 (selector is active)
      */
-    abstract public void setSelectorPaintCoeff(float coeff);
+    abstract protected void setSelectorPaintCoeff(float coeff);
 
     public void setSelectionDivider(Drawable selectionDivider) {
         this.mSelectionDivider = selectionDivider;
+    }
+
+    public void setActiveCoeff(float activeCoeff) {
+        mActiveCoeff = activeCoeff;
+        buildDimSelectorWheelAnimator();
+    }
+
+    public void setPassiveCoeff(float passiveCoeff) {
+        mPassiveCoeff = passiveCoeff;
+        buildDimSelectorWheelAnimator();
     }
 
     //--------------------------------------------------------------------------
