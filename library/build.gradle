@@ -1,13 +1,12 @@
-apply plugin: 'android-library'
-apply plugin: 'android-maven'
+apply plugin: 'com.android.library'
 
 dependencies {
     provided 'com.nineoldandroids:library:2.4.0'
 }
 
 android {
-    compileSdkVersion 19
-    buildToolsVersion "19.1.0"
+    compileSdkVersion 24
+    buildToolsVersion "24.0.3"
 
     defaultConfig {
         minSdkVersion 3
