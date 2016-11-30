@@ -273,7 +273,7 @@ public class WheelVerticalView extends AbstractWheelView {
             // Check against our minimum width
             width = Math.max(width, getSuggestedMinimumWidth());
 
-            if (mode == MeasureSpec.AT_MOST && widthSize < width) {
+            if (mode == MeasureSpec.AT_MOST && widthSize > width) {
                 width = widthSize;
             }
         }
