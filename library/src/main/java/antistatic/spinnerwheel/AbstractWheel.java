@@ -30,6 +30,7 @@ import android.database.DataSetObserver;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Interpolator;
@@ -48,7 +49,8 @@ import java.util.List;
  */
 public abstract class AbstractWheel extends View {
 
-    private static int itemID = -1;
+    private static final String TAG = "AbstractWheel";
+    private static int itemID    = -1;
 
     @SuppressWarnings("unused")
     private final String LOG_TAG = AbstractWheel.class.getName() + " #" + (++itemID);
@@ -105,6 +107,7 @@ public abstract class AbstractWheel extends View {
 
     // Adapter listener
     private DataSetObserver mDataObserver;
+    public int              mLastTempDirection;
 
 
     //--------------------------------------------------------------------------
@@ -184,6 +187,10 @@ public abstract class AbstractWheel extends View {
                     onScrollTouchedUp(); // if scrolling IS performed, whe should use onFinished instead
             }
 
+            @Override public void onFling(int direction) {
+                mLastTempDirection = direction;
+            }
+
             public void onScroll(int distance) {
                 doScroll(distance);
 
@@ -209,8 +216,18 @@ public abstract class AbstractWheel extends View {
             }
 
             public void onJustify() {
+                Log.d(TAG, "onJustify() called, mScrollingOffset = "+mScrollingOffset+", mLastTempDirection = "+mLastTempDirection);
                 if (Math.abs(mScrollingOffset) > WheelScroller.MIN_DELTA_FOR_SCROLLING) {
-                    mScroller.scroll(mScrollingOffset, 0);
+                    final int scrollOffsetDirection = mScrollingOffset;
+                    if(scrollOffsetDirection * mLastTempDirection < 0) {
+                        if(mLastTempDirection == WheelScroller.SCROLL_DIRECTION_UP) {
+                            mScroller.scroll(mScrollingOffset + getItemDimension(), 0);
+                        } else {
+                            mScroller.scroll(mScrollingOffset - getItemDimension(), 0);
+                        }
+                    } else {
+                        mScroller.scroll(mScrollingOffset, 0);
+                    }
                 }
             }
         });
