@@ -52,6 +52,8 @@ public class WheelVerticalView extends AbstractWheelView {
 
     // Cached item height
     private int mItemHeight = 0;
+    public Canvas mC;
+    public Canvas mCSpin;
 
     //--------------------------------------------------------------------------
     //
@@ -303,12 +305,18 @@ public class WheelVerticalView extends AbstractWheelView {
 
         // resetting intermediate bitmap and recreating canvases
         mSpinBitmap.eraseColor(0);
-        Canvas c = new Canvas(mSpinBitmap);
-        Canvas cSpin = new Canvas(mSpinBitmap);
+        if(mC == null) {
+            mC = new Canvas(mSpinBitmap);
+        }
+        mC.save();
+        if(mCSpin == null) {
+            mCSpin = new Canvas(mSpinBitmap);
+        }
+        mCSpin.save();
 
         int top = (mCurrentItemIdx - mFirstItemIdx) * ih + (ih - getHeight()) / 2;
-        c.translate(mItemsPadding, - top + mScrollingOffset);
-        mItemsLayout.draw(c);
+        mC.translate(mItemsPadding, - top + mScrollingOffset);
+        mItemsLayout.draw(mC);
 
         mSeparatorsBitmap.eraseColor(0);
         Canvas cSeparators = new Canvas(mSeparatorsBitmap);
@@ -327,12 +335,14 @@ public class WheelVerticalView extends AbstractWheelView {
             mSelectionDivider.draw(cSeparators);
         }
 
-        cSpin.drawRect(0, 0, w, h, mSelectorWheelPaint);
+        mCSpin.drawRect(0, 0, w, h, mSelectorWheelPaint);
         cSeparators.drawRect(0, 0, w, h, mSeparatorsPaint);
 
         canvas.drawBitmap(mSpinBitmap, 0, 0, null);
         canvas.drawBitmap(mSeparatorsBitmap, 0, 0, null);
         canvas.restore();
+        mC.restore();
+        mCSpin.restore();
     }
 
 }
