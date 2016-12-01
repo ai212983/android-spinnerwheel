@@ -253,6 +253,7 @@ public abstract class AbstractWheelView extends AbstractWheel {
 
     @Override
     protected void onScrollFinished() {
+        invalidateItemsLayout(false);
         fadeSelectorWheel(500);
         lightSeparators(500);
     }

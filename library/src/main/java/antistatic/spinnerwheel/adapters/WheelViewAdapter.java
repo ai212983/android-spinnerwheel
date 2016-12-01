@@ -44,9 +44,10 @@ public interface WheelViewAdapter {
      * @param index the item index
      * @param convertView the old view to reuse if possible
      * @param parent the parent that this view will eventually be attached to
+     * @param currentItemIdx
      * @return the spinnerwheel item View
      */
-    public View getItem(int index, View convertView, ViewGroup parent);
+    public View getItem(int index, View convertView, ViewGroup parent, int currentItemIdx);
 
     /**
      * Get a View that displays an empty spinnerwheel item placed before the first or after

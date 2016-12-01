@@ -888,7 +888,7 @@ public abstract class AbstractWheel extends View {
             }
         }
         index %= count;
-        return mViewAdapter.getItem(index, mRecycler.getItem(), mItemsLayout);
+        return mViewAdapter.getItem(index, mRecycler.getItem(), mItemsLayout, mCurrentItemIdx);
     }
 
 

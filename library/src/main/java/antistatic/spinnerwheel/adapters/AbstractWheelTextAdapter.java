@@ -200,7 +200,7 @@ public abstract class AbstractWheelTextAdapter extends AbstractWheelAdapter {
     protected abstract CharSequence getItemText(int index);
 
     @Override
-    public View getItem(int index, View convertView, ViewGroup parent) {
+    public View getItem(int index, View convertView, ViewGroup parent, int currentItemIdx) {
         if (index >= 0 && index < getItemsCount()) {
             if (convertView == null) {
                 convertView = getView(itemResourceId, parent);
@@ -212,7 +212,7 @@ public abstract class AbstractWheelTextAdapter extends AbstractWheelAdapter {
                     text = "";
                 }
                 textView.setText(text);
-                configureTextView(textView);
+                configureTextView(textView, index == currentItemIdx);
             }
             return convertView;
         }
@@ -225,34 +225,34 @@ public abstract class AbstractWheelTextAdapter extends AbstractWheelAdapter {
             convertView = getView(emptyItemResourceId, parent);
         }
         if (convertView instanceof TextView) {
-            configureTextView((TextView)convertView);
+            configureTextView((TextView)convertView, false);
         }
             
         return convertView;
     }
 
-    private final Object mTagContent = new Object();
-
     /**
      * Configures text view. Is called for the TEXT_VIEW_ITEM_RESOURCE views.
-     * @param view the text view to be configured
+     * @param textView the text view to be configured
+     * @param isSelectedItem
      */
-    protected void configureTextView(TextView view) {
-        if(view.getTag(R.id.wheel_text_view_configured) == null) {
-            view.setTag(R.id.wheel_text_view_configured, mTagContent);
-            onConfigureTextView(view);
+    protected void configureTextView(TextView textView, boolean isSelectedItem) {
+        Boolean tag = (Boolean) textView.getTag(R.id.wheel_text_view_configured_state);
+        if(tag == null || tag != isSelectedItem) {
+            textView.setTag(R.id.wheel_text_view_configured_state, isSelectedItem);
+            onConfigureTextView(textView, isSelectedItem);
         }
     }
 
-    protected void onConfigureTextView(TextView view) {
+    protected void onConfigureTextView(TextView textView, boolean isSelectedItem) {
         if (itemResourceId == TEXT_VIEW_ITEM_RESOURCE) {
-            view.setTextColor(textColor);
-            view.setGravity(Gravity.CENTER);
-            view.setTextSize(textSize);
-            view.setLines(1);
+            textView.setTextColor(textColor);
+            textView.setGravity(Gravity.CENTER);
+            textView.setTextSize(textSize);
+            textView.setLines(1);
         }
         if (textTypeface != null) {
-            view.setTypeface(textTypeface);
+            textView.setTypeface(textTypeface);
         } else {
             textView.setTypeface(Typeface.SANS_SERIF, getDefaultTextStyle());
         }
