@@ -216,11 +216,6 @@ public abstract class AbstractWheel extends View {
             }
 
             public void onJustify() {
-                Log.d(TAG,
-                  "onJustify() called, mScrollingOffset = "
-                    + mScrollingOffset
-                    + ", mLastTempDirection = "
-                    + mLastTempDirection);
                 if (Math.abs(mScrollingOffset) > WheelScroller.MIN_DELTA_FOR_SCROLLING) {
                     boolean handled = false;
                     final int scrollOffsetDirection = mScrollingOffset;
