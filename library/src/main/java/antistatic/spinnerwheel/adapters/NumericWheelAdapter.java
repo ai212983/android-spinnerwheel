@@ -31,6 +31,11 @@ import android.content.Context;
  */
 public class NumericWheelAdapter extends AbstractWheelTextAdapter {
     
+
+    public interface IntParamFunction<R> {
+        R apply(int i);
+    }
+
     /** The default min value */
     public static final int DEFAULT_MAX_VALUE = 9;
 
@@ -42,8 +47,8 @@ public class NumericWheelAdapter extends AbstractWheelTextAdapter {
     private int maxValue;
     
     // format
-    private String format;
-    
+    private IntParamFunction<String> formatFunction;
+
     /**
      * Constructor
      * @param context the current context
@@ -59,7 +64,7 @@ public class NumericWheelAdapter extends AbstractWheelTextAdapter {
      * @param maxValue the spinnerwheel max value
      */
     public NumericWheelAdapter(Context context, int minValue, int maxValue) {
-        this(context, minValue, maxValue, null);
+        this(context, minValue, maxValue, (String) null);
     }
 
     /**
@@ -69,12 +74,24 @@ public class NumericWheelAdapter extends AbstractWheelTextAdapter {
      * @param maxValue the spinnerwheel max value
      * @param format the format string
      */
-    public NumericWheelAdapter(Context context, int minValue, int maxValue, String format) {
+    public NumericWheelAdapter(Context context, int minValue, int maxValue, final String format) {
+        this(context, minValue, maxValue, new IntParamFunction<String>() {
+            @Override public String apply(int i) {
+                if (format == null) {
+                    return Integer.toString(i);
+                }
+                return String.format(format, i);
+            }
+        });
+    }
+
+    public NumericWheelAdapter(Context context, int minValue, int maxValue, IntParamFunction<String> formatFunction) {
         super(context);
-        
+
         this.minValue = minValue;
         this.maxValue = maxValue;
-        this.format = format;
+        this.formatFunction = formatFunction;
+
     }
 
     public void setMinValue(int minValue) {
@@ -87,11 +104,10 @@ public class NumericWheelAdapter extends AbstractWheelTextAdapter {
         notifyDataInvalidatedEvent();
     }
 
-    @Override
-    public CharSequence getItemText(int index) {
+    @Override public CharSequence getItemText(int index) {
         if (index >= 0 && index < getItemsCount()) {
             int value = minValue + index;
-            return format != null ? String.format(format, value) : Integer.toString(value);
+            return formatFunction != null ? formatFunction.apply(value) : Integer.toString(value);
         }
         return null;
     }
