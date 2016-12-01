@@ -254,9 +254,11 @@ public abstract class AbstractWheelTextAdapter extends AbstractWheelAdapter {
         if (textTypeface != null) {
             view.setTypeface(textTypeface);
         } else {
-            view.setTypeface(Typeface.SANS_SERIF, Typeface.BOLD);
+            textView.setTypeface(Typeface.SANS_SERIF, getDefaultTextStyle());
         }
     }
+
+    protected int getDefaultTextStyle() {return Typeface.BOLD;}
 
     /**
      * Loads a text view from view
