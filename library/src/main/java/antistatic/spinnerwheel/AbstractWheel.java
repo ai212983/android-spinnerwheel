@@ -194,7 +194,7 @@ public abstract class AbstractWheel extends View {
             public void onScroll(int distance) {
                 doScroll(distance);
 
-                int dimension = getBaseDimension();
+                int dimension = getMaxOverScrollDimension();
                 if (mScrollingOffset > dimension) {
                     mScrollingOffset = dimension;
                     mScroller.stopScrolling();
@@ -216,18 +216,32 @@ public abstract class AbstractWheel extends View {
             }
 
             public void onJustify() {
-                Log.d(TAG, "onJustify() called, mScrollingOffset = "+mScrollingOffset+", mLastTempDirection = "+mLastTempDirection);
+                Log.d(TAG,
+                  "onJustify() called, mScrollingOffset = "
+                    + mScrollingOffset
+                    + ", mLastTempDirection = "
+                    + mLastTempDirection);
                 if (Math.abs(mScrollingOffset) > WheelScroller.MIN_DELTA_FOR_SCROLLING) {
+                    boolean handled = false;
                     final int scrollOffsetDirection = mScrollingOffset;
-                    if(scrollOffsetDirection * mLastTempDirection < 0) {
-                        if(mLastTempDirection == WheelScroller.SCROLL_DIRECTION_UP) {
-                            mScroller.scroll(mScrollingOffset + getItemDimension(), 0);
+
+                    // if justify direction is not fling direction, try make it be
+                    if (scrollOffsetDirection * mLastTempDirection < 0) {
+                        if (mLastTempDirection == WheelScroller.SCROLL_DIRECTION_UP) {
+                            if(isValidItemIndex(mCurrentItemIdx + 1)) {
+                                mScroller.scroll(mScrollingOffset + getItemDimension(), 0);
+                                handled = true;
+                            }
                         } else {
-                            mScroller.scroll(mScrollingOffset - getItemDimension(), 0);
+                            if(isValidItemIndex(mCurrentItemIdx - 1)) {
+                                mScroller.scroll(mScrollingOffset - getItemDimension(), 0);
+                                handled = true;
+                            }
                         }
-                    } else {
-                        mScroller.scroll(mScrollingOffset, 0);
                     }
+
+                    // default justify
+                    if (!handled) mScroller.scroll(mScrollingOffset, 0);
                 }
             }
         });
@@ -431,6 +445,13 @@ public abstract class AbstractWheel extends View {
     //  Base measurements
     //
     //--------------------------------------------------------------------------
+
+    /**
+     * Returns over scroll dimension of the spinnerwheel — width for horizontal spinnerwheel, height for vertical
+     *
+     * @return over scroll width or height of the spinnerwheel
+     */
+    abstract protected int getMaxOverScrollDimension();
 
     /**
      * Returns base dimension of the spinnerwheel — width for horizontal spinnerwheel, height for vertical

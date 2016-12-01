@@ -258,6 +258,10 @@ public abstract class AbstractWheelView extends AbstractWheel {
         lightSeparators(500);
     }
 
+    @Override protected int getMaxOverScrollDimension() {
+        return (int) (getBaseDimension() * 0.3);
+    }
+
     //----------------------------------
     //  Animating components
     //----------------------------------
