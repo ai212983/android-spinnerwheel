@@ -2,6 +2,7 @@ apply plugin: 'com.android.library'
 
 dependencies {
     provided 'com.nineoldandroids:library:2.4.0'
+    compile 'com.android.support:support-annotations:24.2.1'
 }
 
 android {
@@ -9,6 +10,6 @@ android {
     buildToolsVersion "24.0.3"
 
     defaultConfig {
-        minSdkVersion 3
+        minSdkVersion 9
     }
 }

@@ -31,6 +31,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import antistatic.spinnerwheel.R;
 
 /**
  * Abstract spinnerwheel adapter provides common functionality for adapters.
@@ -230,11 +231,20 @@ public abstract class AbstractWheelTextAdapter extends AbstractWheelAdapter {
         return convertView;
     }
 
+    private final Object mTagContent = new Object();
+
     /**
      * Configures text view. Is called for the TEXT_VIEW_ITEM_RESOURCE views.
      * @param view the text view to be configured
      */
     protected void configureTextView(TextView view) {
+        if(view.getTag(R.id.wheel_text_view_configured) == null) {
+            view.setTag(R.id.wheel_text_view_configured, mTagContent);
+            onConfigureTextView(view);
+        }
+    }
+
+    protected void onConfigureTextView(TextView view) {
         if (itemResourceId == TEXT_VIEW_ITEM_RESOURCE) {
             view.setTextColor(textColor);
             view.setGravity(Gravity.CENTER);
@@ -248,7 +258,7 @@ public abstract class AbstractWheelTextAdapter extends AbstractWheelAdapter {
             view.setTypeface(Typeface.SANS_SERIF);
         }
     }
-    
+
     /**
      * Loads a text view from view
      * @param view the text view or layout containing it
