@@ -54,6 +54,7 @@ public class WheelVerticalView extends AbstractWheelView {
     private int mItemHeight = 0;
     public Canvas mC;
     public Canvas mCSpin;
+    public Canvas mCSeparators;
 
     //--------------------------------------------------------------------------
     //
@@ -319,24 +320,26 @@ public class WheelVerticalView extends AbstractWheelView {
         mItemsLayout.draw(mC);
 
         mSeparatorsBitmap.eraseColor(0);
-        Canvas cSeparators = new Canvas(mSeparatorsBitmap);
+        if(mCSeparators == null) {
+            mCSeparators = new Canvas(mSeparatorsBitmap);
+        }
 
         if (mSelectionDivider != null) {
             // draw the top divider
             int topOfTopDivider = (getHeight() - ih - mSelectionDividerHeight) / 2;
             int bottomOfTopDivider = topOfTopDivider + mSelectionDividerHeight;
             mSelectionDivider.setBounds(0, topOfTopDivider, w, bottomOfTopDivider);
-            mSelectionDivider.draw(cSeparators);
+            mSelectionDivider.draw(mCSeparators);
 
             // draw the bottom divider
             int topOfBottomDivider =  topOfTopDivider + ih;
             int bottomOfBottomDivider = bottomOfTopDivider + ih;
             mSelectionDivider.setBounds(0, topOfBottomDivider, w, bottomOfBottomDivider);
-            mSelectionDivider.draw(cSeparators);
+            mSelectionDivider.draw(mCSeparators);
         }
 
         mCSpin.drawRect(0, 0, w, h, mSelectorWheelPaint);
-        cSeparators.drawRect(0, 0, w, h, mSeparatorsPaint);
+        mCSeparators.drawRect(0, 0, w, h, mSeparatorsPaint);
 
         canvas.drawBitmap(mSpinBitmap, 0, 0, null);
         canvas.drawBitmap(mSeparatorsBitmap, 0, 0, null);
