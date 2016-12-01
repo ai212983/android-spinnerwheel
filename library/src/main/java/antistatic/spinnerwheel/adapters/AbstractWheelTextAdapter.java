@@ -271,7 +271,11 @@ public abstract class AbstractWheelTextAdapter extends AbstractWheelAdapter {
             if (textResource == NO_RESOURCE && view instanceof TextView) {
                 text = (TextView) view;
             } else if (textResource != NO_RESOURCE) {
-                text = (TextView) view.findViewById(textResource);
+                text = (TextView) view.getTag(textResource);
+                if(text == null) {
+                    text = (TextView) view.findViewById(textResource);
+                    view.setTag(textResource, text);
+                }
             }
         } catch (ClassCastException e) {
             Log.e("AbstractWheelAdapter", "You must supply a resource ID for a TextView");
