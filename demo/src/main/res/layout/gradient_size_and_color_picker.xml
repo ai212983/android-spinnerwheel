@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+  <Button
+      android:id="@+id/tv"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignParentTop="true"
+      android:padding="15sp"
+      android:text="Click to test edge"
+      android:textSize="14sp"
+      />
+
+
+  <TimePicker
+      android:id="@+id/time"
+      android:layout_width="wrap_content"
+      android:layout_height="150dp"
+      android:layout_marginTop="20sp"
+      android:layout_alignParentBottom="true"
+      android:layout_centerInParent="true"
+      />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layout_margin="15dp"
+        android:layout_below="@id/tv"
+        android:layout_above="@id/time"
+        android:background="#10F0"
+        >
+
+
+      <antistatic.spinnerwheel.WheelVerticalView
+          android:id="@+id/wheel_date"
+          android:layout_width="0dp"
+          android:layout_height="match_parent"
+          android:layout_weight="165"
+          />
+      <antistatic.spinnerwheel.WheelVerticalView
+          android:id="@+id/wheel_hour"
+          android:layout_width="0dp"
+          android:layout_height="match_parent"
+          android:layout_weight="90"
+          />
+      <antistatic.spinnerwheel.WheelVerticalView
+          android:id="@+id/wheel_min"
+          android:layout_width="0dp"
+          android:layout_height="match_parent"
+          android:layout_weight="90"
+          />
+    </LinearLayout>
+
+</RelativeLayout>

@@ -106,8 +106,8 @@ public class CitiesActivity extends Activity {
         }
 
         @Override
-        public View getItem(int index, View cachedView, ViewGroup parent) {
-            View view = super.getItem(index, cachedView, parent);
+        public View getItem(int index, View cachedView, ViewGroup parent, int currentItemIdx) {
+            View view = super.getItem(index, cachedView, parent, currentItemIdx);
             ImageView img = (ImageView) view.findViewById(R.id.flag);
             img.setImageResource(flags[index]);
             return view;
