@@ -108,6 +108,13 @@ public class WheelVerticalView extends AbstractWheelView {
         a.recycle();
     }
 
+    @Override protected void recreateAssets(int width, int height) {
+        super.recreateAssets(width, height);
+        mC = new Canvas(mSpinBitmap);
+        mCSpin = new Canvas(mSpinBitmap);
+        mCSeparators = new Canvas(mSeparatorsBitmap);
+    }
+
     @Override
     public void setSelectorPaintCoeff(float coeff) {
         LinearGradient shader;
@@ -306,13 +313,7 @@ public class WheelVerticalView extends AbstractWheelView {
 
         // resetting intermediate bitmap and recreating canvases
         mSpinBitmap.eraseColor(0);
-        if(mC == null) {
-            mC = new Canvas(mSpinBitmap);
-        }
         mC.save();
-        if(mCSpin == null) {
-            mCSpin = new Canvas(mSpinBitmap);
-        }
         mCSpin.save();
 
         int top = (mCurrentItemIdx - mFirstItemIdx) * ih + (ih - getHeight()) / 2;
@@ -320,9 +321,6 @@ public class WheelVerticalView extends AbstractWheelView {
         mItemsLayout.draw(mC);
 
         mSeparatorsBitmap.eraseColor(0);
-        if(mCSeparators == null) {
-            mCSeparators = new Canvas(mSeparatorsBitmap);
-        }
 
         if (mSelectionDivider != null) {
             // draw the top divider
