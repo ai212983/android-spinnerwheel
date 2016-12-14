@@ -124,7 +124,7 @@ public abstract class AbstractWheelCustomAdapter extends AbstractWheelAdapter {
     }
 
     @Override
-    public View getItem(int index, View convertView, ViewGroup parent) {
+    public View getItem(int index, View convertView, ViewGroup parent, int currentItemIdx) {
         if (index >= 0 && index < getItemsCount()) {
             if (convertView == null) {
                 convertView = getView(itemResourceId, parent);

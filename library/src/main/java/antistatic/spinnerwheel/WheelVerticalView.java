@@ -52,6 +52,9 @@ public class WheelVerticalView extends AbstractWheelView {
 
     // Cached item height
     private int mItemHeight = 0;
+    public Canvas mC;
+    public Canvas mCSpin;
+    public Canvas mCSeparators;
 
     //--------------------------------------------------------------------------
     //
@@ -103,6 +106,13 @@ public class WheelVerticalView extends AbstractWheelView {
         TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.WheelVerticalView, defStyle, 0);
         mSelectionDividerHeight = a.getDimensionPixelSize(R.styleable.WheelVerticalView_selectionDividerHeight, DEF_SELECTION_DIVIDER_SIZE);
         a.recycle();
+    }
+
+    @Override protected void recreateAssets(int width, int height) {
+        super.recreateAssets(width, height);
+        mC = new Canvas(mSpinBitmap);
+        mCSpin = new Canvas(mSpinBitmap);
+        mCSeparators = new Canvas(mSeparatorsBitmap);
     }
 
     @Override
@@ -273,7 +283,7 @@ public class WheelVerticalView extends AbstractWheelView {
             // Check against our minimum width
             width = Math.max(width, getSuggestedMinimumWidth());
 
-            if (mode == MeasureSpec.AT_MOST && widthSize < width) {
+            if (mode == MeasureSpec.AT_MOST && widthSize > width) {
                 width = widthSize;
             }
         }
@@ -303,36 +313,37 @@ public class WheelVerticalView extends AbstractWheelView {
 
         // resetting intermediate bitmap and recreating canvases
         mSpinBitmap.eraseColor(0);
-        Canvas c = new Canvas(mSpinBitmap);
-        Canvas cSpin = new Canvas(mSpinBitmap);
+        mC.save();
+        mCSpin.save();
 
         int top = (mCurrentItemIdx - mFirstItemIdx) * ih + (ih - getHeight()) / 2;
-        c.translate(mItemsPadding, - top + mScrollingOffset);
-        mItemsLayout.draw(c);
+        mC.translate(mItemsPadding, - top + mScrollingOffset);
+        mItemsLayout.draw(mC);
 
         mSeparatorsBitmap.eraseColor(0);
-        Canvas cSeparators = new Canvas(mSeparatorsBitmap);
 
         if (mSelectionDivider != null) {
             // draw the top divider
             int topOfTopDivider = (getHeight() - ih - mSelectionDividerHeight) / 2;
             int bottomOfTopDivider = topOfTopDivider + mSelectionDividerHeight;
             mSelectionDivider.setBounds(0, topOfTopDivider, w, bottomOfTopDivider);
-            mSelectionDivider.draw(cSeparators);
+            mSelectionDivider.draw(mCSeparators);
 
             // draw the bottom divider
             int topOfBottomDivider =  topOfTopDivider + ih;
             int bottomOfBottomDivider = bottomOfTopDivider + ih;
             mSelectionDivider.setBounds(0, topOfBottomDivider, w, bottomOfBottomDivider);
-            mSelectionDivider.draw(cSeparators);
+            mSelectionDivider.draw(mCSeparators);
         }
 
-        cSpin.drawRect(0, 0, w, h, mSelectorWheelPaint);
-        cSeparators.drawRect(0, 0, w, h, mSeparatorsPaint);
+        mCSpin.drawRect(0, 0, w, h, mSelectorWheelPaint);
+        mCSeparators.drawRect(0, 0, w, h, mSeparatorsPaint);
 
         canvas.drawBitmap(mSpinBitmap, 0, 0, null);
         canvas.drawBitmap(mSeparatorsBitmap, 0, 0, null);
         canvas.restore();
+        mC.restore();
+        mCSpin.restore();
     }
 
 }

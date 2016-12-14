@@ -80,12 +80,12 @@ public class TimePickerCustomViewsActivity extends Activity {
         }
 
         @Override
-        public View getItem(int index, View cachedView, ViewGroup parent) {
+        public View getItem(int index, View cachedView, ViewGroup parent, int currentItemIdx) {
             int day = -daysCount/2 + index;
             Calendar newCalendar = (Calendar) calendar.clone();
             newCalendar.roll(Calendar.DAY_OF_YEAR, day);
             
-            View view = super.getItem(index, cachedView, parent);
+            View view = super.getItem(index, cachedView, parent, currentItemIdx);
 
             TextView weekday = (TextView) view.findViewById(R.id.time2_weekday);
             if (day == 0) {

@@ -31,6 +31,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import antistatic.spinnerwheel.R;
 
 /**
  * Abstract spinnerwheel adapter provides common functionality for adapters.
@@ -199,7 +200,7 @@ public abstract class AbstractWheelTextAdapter extends AbstractWheelAdapter {
     protected abstract CharSequence getItemText(int index);
 
     @Override
-    public View getItem(int index, View convertView, ViewGroup parent) {
+    public View getItem(int index, View convertView, ViewGroup parent, int currentItemIdx) {
         if (index >= 0 && index < getItemsCount()) {
             if (convertView == null) {
                 convertView = getView(itemResourceId, parent);
@@ -211,7 +212,7 @@ public abstract class AbstractWheelTextAdapter extends AbstractWheelAdapter {
                     text = "";
                 }
                 textView.setText(text);
-                configureTextView(textView);
+                configureTextView(textView, index == currentItemIdx);
             }
             return convertView;
         }
@@ -224,7 +225,7 @@ public abstract class AbstractWheelTextAdapter extends AbstractWheelAdapter {
             convertView = getView(emptyItemResourceId, parent);
         }
         if (convertView instanceof TextView) {
-            configureTextView((TextView)convertView);
+            configureTextView((TextView)convertView, false);
         }
             
         return convertView;
@@ -232,22 +233,33 @@ public abstract class AbstractWheelTextAdapter extends AbstractWheelAdapter {
 
     /**
      * Configures text view. Is called for the TEXT_VIEW_ITEM_RESOURCE views.
-     * @param view the text view to be configured
+     * @param textView the text view to be configured
+     * @param isSelectedItem
      */
-    protected void configureTextView(TextView view) {
-        if (itemResourceId == TEXT_VIEW_ITEM_RESOURCE) {
-            view.setTextColor(textColor);
-            view.setGravity(Gravity.CENTER);
-            view.setTextSize(textSize);
-            view.setLines(1);
-        }
-        if (textTypeface != null) {
-            view.setTypeface(textTypeface);
-        } else {
-            view.setTypeface(Typeface.SANS_SERIF, Typeface.BOLD);
+    protected void configureTextView(TextView textView, boolean isSelectedItem) {
+        Boolean tag = (Boolean) textView.getTag(R.id.wheel_text_view_configured_state);
+        if(tag == null || tag != isSelectedItem) {
+            textView.setTag(R.id.wheel_text_view_configured_state, isSelectedItem);
+            onConfigureTextView(textView, isSelectedItem);
         }
     }
-    
+
+    protected void onConfigureTextView(TextView textView, boolean isSelectedItem) {
+        if (itemResourceId == TEXT_VIEW_ITEM_RESOURCE) {
+            textView.setTextColor(textColor);
+            textView.setGravity(Gravity.CENTER);
+            textView.setTextSize(textSize);
+            textView.setLines(1);
+        }
+        if (textTypeface != null) {
+            textView.setTypeface(textTypeface);
+        } else {
+            textView.setTypeface(Typeface.SANS_SERIF, getDefaultTextStyle());
+        }
+    }
+
+    protected int getDefaultTextStyle() {return Typeface.BOLD;}
+
     /**
      * Loads a text view from view
      * @param view the text view or layout containing it
@@ -260,7 +272,11 @@ public abstract class AbstractWheelTextAdapter extends AbstractWheelAdapter {
             if (textResource == NO_RESOURCE && view instanceof TextView) {
                 text = (TextView) view;
             } else if (textResource != NO_RESOURCE) {
-                text = (TextView) view.findViewById(textResource);
+                text = (TextView) view.getTag(textResource);
+                if(text == null) {
+                    text = (TextView) view.findViewById(textResource);
+                    view.setTag(textResource, text);
+                }
             }
         } catch (ClassCastException e) {
             Log.e("AbstractWheelAdapter", "You must supply a resource ID for a TextView");

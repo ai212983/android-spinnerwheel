@@ -30,6 +30,7 @@ import android.database.DataSetObserver;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Interpolator;
@@ -48,7 +49,8 @@ import java.util.List;
  */
 public abstract class AbstractWheel extends View {
 
-    private static int itemID = -1;
+    private static final String TAG = "AbstractWheel";
+    private static int itemID    = -1;
 
     @SuppressWarnings("unused")
     private final String LOG_TAG = AbstractWheel.class.getName() + " #" + (++itemID);
@@ -105,6 +107,7 @@ public abstract class AbstractWheel extends View {
 
     // Adapter listener
     private DataSetObserver mDataObserver;
+    public int              mLastTempDirection;
 
 
     //--------------------------------------------------------------------------
@@ -184,10 +187,14 @@ public abstract class AbstractWheel extends View {
                     onScrollTouchedUp(); // if scrolling IS performed, whe should use onFinished instead
             }
 
+            @Override public void onFling(int direction) {
+                mLastTempDirection = direction;
+            }
+
             public void onScroll(int distance) {
                 doScroll(distance);
 
-                int dimension = getBaseDimension();
+                int dimension = getMaxOverScrollDimension();
                 if (mScrollingOffset > dimension) {
                     mScrollingOffset = dimension;
                     mScroller.stopScrolling();
@@ -210,7 +217,26 @@ public abstract class AbstractWheel extends View {
 
             public void onJustify() {
                 if (Math.abs(mScrollingOffset) > WheelScroller.MIN_DELTA_FOR_SCROLLING) {
-                    mScroller.scroll(mScrollingOffset, 0);
+                    boolean handled = false;
+                    final int scrollOffsetDirection = mScrollingOffset;
+
+                    // if justify direction is not fling direction, try make it be
+                    if (scrollOffsetDirection * mLastTempDirection < 0) {
+                        if (mLastTempDirection == WheelScroller.SCROLL_DIRECTION_UP) {
+                            if(isValidItemIndex(mCurrentItemIdx + 1)) {
+                                mScroller.scroll(mScrollingOffset + getItemDimension(), 0);
+                                handled = true;
+                            }
+                        } else {
+                            if(isValidItemIndex(mCurrentItemIdx - 1)) {
+                                mScroller.scroll(mScrollingOffset - getItemDimension(), 0);
+                                handled = true;
+                            }
+                        }
+                    }
+
+                    // default justify
+                    if (!handled) mScroller.scroll(mScrollingOffset, 0);
                 }
             }
         });
@@ -343,7 +369,7 @@ public abstract class AbstractWheel extends View {
      * Set the friction of the scroller. This function is available over Android 3.0 (API Level 11).
      * @param friction the amount of friction
      */
-    public void SetFriction(float friction) {
+    public void setFriction(float friction) {
         mScroller.setFriction(friction);
     }
 
@@ -414,6 +440,13 @@ public abstract class AbstractWheel extends View {
     //  Base measurements
     //
     //--------------------------------------------------------------------------
+
+    /**
+     * Returns over scroll dimension of the spinnerwheel — width for horizontal spinnerwheel, height for vertical
+     *
+     * @return over scroll width or height of the spinnerwheel
+     */
+    abstract protected int getMaxOverScrollDimension();
 
     /**
      * Returns base dimension of the spinnerwheel — width for horizontal spinnerwheel, height for vertical
@@ -871,7 +904,7 @@ public abstract class AbstractWheel extends View {
             }
         }
         index %= count;
-        return mViewAdapter.getItem(index, mRecycler.getItem(), mItemsLayout);
+        return mViewAdapter.getItem(index, mRecycler.getItem(), mItemsLayout, mCurrentItemIdx);
     }
 
 
