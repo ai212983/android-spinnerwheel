@@ -1,6 +1,6 @@
 **Update Dec 2016**
-Please read [this ticket](https://github.com/ai212983/android-spinnerwheel/issues/77).
-This version is not supported anymore, PRs are still welcome though.
+# Library is discontinued
+There's still a lot of wheel libraries [out there](https://android-arsenal.com/tag/142).
 
 **Update Oct 2014** I am thinking of rewriting this control. Update will contain most requested features, numerous improvements and optimizations. But main point in update is to discontinue ICS lookalike and support Material Design (Android 5.0 Lollipop) look and feel instead. Sadly I wasn't able to find any reference images of something like it. 
 
